@@ -1,0 +1,76 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "../styles/tokens.css";
+
+html,
+body {
+  background: var(--color-bg);
+  color: var(--color-ink);
+  font-family: var(--font-sans), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: smooth;
+}
+
+h1,
+h2,
+h3 {
+  font-family: var(--font-display), ui-sans-serif, system-ui;
+  letter-spacing: -0.02em;
+}
+
+::selection {
+  background: rgba(79, 70, 229, 0.18);
+  color: var(--color-ink);
+}
+
+/* Tremor overrides leves (ajusta sombra de card) */
+.tremor-Card-root {
+  box-shadow: var(--shadow-card);
+  border-color: var(--color-border);
+}
+
+/* Custom scrollbar fina */
+.thin-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+.thin-scroll::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 3px;
+}
+.thin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+/* Layout helpers */
+.section-container {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1.5rem;
+  padding-right: 1.5rem;
+}
+
+@media (min-width: 1024px) {
+  .section-container {
+    padding-left: 2rem;
+    padding-right: 2rem;
+  }
+}
+
+/* Gradient util pra hero */
+.bg-hero-gradient {
+  background: radial-gradient(
+      1200px circle at 10% -10%,
+      rgba(79, 70, 229, 0.08),
+      transparent 60%
+    ),
+    radial-gradient(
+      900px circle at 100% 0%,
+      rgba(245, 158, 11, 0.07),
+      transparent 55%
+    ),
+    var(--color-bg);
+}
