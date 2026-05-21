@@ -1,0 +1,110 @@
+# ============================================================
+# Dinamic Imobiliária — Stack de dev local
+# ============================================================
+# Sobe: Postgres 16 + pgvector, Redis 7, Meilisearch 1.10
+# Uso:
+#   pnpm db:up      (sobe tudo em background)
+#   pnpm db:down    (para tudo, mantém volumes)
+#   pnpm db:reset   (apaga volumes — destrutivo)
+#   pnpm db:logs    (segue logs)
+#   pnpm db:psql    (abre psql no postgres)
+# ============================================================
+
+name: dinamic
+
+services:
+  # ----------------------------------------------------------
+  # PostgreSQL 16 com pgvector pre-instalado
+  # Extensions criadas via docker/postgres/init/*.sql
+  # ----------------------------------------------------------
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: dinamic-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: dinamic
+      POSTGRES_PASSWORD: dinamic
+      POSTGRES_DB: dinamic
+      PGDATA: /var/lib/postgresql/data/pgdata
+    ports:
+      # host:container — outros projetos do user (s13hs/multimarket/agromax/alicia)
+      # ocupam 5432-5435, então Dinamic pega 5436
+      - "5436:5432"
+    volumes:
+      - dinamic-postgres-data:/var/lib/postgresql/data
+      - ./docker/postgres/init:/docker-entrypoint-initdb.d:ro
+    networks:
+      - dinamic-net
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dinamic -d dinamic"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 10s
+
+  # ----------------------------------------------------------
+  # Redis 7 (cache + BullMQ queue)
+  # ----------------------------------------------------------
+  redis:
+    image: redis:7-alpine
+    container_name: dinamic-redis
+    restart: unless-stopped
+    command: ["redis-server", "--save", "60", "1", "--loglevel", "warning"]
+    ports:
+      # host:container — alicia ocupa 6381, Dinamic pega 6382
+      - "6382:6379"
+    volumes:
+      - dinamic-redis-data:/data
+    networks:
+      - dinamic-net
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+      start_period: 5s
+
+  # ----------------------------------------------------------
+  # Meilisearch 1.10 (busca facetada de imóveis)
+  # ----------------------------------------------------------
+  meilisearch:
+    image: getmeili/meilisearch:v1.10
+    container_name: dinamic-meili
+    restart: unless-stopped
+    environment:
+      MEILI_ENV: development
+      MEILI_MASTER_KEY: masterKey-dev-only-replace-in-prod
+      MEILI_NO_ANALYTICS: "true"
+      MEILI_LOG_LEVEL: WARN
+    ports:
+      - "7700:7700"
+    volumes:
+      - dinamic-meili-data:/meili_data
+    networks:
+      - dinamic-net
+    healthcheck:
+      test: ["CMD-SHELL", "curl -fSs http://localhost:7700/health || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 15s
+
+# ============================================================
+# Volumes nomeados (persistentes entre restarts)
+# Apagar tudo: docker compose down -v   (ou pnpm db:reset)
+# ============================================================
+volumes:
+  dinamic-postgres-data:
+    name: dinamic-postgres-data
+  dinamic-redis-data:
+    name: dinamic-redis-data
+  dinamic-meili-data:
+    name: dinamic-meili-data
+
+# ============================================================
+# Network compartilhada (apps locais conectam direto via host)
+# ============================================================
+networks:
+  dinamic-net:
+    name: dinamic-net
+    driver: bridge

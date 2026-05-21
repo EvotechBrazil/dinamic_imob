@@ -13,7 +13,15 @@
     "typecheck": "turbo typecheck",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "clean": "turbo clean"
+    "clean": "turbo clean",
+    "db:up": "docker compose up -d",
+    "db:down": "docker compose down",
+    "db:reset": "docker compose down -v && docker compose up -d",
+    "db:logs": "docker compose logs -f",
+    "db:ps": "docker compose ps",
+    "db:psql": "docker compose exec postgres psql -U dinamic -d dinamic",
+    "db:redis-cli": "docker compose exec redis redis-cli",
+    "db:wait": "node scripts/wait-for-services.mjs"
   },
   "devDependencies": {
     "@openrouter/sdk": "^0.12.35",
