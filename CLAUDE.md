@@ -72,17 +72,26 @@ Hoje: `backend/` e `frontend/` vazios; `docs/dinamic_web.md` contém a proposta 
 
 `nextjs-shadcn-saas`, `nestjs-multitenant`, `prisma-schema-design`, `brazilian-forms`, `brazilian-payments` (Asaas), `bullmq-workers`, `integration-adapter`, `lgpd-compliance`, `admin-dashboard` (Tremor + TanStack Table), `pwa-mobile-first`, `claude-api`.
 
-## Próximas decisões pendentes (antes de começar Sprint 0)
+## Ajustes da reunião 2026-05-21 (sobrepõem o plano original onde houver conflito)
 
-1. Criar/confirmar repo `EvotechBrazil/dinamic_imob` no GitHub e configurar `origin`
-2. Confirmar contas/acessos: Vercel, Railway, Cloudflare, Asaas, Meta Business, Anthropic
-3. Logo Dinamic em vetor + paleta + fontes — mantém ou redesenha?
-4. WhatsApp: migrar os 2 números (8713/8670) para Meta Cloud API ou criar um novo?
-5. Aprovar 5-6 templates WhatsApp HSM com Meta (radar, agendamento, boleto, dunning, confirmação visita)
-6. Exportar manual do Flex49 a lista de proprietários (necessário pro Sprint 5)
-7. Definir tom de voz da IA com equipe de vendas/locação
-8. Definir regras de transferência por setor (vendas/locação/captação/financeiro) fora do horário
-9. Calendário corretor: Google Calendar OAuth ou agenda interna?
+- **Hosting backend:** Hostinger + easypanel (não Railway). Frontend continua na Vercel.
+- **IA:** OpenRouter (clonando pattern do projeto `evofit/alicia`) — não Anthropic SDK direto.
+- **WhatsApp:** Evolution API primeiro (demo), Meta Cloud API depois (Sprint 3+). Templates HSM adiados.
+- **Asaas:** adapter/estrutura pronto, integração real adiada (pós-demo).
+- **Primeira entrega = "wow visual" pro cliente:** foco em landing pública + admin shell com dashboards Tremor populados com mock realista. Backend só stub.
+- **Identidade visual:** redesenha leve — indigo-600 `#4F46E5` + amber-500 `#F59E0B` + Plus Jakarta Sans (display) + Inter (body) + JetBrains Mono. Vibe Tremor Solar.
+- **Landing híbrida:** hero buscador grande + CTA "Fale com a IA"; 6 seções (featured / como IA ajuda / bairros+mapa / números / depoimentos / CTA contato).
+- **Dados demo:** mock realista — ~50–100 imóveis fictícios Arapongas (Centro, Jardim Tropical, Industrial), 30 leads, 15 contratos.
+- **Tom IA:** profissional caloroso (você, sem gírias, máx 1 emoji/msg).
+- **Atribuição:** round-robin por setor (vendas/locação/captação/financeiro) com fora-de-horário enfileirando pra abertura.
+- **Calendário corretor:** agenda interna no admin (sem Google Calendar no MVP).
+- **Flex49:** scraper e export proprietários adiados; reabordar pós-demo.
+
+## Próximos passos imediatos
+
+1. Conectar `origin` ao `EvotechBrazil/dinamic_imob` (repo já existe).
+2. Sprint 0 revisado: monorepo skeleton + design tokens + landing pública (hero+seções) + admin shell com 2-3 dashboards Tremor populados com mock + chat widget mockado.
+3. Após demo aprovada: ativar adapters reais (OpenRouter, Evolution, Asaas) e voltar ao plano original Sprint 1-7.
 
 ## Como retomar este projeto
 
