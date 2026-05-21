@@ -1,0 +1,6 @@
+{
+  "name": "@dinamic/contracts",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Interfaces TS dos 14 módulos backend + adapter interfaces (IPaymentGateway, IMessagingProvider, IAIProvider, ISignatureProvider, IStorage, IMaps, IEmail)"
+}

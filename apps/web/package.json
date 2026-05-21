@@ -1,0 +1,6 @@
+{
+  "name": "@dinamic/web",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Next.js 14 App Router — landing pública + admin + PWA (placeholder até task #8)"
+}

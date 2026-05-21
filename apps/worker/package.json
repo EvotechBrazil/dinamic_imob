@@ -1,0 +1,6 @@
+{
+  "name": "@dinamic/worker",
+  "version": "0.0.0",
+  "private": true,
+  "description": "BullMQ workers — image-process, radar-match, dunning, seo-gen, scrape-flex49 (placeholder até task #11)"
+}

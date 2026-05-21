@@ -5,14 +5,26 @@
   "description": "Plataforma integrada da Dinamic Imobiliaria — Portal + IA + CRM + Financeiro",
   "type": "module",
   "scripts": {
-    "test:ai": "node scripts/test-openrouter.mjs"
+    "test:ai": "node scripts/test-openrouter.mjs",
+    "build": "turbo build",
+    "dev": "turbo dev",
+    "lint": "turbo lint",
+    "test": "turbo test",
+    "typecheck": "turbo typecheck",
+    "format": "prettier --write .",
+    "format:check": "prettier --check .",
+    "clean": "turbo clean"
   },
   "devDependencies": {
     "@openrouter/sdk": "^0.12.35",
-    "dotenv": "^16.4.5"
+    "dotenv": "^16.4.5",
+    "prettier": "^3.3.3",
+    "turbo": "^2.3.0",
+    "typescript": "^5.5.0"
   },
   "engines": {
-    "node": ">=22"
+    "node": ">=22",
+    "pnpm": ">=10.0.0"
   },
   "packageManager": "pnpm@10.28.2"
 }

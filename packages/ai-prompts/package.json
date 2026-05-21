@@ -1,0 +1,6 @@
+{
+  "name": "@dinamic/ai-prompts",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Templates de prompt versionados + guardrails da IA Dinamic"
+}

@@ -1,0 +1,6 @@
+{
+  "name": "@dinamic/ui",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Design tokens Dinamic + Tailwind preset + wrappers shadcn/Origin UI/Tremor (placeholder até task #5)"
+}

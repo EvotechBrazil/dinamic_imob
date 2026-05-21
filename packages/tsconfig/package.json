@@ -1,0 +1,11 @@
+{
+  "name": "@dinamic/tsconfig",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Configurações TypeScript compartilhadas (placeholder até task #4)",
+  "files": [
+    "base.json",
+    "nextjs.json",
+    "nestjs.json"
+  ]
+}
