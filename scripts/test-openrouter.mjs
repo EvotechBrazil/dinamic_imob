@@ -51,6 +51,7 @@ const stream = await openrouter.chat.send({
 });
 
 let totalChars = 0;
+let usage = null;
 const t0 = Date.now();
 let firstTokenAt = null;
 
@@ -61,6 +62,8 @@ for await (const chunk of stream) {
     process.stdout.write(content);
     totalChars += content.length;
   }
+  // Usage chega no chunk final (com reasoningTokens se modelo for de reasoning)
+  if (chunk.usage) usage = chunk.usage;
 }
 
 const totalMs = Date.now() - t0;
@@ -69,3 +72,15 @@ console.log(`Primeiro token:  ${firstTokenAt ?? "n/a"} ms`);
 console.log(`Tempo total:     ${totalMs} ms`);
 console.log(`Caracteres:      ${totalChars}`);
 console.log(`Throughput:      ${(totalChars / (totalMs / 1000)).toFixed(0)} chars/s`);
+
+if (usage) {
+  console.log(`\n=== Usage ===`);
+  console.log(`Prompt tokens:     ${usage.promptTokens}`);
+  console.log(`Completion tokens: ${usage.completionTokens}`);
+  console.log(`Reasoning tokens:  ${usage.reasoningTokens ?? 0}`);
+  console.log(`Total tokens:      ${usage.totalTokens}`);
+  if (usage.cost !== undefined) {
+    console.log(`Custo USD:         $${usage.cost?.toFixed?.(6) ?? usage.cost}`);
+    console.log(`Custo BRL approx:  R$ ${(usage.cost * 5.0).toFixed(4)}`);
+  }
+}
