@@ -72,6 +72,14 @@ Hoje: `backend/` e `frontend/` vazios; `docs/dinamic_web.md` contém a proposta 
 
 `nextjs-shadcn-saas`, `nestjs-multitenant`, `prisma-schema-design`, `brazilian-forms`, `brazilian-payments` (Asaas), `bullmq-workers`, `integration-adapter`, `lgpd-compliance`, `admin-dashboard` (Tremor + TanStack Table), `pwa-mobile-first`, `claude-api`.
 
+## Ajustes 2026-05-21 (parte 2) — estratégia local-first
+
+- **Stack 100% local via Docker Desktop durante todo dev.** docker-compose sobe Postgres 16 + Redis 7 + Meilisearch. apps/web, apps/api, apps/worker rodam local. Storage local em `./uploads` (não R2 ainda).
+- **Única integração externa ATIVA: OpenRouter.** API key em `.env.local` (NUNCA commitada). Modelos: Haiku 4.5 default + Sonnet 4.6 premium. Testada e respondendo no tom profissional caloroso (~R$ 0,002/conversa).
+- **Adiadas pra entrega ao cliente:** Vercel, Hostinger easypanel, Cloudflare (DNS+R2+WAF), Asaas, Meta WhatsApp Cloud API, D4Sign. Adapters implementados (mock + real stubs), mas só OpenRouter ativada de fato.
+- **Demo wow Sprint 1 Frontend já pode ter chat IA REAL** (não só mock UI) — antecipa parte da Sprint 3 Backend.
+- **Segurança:** OPENROUTER_API_KEY foi exposta em chat; recomendado rotar em https://openrouter.ai/keys quando der.
+
 ## Ajustes da reunião 2026-05-21 (sobrepõem o plano original onde houver conflito)
 
 - **Hosting backend:** Hostinger + easypanel (não Railway). Frontend continua na Vercel.

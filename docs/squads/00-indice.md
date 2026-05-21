@@ -2,6 +2,8 @@
 
 > Visão geral, cronograma master, matriz de dependências e ritual Scrum compartilhado entre as 3 squads do projeto Dinamic.
 
+> **⚠️ Atualização 2026-05-21 (parte 2):** estratégia ajustada para **local-first via Docker Desktop**. Toda a stack roda local durante o dev (docker-compose com Postgres + Redis + Meilisearch). **Única integração externa ativa: OpenRouter** (IA). Vercel, Hostinger easypanel, Cloudflare, Asaas, Meta Cloud API e D4Sign ficam **adiados para a fase de entrega ao cliente** — adapters implementados, integração real só perto do go-live. Demo wow Sprint 1 Frontend já pode integrar chat IA real. Detalhes em `CLAUDE.md`.
+
 ## 1. Propósito deste plano
 
 Este documento orquestra a entrega da plataforma Dinamic Imobiliária do **Sprint 0 ao Go-live**, dividida em **3 squads paralelas** com 6 devs cada (18 devs total), sprints de **2 semanas** no padrão Scrum, com cerimônias detalhadas e Definition of Done (DoD) explícita por sprint.
