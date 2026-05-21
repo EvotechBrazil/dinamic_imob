@@ -99,6 +99,9 @@ storybook-static/
 uploads/
 local-storage/
 
+# ----- Vendor (references locais, NAO commitar) -----
+vendor/
+
 # ----- Misc -----
 *.local
 .vercel

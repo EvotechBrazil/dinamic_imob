@@ -27,11 +27,36 @@
 │  └────────────────────────────────────────────────────────┘
 │
 │  ┌─ 1. OMNICHANNEL COMERCIAL ─────────────────────────────┐
-│  │ "Tudo numa só inbox."                                  │
-│  │ Card com 3 abas (WhatsApp / Instagram / Facebook)      │
-│  │ Lista de 6 conversas mock (foto, nome, prévia, canal) │
-│  │ Painel direito: conversa selecionada com bolhas        │
-│  │ Mock: leads chegando, atribuição automática            │
+│  │ "Tudo numa só inbox — WhatsApp, Instagram, Facebook."  │
+│  │                                                        │
+│  │ Layout 3 colunas (baseado no chat-bullq REAL):         │
+│  │ ┌─────────┬───────────────┬──────────────────┐         │
+│  │ │ LISTA   │ CHAT          │ AGENT RUNS (IA)  │         │
+│  │ │         │               │                  │         │
+│  │ │ Filtros │ Header        │ Histórico do     │         │
+│  │ │ canal   │ contato+canal │ que a IA fez:    │         │
+│  │ │ [Todos] │               │ - classificou    │         │
+│  │ │ [WA]    │ Bolhas:       │ - extraiu RAG    │         │
+│  │ │ [IG]    │ - lead (esq)  │ - propôs visita  │         │
+│  │ │ [FB]    │ - IA (centro) │ - agendou        │         │
+│  │ │         │ - corretor    │ (logs streaming) │         │
+│  │ │ 6 conv  │   (dir)       │                  │         │
+│  │ │ mock    │               │ Toggle "ver/     │         │
+│  │ │         │ Input chat    │ ocultar IA"      │         │
+│  │ └─────────┴───────────────┴──────────────────┘         │
+│  │                                                        │
+│  │ 6 conversas mock contexto imobiliária:                 │
+│  │  • Mariana Silva [WA] "Tem casa Centro 350mil?"        │
+│  │  • João Pereira  [IG] "Vi seu apto Jd Tropical..."     │
+│  │  • Carla Andrade [WA] "Quero visitar amanhã 14h"       │
+│  │  • Roberto Lima  [FB] "É possível negociar?"           │
+│  │  • Ana Costa     [WA] "Aceita pet?"                    │
+│  │  • Pedro Souza   [IG] "Garagem coberta?"               │
+│  │                                                        │
+│  │ Tags por setor: Vendas (azul) / Locação (verde) /      │
+│  │ Captação (âmbar) / Financeiro (cinza)                  │
+│  │                                                        │
+│  │ Selo "Powered by chat-bullq" pequeno no canto          │
 │  └────────────────────────────────────────────────────────┘
 │
 │  ┌─ 2. FINANCEIRO ────────────────────────────────────────┐
@@ -95,8 +120,12 @@
 Arquivo `apps/web/src/lib/mock-data.ts`:
 
 ### Omnichannel
-- 6 conversas com `{nome, canal: 'wa'|'ig'|'fb', avatar, ultimaMsg, hora, naoLidas}`
-- 1 conversa expandida com 8 mensagens
+- 6 conversas com `{id, nome, canal: 'wa'|'ig'|'fb', avatar, ultimaMsg, hora, naoLidas, setor, status}`
+- Setores: `'vendas' | 'locacao' | 'captacao' | 'financeiro'`
+- Status: `'pending' | 'open' | 'snoozed' | 'closed'`
+- 1 conversa expandida com 8 mensagens (direction: 'inbound' | 'outbound', sender: 'lead' | 'ai' | 'corretor')
+- 4 agent runs mock pra coluna direita: `{ts, action: 'classify' | 'rag-search' | 'propose-visit' | 'handoff', detail, tokens, costBRL}`
+- Modelos inspirados em `vendor/jpasv-chat-bullq/api/prisma/schema.prisma` (Channel, Conversation, Message)
 
 ### Financeiro
 - KPIs: receita 48.200, a receber 67.000, inadimplencia 2.8%, repasses 31.000
@@ -152,6 +181,18 @@ Arquivo `apps/web/src/lib/mock-data.ts`:
 - CRUD funcional — só visualização
 - Filtros funcionais — só visual
 - Mobile-first detalhado — só desktop bonito
+
+## Reuso do `vendor/jpasv-chat-bullq` (clonado, gitignored)
+
+A inbox da seção Omnichannel é inspirada **diretamente** na implementação real do `chat-bullq-web` (clonada em `vendor/jpasv-chat-bullq/web/src/app/(dashboard)/inbox/`).
+
+**Pra demo:** copiar a estrutura visual (3 colunas: ConversationList + ChatPanel + AgentRunsSidebar), simplificar pra mock estático. **NÃO** copiar TanStack Query, socket.io-client nem hooks — só o JSX + Tailwind classes.
+
+**Pós-demo (próxima sprint):** o `apps/api/src/modules/conversations/` + `ai-agents/` do Dinamic vai SER baseado no `chat-bullq-api` (NestJS 11 + Prisma 6 + BullMQ 5 + Socket.io — 28 deps, ai-agents com classifier/rag/memory/prompts/router/evals já implementados). Economiza ~3 sprints de Backend. Adaptar:
+- `ChannelType`: adicionar `FACEBOOK` (atualmente só WhatsApp Official, Zappfy, Instagram)
+- Adaptar prompts pro tom Dinamic (profissional caloroso, imobiliária Arapongas)
+- Plugar OpenRouter Qwen3.7-max como provider primário (chat-bullq usa Anthropic + OpenAI SDK diretos)
+- Domínio Dinamic: substituir contatos genéricos por leads imobiliários (Imóvel, Bairro, Lead, LeadProfile, Visit)
 
 ## Estimativa de tempo
 
