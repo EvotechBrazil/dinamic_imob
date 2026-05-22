@@ -8,7 +8,8 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
-import { cn, formatBRL, relativeTime } from "@/lib/utils";
+import { cn, formatBRL } from "@/lib/utils";
+import { RelativeTime } from "@/components/ui/relative-time";
 import type { AgentAction, AgentRun } from "@/lib/mock-types";
 
 const ACTION_META: Record<
@@ -144,7 +145,7 @@ function RunCard({ run }: { run: AgentRun }) {
           <span className="text-[11px] font-semibold uppercase tracking-wider text-ink">
             {meta.label}
           </span>
-          <span className="text-[10px] text-muted">{relativeTime(run.ts)}</span>
+          <RelativeTime ts={run.ts} className="text-[10px] text-muted" />
         </div>
         <p className="mt-1 line-clamp-1 text-xs leading-snug text-muted">
           {run.detail}

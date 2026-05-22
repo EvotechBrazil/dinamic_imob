@@ -4,7 +4,8 @@ import { Bot, CheckCheck, User, UserRound } from "lucide-react";
 import { motion } from "framer-motion";
 
 import type { ChatMessage } from "@/lib/mock-types";
-import { cn, relativeTime } from "@/lib/utils";
+import { cn } from "@/lib/utils";
+import { RelativeTime } from "@/components/ui/relative-time";
 
 interface ChatBubbleProps {
   message: ChatMessage;
@@ -111,7 +112,7 @@ export function ChatBubble({ message, showAvatar = true }: ChatBubbleProps) {
             !isInbound && "flex-row-reverse"
           )}
         >
-          <span>{relativeTime(message.ts)}</span>
+          <RelativeTime ts={message.ts} />
           {!isInbound && message.status && (
             <CheckCheck
               className={cn(
