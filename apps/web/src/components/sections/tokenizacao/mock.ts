@@ -3,7 +3,8 @@
  * Dinamic Imobiliária / Arapongas-PR
  *
  * Modelo de monetização: cliente compra "créditos IA" (tokens prepagos via
- * OpenRouter Qwen3.7-max) e consome conforme atende leads.
+ * OpenRouter — família Qwen: Flash, Plus e 3.7 Max) e consome conforme
+ * atende leads.
  *
  * Squad: somente lê tipos de @/lib/mock-types.
  * Tudo aqui é fictício mas realista (custos, modelos, tokens).
@@ -93,22 +94,22 @@ export interface TopModelo {
 
 export const TOP_MODELOS: TopModelo[] = [
   {
-    nome: "Qwen 3.7-max",
+    nome: "Qwen 3.7 Max",
     slug: "qwen/qwen3.7-max",
     percent: 87,
     custoBRL: 198.4,
     cor: "indigo",
   },
   {
-    nome: "Haiku 4.5",
-    slug: "anthropic/claude-haiku-4.5",
+    nome: "Qwen Flash",
+    slug: "qwen/qwen3.6-flash",
     percent: 10,
     custoBRL: 22.3,
     cor: "sky",
   },
   {
-    nome: "Sonnet 4.6",
-    slug: "anthropic/claude-sonnet-4.6",
+    nome: "Qwen Plus",
+    slug: "qwen/qwen3.6-plus",
     percent: 3,
     custoBRL: 6.8,
     cor: "amber",
@@ -150,7 +151,7 @@ export const TOKEN_HISTORICO: TokenRecord[] = [
     id: "tk-003",
     ts: tsAtras(0, 19),
     conversa: "Conversa #GHI9012",
-    modelo: "haiku-4.5",
+    modelo: "qwen-flash",
     tokensIn: 643,
     tokensOut: 215,
     costBRL: 0.024,
@@ -195,7 +196,7 @@ export const TOKEN_HISTORICO: TokenRecord[] = [
     id: "tk-008",
     ts: tsAtras(1, 24),
     conversa: "Conversa #VWX0123",
-    modelo: "haiku-4.5",
+    modelo: "qwen-flash",
     tokensIn: 467,
     tokensOut: 153,
     costBRL: 0.019,

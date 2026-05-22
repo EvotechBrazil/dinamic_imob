@@ -4,6 +4,13 @@ import { MessageCircle, Sparkles } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
+import type { Boleto, ChartPoint, KPI } from "@/lib/mock-types";
+
+interface AiCtaProps {
+  kpis: KPI[];
+  chart: ChartPoint[];
+  boletos: Boleto[];
+}
 
 const SAMPLE_QUESTIONS: string[] = [
   "Quanto entrou de aluguel do Centro nos últimos 30 dias?",
@@ -13,12 +20,68 @@ const SAMPLE_QUESTIONS: string[] = [
 
 const DEFAULT_PROMPT = "Me mostra um resumo do financeiro do mês";
 
-export function AiCta() {
+function formatBRL(n: number): string {
+  return n.toLocaleString("pt-BR", {
+    style: "currency",
+    currency: "BRL",
+    maximumFractionDigits: 0,
+  });
+}
+
+function buildFinanceiroContext(
+  kpis: KPI[],
+  chart: ChartPoint[],
+  boletos: Boleto[]
+): string {
+  const kpiBlock = kpis
+    .map((k) => {
+      const delta =
+        k.delta !== undefined
+          ? ` (variação ${k.delta > 0 ? "+" : ""}${k.delta}${k.suffix ?? "%"} vs mês anterior)`
+          : "";
+      return `- ${k.label}: ${k.value}${delta}${k.helper ? ` — ${k.helper}` : ""}`;
+    })
+    .join("\n");
+
+  const chartBlock = chart
+    .map(
+      (p) =>
+        `- ${p.label}: recebido ${formatBRL(p.valor)} / previsto ${formatBRL(p.valor2 ?? 0)}`
+    )
+    .join("\n");
+
+  const boletosBlock = boletos
+    .map((b) => {
+      const atraso =
+        b.diasAtraso !== undefined ? ` (${b.diasAtraso}d de atraso)` : "";
+      return `- ${b.locatario} — ${b.imovel} (${b.bairro}) — ${formatBRL(b.valor)} — ${b.vencimento} — status: ${b.status}${atraso}`;
+    })
+    .join("\n");
+
+  return [
+    "CONTEXTO: O usuário está vendo o painel FINANCEIRO da Dinamic (mês de Maio/2026).",
+    "Responda em PT-BR, direto e conciso, usando exatamente estes números:",
+    "",
+    "KPIs do mês:",
+    kpiBlock,
+    "",
+    "Série Recebido vs Previsto (últimos 6 meses):",
+    chartBlock,
+    "",
+    "Próximos vencimentos (boletos representativos):",
+    boletosBlock,
+    "",
+    "Quando o usuário perguntar sobre receita, atraso, repasses, previsões ou bairros, use estes dados como verdade. Se a pergunta exigir dado não presente acima, diga educadamente que precisa puxar do sistema e ofereça consultar.",
+  ].join("\n");
+}
+
+export function AiCta({ kpis, chart, boletos }: AiCtaProps) {
   const handleOpenChat = (prompt: string = DEFAULT_PROMPT) => {
     if (typeof window === "undefined") return;
+    const context = buildFinanceiroContext(kpis, chart, boletos);
     window.dispatchEvent(
       new CustomEvent("dinamic:open-chat-widget", {
-        detail: { prompt },
+        detail: { prompt, context },
       }),
     );
   };
@@ -73,7 +136,7 @@ export function AiCta() {
             Conversar agora
           </Button>
           <p className="mt-2 text-center text-[11px] text-muted">
-            Powered by Claude 4.6 · resposta em &lt;3s
+            Powered by Qwen via OpenRouter · resposta em &lt;3s
           </p>
         </div>
       </div>

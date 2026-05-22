@@ -33,8 +33,8 @@ const MODELO_BADGE: Record<
   { label: string; variant: "default" | "info" | "warning" | "muted" }
 > = {
   "qwen3.7-max": { label: "qwen3.7-max", variant: "default" },
-  "haiku-4.5": { label: "haiku-4.5", variant: "info" },
-  "sonnet-4.6": { label: "sonnet-4.6", variant: "warning" },
+  "qwen-flash": { label: "qwen-flash", variant: "info" },
+  "qwen-plus": { label: "qwen-plus", variant: "warning" },
 };
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;

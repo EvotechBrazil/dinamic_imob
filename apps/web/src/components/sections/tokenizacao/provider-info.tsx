@@ -4,8 +4,8 @@ import { ArrowUpRight, Cpu } from "lucide-react";
 
 /**
  * <ProviderInfo />
- * Mini-card horizontal explicando o roteamento entre modelos
- * (Qwen 3.7-max default, Haiku 4.5 pra queries baratas).
+ * Mini-card horizontal explicando o roteamento entre modelos Qwen
+ * (Qwen Flash pra queries baratas, Qwen 3.7 Max pra consultas complexas).
  */
 export function ProviderInfo() {
   return (
@@ -16,12 +16,14 @@ export function ProviderInfo() {
 
       <div className="flex-1 min-w-0">
         <div className="text-sm font-semibold text-ink">
-          Usamos OpenRouter — Qwen 3.7-max
+          Usamos OpenRouter — família Qwen
         </div>
         <p className="mt-0.5 text-xs leading-relaxed text-muted">
-          Roteamento inteligente: queries simples vão pra modelo barato
-          (Haiku 4.5), respostas complexas pra Qwen 3.7. Você economiza sem
-          perder qualidade.
+          Roteamento inteligente: queries rápidas vão pra{" "}
+          <span className="font-medium text-ink">Qwen Flash</span> (mais barato),
+          consultas complexas pra{" "}
+          <span className="font-medium text-ink">Qwen 3.7 Max</span>. Você
+          economiza sem perder qualidade.
         </p>
       </div>
 
