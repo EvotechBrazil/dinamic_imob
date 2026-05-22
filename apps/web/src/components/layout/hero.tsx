@@ -12,26 +12,28 @@ const MINI_KPIS = [
 export function Hero() {
   return (
     <section className="relative overflow-hidden bg-hero-gradient">
-      {/* Watermark da marca — logo oficial em opacity baixa com fade radial.
-          Posicionado fora do flow, atrás do conteúdo (z-0). */}
+      {/* Watermark da marca — logo oficial centralizada atrás do conteúdo,
+          opacity baixa com fade radial nas bordas pra fundir no gradient. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute -right-16 -top-8 hidden h-[560px] w-[820px] select-none md:block lg:-right-24 lg:h-[640px] lg:w-[1000px]"
+        className="pointer-events-none absolute inset-0 flex select-none items-center justify-center"
         style={{
           WebkitMaskImage:
-            "radial-gradient(ellipse at 70% 50%, black 0%, transparent 70%)",
+            "radial-gradient(ellipse 60% 70% at 50% 50%, black 0%, transparent 75%)",
           maskImage:
-            "radial-gradient(ellipse at 70% 50%, black 0%, transparent 70%)",
+            "radial-gradient(ellipse 60% 70% at 50% 50%, black 0%, transparent 75%)",
         }}
       >
-        <Image
-          src="/logo-dinamic.png"
-          alt=""
-          fill
-          sizes="1000px"
-          priority
-          className="object-contain object-right opacity-[0.07]"
-        />
+        <div className="relative h-[80%] w-[90%] max-w-[1100px]">
+          <Image
+            src="/logo-dinamic.png"
+            alt=""
+            fill
+            sizes="1100px"
+            priority
+            className="object-contain opacity-[0.06]"
+          />
+        </div>
       </div>
 
       <div className="section-container relative z-10 py-16 sm:py-24">

@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
+  { id: "imoveis", label: "Imóveis" },
   { id: "omnichannel", label: "Omnichannel" },
   { id: "financeiro", label: "Financeiro" },
   { id: "crm", label: "CRM" },
@@ -57,23 +58,20 @@ export function Topbar() {
       )}
       style={{ zIndex: "var(--z-topbar)" as unknown as number }}
     >
-      <div className="section-container flex h-16 items-center justify-between">
+      <div className="section-container flex h-20 items-center justify-between">
         <Link
           href="/"
           aria-label="Dinamic Imóveis — Arapongas-PR"
-          className="group flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+          className="group flex items-center rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
         >
           <Image
             src="/logo-dinamic.png"
             alt="Dinamic Imóveis"
-            width={210}
-            height={140}
+            width={273}
+            height={182}
             priority
-            className="h-10 w-auto transition-transform duration-200 group-hover:scale-[1.02]"
+            className="h-[52px] w-auto transition-transform duration-200 group-hover:scale-[1.02]"
           />
-          <span className="ml-1 hidden text-[10px] font-semibold uppercase tracking-[0.18em] text-muted sm:inline">
-            CRECI-J 03226
-          </span>
         </Link>
 
         <nav className="hidden items-center gap-1 lg:flex">

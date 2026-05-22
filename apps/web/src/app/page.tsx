@@ -1,5 +1,6 @@
 import { Topbar, Hero, Footer } from "@/components/layout";
 import { ChatWidget } from "@/components/chat-widget";
+import { ImoveisSection } from "@/components/sections/imoveis";
 import { OmnichannelSection } from "@/components/sections/omnichannel";
 import { FinanceiroSection } from "@/components/sections/financeiro";
 import { CRMSection } from "@/components/sections/crm";
@@ -13,6 +14,7 @@ export default function HomePage() {
       <Topbar />
       <main>
         <Hero />
+        <ImoveisSection />
         <OmnichannelSection />
         <FinanceiroSection />
         <CRMSection />
