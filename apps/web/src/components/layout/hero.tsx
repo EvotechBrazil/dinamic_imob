@@ -38,19 +38,24 @@ export function Hero() {
 
       <div className="section-container relative z-10 py-16 sm:py-24">
         <div className="max-w-3xl">
-          <Badge variant="muted" className="mb-4">
-            Demo Executiva · 2026-05-22
-          </Badge>
-          <h1 className="font-display text-4xl font-bold leading-[1.1] tracking-tight text-ink sm:text-5xl lg:text-6xl">
-            A plataforma da Dinamic em{" "}
+          <div className="mb-4 flex flex-wrap items-center gap-2">
+            <Badge variant="muted">Demo Executiva · 2026-05-22</Badge>
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/30 bg-accent/10 px-2.5 py-1 text-[11px] font-semibold uppercase tracking-wider text-amber-700">
+              <span className="h-1.5 w-1.5 rounded-full bg-amber-500" />
+              Feito sob medida
+            </span>
+          </div>
+          <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-ink sm:text-5xl lg:text-6xl">
+            Toda a Dinamic em{" "}
             <span className="bg-gradient-to-r from-indigo-600 via-indigo-500 to-amber-500 bg-clip-text text-transparent">
-              6 frentes.
+              um só lugar.
             </span>
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted">
-            Dinamic Channel comercial, financeiro de locação, CRM com IA, jurídico
-            LGPD-nativo e dashboards consolidados — tudo num produto só, feito
-            sob medida para a Dinamic Imobiliária de Arapongas-PR.
+            Atendimento IA 24/7, catálogo de imóveis vivo, financeiro auditável,
+            CRM com funil e contratos LGPD-nativos. Construído sob medida pra
+            Dinamic Imobiliária — você no controle de tudo, sem depender de
+            ninguém.
           </p>
 
           <div className="mt-7 flex flex-wrap items-center gap-3">
