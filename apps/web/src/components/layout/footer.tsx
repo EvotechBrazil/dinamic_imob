@@ -1,21 +1,27 @@
+import Image from "next/image";
+
 export function Footer() {
   return (
     <footer className="mt-24 border-t border-border bg-white">
       <div className="section-container py-10">
-        <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-center">
+        <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-start">
           <div>
-            <div className="flex items-center gap-2">
-              <span className="grid h-7 w-7 place-items-center rounded-md bg-primary text-xs font-bold text-white">
-                D
+            <div className="flex items-center gap-3">
+              <Image
+                src="/logo-dinamic.png"
+                alt="Dinamic Imóveis"
+                width={180}
+                height={120}
+                className="h-9 w-auto"
+              />
+              <span className="rounded-md border border-border bg-app/60 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted">
+                CRECI-J 03226
               </span>
-              <span className="font-display text-base font-bold text-ink">
-                DINAMIC
-              </span>
-              <span className="text-xs text-muted">Imobiliária — Arapongas-PR</span>
             </div>
-            <p className="mt-2 max-w-md text-sm text-muted">
-              Plataforma proprietária desenvolvida sob medida. Portal +
-              Atendimento IA + CRM + Financeiro de locação + Jurídico.
+            <p className="mt-3 max-w-md text-sm leading-relaxed text-muted">
+              Plataforma proprietária desenvolvida sob medida — Portal,
+              Atendimento IA, CRM, Financeiro de locação e Jurídico em um só
+              produto. Arapongas-PR.
             </p>
           </div>
           <div className="text-sm text-muted">
@@ -31,7 +37,7 @@ export function Footer() {
         </div>
         <div className="mt-8 flex flex-col-reverse items-start justify-between gap-3 border-t border-border pt-6 text-xs text-muted sm:flex-row sm:items-center">
           <p>
-            © {new Date().getFullYear()} Dinamic Imobiliária. Todos os direitos
+            © {new Date().getFullYear()} Dinamic Imóveis. Todos os direitos
             reservados.
           </p>
           <div className="flex gap-4">

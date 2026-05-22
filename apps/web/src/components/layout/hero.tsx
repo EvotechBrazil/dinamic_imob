@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
@@ -10,8 +11,30 @@ const MINI_KPIS = [
 
 export function Hero() {
   return (
-    <section className="bg-hero-gradient">
-      <div className="section-container py-16 sm:py-24">
+    <section className="relative overflow-hidden bg-hero-gradient">
+      {/* Watermark da marca — logo oficial em opacity baixa com fade radial.
+          Posicionado fora do flow, atrás do conteúdo (z-0). */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute -right-16 -top-8 hidden h-[560px] w-[820px] select-none md:block lg:-right-24 lg:h-[640px] lg:w-[1000px]"
+        style={{
+          WebkitMaskImage:
+            "radial-gradient(ellipse at 70% 50%, black 0%, transparent 70%)",
+          maskImage:
+            "radial-gradient(ellipse at 70% 50%, black 0%, transparent 70%)",
+        }}
+      >
+        <Image
+          src="/logo-dinamic.png"
+          alt=""
+          fill
+          sizes="1000px"
+          priority
+          className="object-contain object-right opacity-[0.07]"
+        />
+      </div>
+
+      <div className="section-container relative z-10 py-16 sm:py-24">
         <div className="max-w-3xl">
           <Badge variant="muted" className="mb-4">
             Demo Executiva · 2026-05-22

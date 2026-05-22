@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -57,15 +58,21 @@ export function Topbar() {
       style={{ zIndex: "var(--z-topbar)" as unknown as number }}
     >
       <div className="section-container flex h-16 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2">
-          <span className="grid h-8 w-8 place-items-center rounded-lg bg-primary text-sm font-bold tracking-tight text-white">
-            D
-          </span>
-          <span className="font-display text-lg font-bold tracking-tight text-ink">
-            DINAMIC
-          </span>
-          <span className="ml-1 hidden text-xs font-medium uppercase tracking-wider text-muted sm:inline">
-            Imobiliária
+        <Link
+          href="/"
+          aria-label="Dinamic Imóveis — Arapongas-PR"
+          className="group flex items-center gap-2 rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
+        >
+          <Image
+            src="/logo-dinamic.png"
+            alt="Dinamic Imóveis"
+            width={210}
+            height={140}
+            priority
+            className="h-10 w-auto transition-transform duration-200 group-hover:scale-[1.02]"
+          />
+          <span className="ml-1 hidden text-[10px] font-semibold uppercase tracking-[0.18em] text-muted sm:inline">
+            CRECI-J 03226
           </span>
         </Link>
 

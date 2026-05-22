@@ -1,7 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Bot, X, RotateCcw, Sparkles } from "lucide-react";
+import Image from "next/image";
+import { X, RotateCcw, Sparkles } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChatMessageBubble } from "./chat-message";
 import { ChatInput } from "./chat-input";
@@ -42,15 +43,25 @@ export function ChatPanel({ open, onClose }: ChatPanelProps) {
           {/* header */}
           <div className="flex items-center justify-between border-b border-border bg-gradient-to-r from-primary to-primary-dark px-4 py-3 text-white">
             <div className="flex items-center gap-2.5">
-              <div className="grid h-8 w-8 place-items-center rounded-lg bg-white/15 backdrop-blur">
-                <Bot className="h-4 w-4" />
+              <div className="grid h-9 w-9 place-items-center rounded-lg bg-white shadow-sm ring-1 ring-white/30">
+                <Image
+                  src="/logo-dinamic.png"
+                  alt="Dinamic"
+                  width={48}
+                  height={32}
+                  className="h-6 w-auto"
+                />
               </div>
               <div>
                 <p className="text-sm font-semibold leading-tight">
                   Fale com a Dinamic
                 </p>
-                <p className="text-[11px] leading-tight text-white/80">
-                  Atendimento IA · Qwen 3.7-max
+                <p className="flex items-center gap-1 text-[11px] leading-tight text-white/80">
+                  <span className="relative flex h-1.5 w-1.5">
+                    <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-75" />
+                    <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-emerald-400" />
+                  </span>
+                  Atendimento IA · online agora
                 </p>
               </div>
             </div>
