@@ -52,6 +52,8 @@ const STATUS_ORDER: LeadStatus[] = [
   "qualificado",
   "visita",
   "proposta",
+  "fechado",
+  "perdido",
 ];
 
 const STATUS_STYLE: Record<
@@ -87,6 +89,18 @@ const STATUS_STYLE: Record<
     pill: "bg-emerald-100 text-emerald-700",
     column: "border-emerald-200",
     overBg: "bg-emerald-100/60",
+  },
+  fechado: {
+    dot: "bg-emerald-600",
+    pill: "bg-emerald-200 text-emerald-800",
+    column: "border-emerald-300 bg-emerald-50/40",
+    overBg: "bg-emerald-200/60",
+  },
+  perdido: {
+    dot: "bg-rose-400",
+    pill: "bg-rose-100 text-rose-700",
+    column: "border-rose-200 bg-rose-50/30",
+    overBg: "bg-rose-100/60",
   },
 };
 
@@ -160,10 +174,12 @@ const EMPTY_BOARD: Board = {
   qualificado: [],
   visita: [],
   proposta: [],
+  fechado: [],
+  perdido: [],
 };
 
 function groupByStatus(leads: Lead[]): Board {
-  const out: Board = { novo: [], contatado: [], qualificado: [], visita: [], proposta: [] };
+  const out: Board = { novo: [], contatado: [], qualificado: [], visita: [], proposta: [], fechado: [], perdido: [] };
   for (const l of leads) {
     if (STATUS_ORDER.includes(l.status)) {
       out[l.status].push(l);
@@ -394,7 +410,7 @@ export function Kanban() {
           </div>
         </div>
 
-        <div className="-mx-2 flex gap-3 overflow-x-auto px-2 pb-2 lg:grid lg:grid-cols-5 lg:overflow-visible">
+        <div className="-mx-2 flex gap-3 overflow-x-auto px-2 pb-2 lg:grid lg:grid-cols-7 lg:overflow-visible">
           {STATUS_ORDER.map((status) => {
             const leads = board[status];
             const style = STATUS_STYLE[status];

@@ -116,7 +116,9 @@ export type LeadStatus =
   | "contatado"
   | "qualificado"
   | "visita"
-  | "proposta";
+  | "proposta"
+  | "fechado"
+  | "perdido";
 
 export type IntencaoLead = "compra" | "aluguel";
 
@@ -130,6 +132,8 @@ export interface Lead {
   status: LeadStatus;
   setor: Setor;
   ultimaInteracao: string;
+  telefone?: string;
+  origemCanal?: ChannelType;
 }
 
 export type TipoImovel = "apartamento" | "casa" | "terreno" | "comercial";
@@ -180,6 +184,30 @@ export interface Contract {
   status: ContractStatus;
 }
 
+// ============================================================
+// Comissões / Corretores
+// ============================================================
+export type ComissaoStatus = "pago" | "pendente";
+
+export interface Corretor {
+  id: string;
+  nome: string;
+  setor: Setor;
+  creci?: string;
+  desde: string;
+  nivel: "junior" | "pleno" | "senior";
+}
+
+export interface ComissaoMensal {
+  id: string;
+  corretorId: string;
+  mes: string;
+  fechamentos: number;
+  vgvBRL: number;
+  comissaoBRL: number;
+  status: ComissaoStatus;
+}
+
 export type LGPDRequestType = "export" | "delete" | "consent_revoke";
 export type LGPDRequestStatus = "pendente" | "concluido";
 
@@ -213,4 +241,6 @@ export const LEAD_STATUS_LABELS: Record<LeadStatus, string> = {
   qualificado: "Qualificado",
   visita: "Visita",
   proposta: "Proposta",
+  fechado: "Fechado",
+  perdido: "Perdido",
 };
