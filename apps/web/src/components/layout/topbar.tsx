@@ -3,13 +3,14 @@
 import * as React from "react";
 import Link from "next/link";
 import Image from "next/image";
+import { Menu, X } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
 const NAV_ITEMS = [
   { id: "imoveis", label: "Imóveis" },
-  { id: "omnichannel", label: "Omnichannel" },
+  { id: "omnichannel", label: "Dinamic Channel" },
   { id: "financeiro", label: "Financeiro" },
   { id: "crm", label: "CRM" },
   { id: "tokenizacao", label: "Tokenização" },
@@ -20,6 +21,7 @@ const NAV_ITEMS = [
 export function Topbar() {
   const [activeId, setActiveId] = React.useState<string>("");
   const [scrolled, setScrolled] = React.useState(false);
+  const [mobileOpen, setMobileOpen] = React.useState(false);
 
   React.useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 8);
@@ -27,6 +29,15 @@ export function Topbar() {
     window.addEventListener("scroll", onScroll, { passive: true });
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  // Trava scroll do body quando menu mobile está aberto
+  React.useEffect(() => {
+    if (typeof document === "undefined") return;
+    document.body.style.overflow = mobileOpen ? "hidden" : "";
+    return () => {
+      document.body.style.overflow = "";
+    };
+  }, [mobileOpen]);
 
   React.useEffect(() => {
     if (typeof window === "undefined") return;
@@ -58,7 +69,7 @@ export function Topbar() {
       )}
       style={{ zIndex: "var(--z-topbar)" as unknown as number }}
     >
-      <div className="section-container flex h-20 items-center justify-between">
+      <div className="section-container flex h-28 items-center justify-between">
         <Link
           href="/"
           aria-label="Dinamic Imóveis — Arapongas-PR"
@@ -70,7 +81,7 @@ export function Topbar() {
             width={273}
             height={182}
             priority
-            className="h-[52px] w-auto transition-transform duration-200 group-hover:scale-[1.02]"
+            className="h-[78px] w-auto transition-transform duration-200 group-hover:scale-[1.02]"
           />
         </Link>
 
@@ -95,13 +106,67 @@ export function Topbar() {
           <Button size="sm" variant="outline" className="hidden md:inline-flex">
             Acessar admin
           </Button>
-          <Avatar className="h-9 w-9">
+          <Avatar className="hidden h-9 w-9 sm:flex">
             <AvatarFallback className="bg-primary/10 text-primary">
               DN
             </AvatarFallback>
           </Avatar>
+          <button
+            type="button"
+            aria-label={mobileOpen ? "Fechar menu" : "Abrir menu"}
+            aria-expanded={mobileOpen}
+            onClick={() => setMobileOpen((v) => !v)}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-ink transition hover:bg-slate-100 lg:hidden"
+          >
+            {mobileOpen ? (
+              <X className="h-5 w-5" />
+            ) : (
+              <Menu className="h-5 w-5" />
+            )}
+          </button>
         </div>
       </div>
+
+      {/* Mobile drawer — desliza pra baixo abaixo do header */}
+      {mobileOpen && (
+        <>
+          <div
+            className="fixed inset-0 top-28 z-40 bg-ink/40 lg:hidden"
+            onClick={() => setMobileOpen(false)}
+            aria-hidden
+          />
+          <nav
+            id="mobile-nav"
+            className="absolute left-0 right-0 top-full z-50 border-b border-border bg-white shadow-lg lg:hidden"
+          >
+            <ul className="section-container flex flex-col gap-1 py-3">
+              {NAV_ITEMS.map((item) => (
+                <li key={item.id}>
+                  <a
+                    href={`#${item.id}`}
+                    onClick={() => setMobileOpen(false)}
+                    className={cn(
+                      "block rounded-md px-4 py-3 text-base font-medium transition-colors",
+                      activeId === item.id
+                        ? "bg-primary/10 text-primary"
+                        : "text-ink hover:bg-slate-50"
+                    )}
+                  >
+                    {item.label}
+                  </a>
+                </li>
+              ))}
+              <li className="mt-2 border-t border-border pt-3">
+                <Button asChild size="sm" className="w-full">
+                  <a href="#omnichannel" onClick={() => setMobileOpen(false)}>
+                    Acessar admin
+                  </a>
+                </Button>
+              </li>
+            </ul>
+          </nav>
+        </>
+      )}
     </header>
   );
 }

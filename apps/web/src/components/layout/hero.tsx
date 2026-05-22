@@ -43,12 +43,12 @@ export function Hero() {
           </Badge>
           <h1 className="font-display text-4xl font-bold leading-[1.1] tracking-tight text-ink sm:text-5xl lg:text-6xl">
             A plataforma da Dinamic em{" "}
-            <span className="bg-gradient-to-r from-primary to-accent bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-indigo-600 via-indigo-500 to-amber-500 bg-clip-text text-transparent">
               6 frentes.
             </span>
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted">
-            Omnichannel comercial, financeiro de locação, CRM com IA, jurídico
+            Dinamic Channel comercial, financeiro de locação, CRM com IA, jurídico
             LGPD-nativo e dashboards consolidados — tudo num produto só, feito
             sob medida para a Dinamic Imobiliária de Arapongas-PR.
           </p>
@@ -61,11 +61,11 @@ export function Hero() {
               <a href="#dashboards">Ver indicadores</a>
             </Button>
             <span className="ml-1 text-sm text-muted">
-              ou{" "}
+              ou abra o{" "}
               <span className="font-medium text-primary">
-                clique no chat ao lado
+                chat no canto inferior direito
               </span>{" "}
-              para falar com a IA
+              pra falar com a IA agora
             </span>
           </div>
         </div>
