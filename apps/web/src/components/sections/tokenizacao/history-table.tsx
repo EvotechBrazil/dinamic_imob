@@ -32,9 +32,9 @@ const MODELO_BADGE: Record<
   string,
   { label: string; variant: "default" | "info" | "warning" | "muted" }
 > = {
-  "qwen3.7-max": { label: "qwen3.7-max", variant: "default" },
-  "qwen-flash": { label: "qwen-flash", variant: "info" },
-  "qwen-plus": { label: "qwen-plus", variant: "warning" },
+  rapido: { label: "Rápido", variant: "default" },
+  padrao: { label: "Padrão", variant: "info" },
+  premium: { label: "Premium", variant: "warning" },
 };
 
 const ONE_DAY_MS = 24 * 60 * 60 * 1000;

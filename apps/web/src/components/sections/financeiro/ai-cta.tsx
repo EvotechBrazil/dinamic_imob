@@ -136,7 +136,7 @@ export function AiCta({ kpis, chart, boletos }: AiCtaProps) {
             Conversar agora
           </Button>
           <p className="mt-2 text-center text-[11px] text-muted">
-            Powered by Qwen via OpenRouter · resposta em &lt;3s
+            Powered by IA Dinamic · resposta em &lt;3s
           </p>
         </div>
       </div>

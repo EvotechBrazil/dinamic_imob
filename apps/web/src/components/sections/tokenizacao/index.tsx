@@ -36,7 +36,7 @@ export function TokenizacaoSection() {
         <SectionHeader
           eyebrow="05 · Tokenização IA"
           title="Você paga só o que usa de IA."
-          subtitle="Claude 3.5 Haiku via OpenRouter, com Sonnet 4.5 disponível pra consultas pesadas. Cada token contabilizado em R$ — transparência total, sem surpresa no fim do mês."
+          subtitle="Roteamento inteligente entre modelos: rápido pra chat em tempo real, premium pra consultas complexas. Cada token contabilizado em R$ — transparência total, sem surpresa no fim do mês."
         />
 
         {/* Top: BalanceCard + ConsumptionChart */}

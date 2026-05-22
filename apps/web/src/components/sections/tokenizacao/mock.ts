@@ -2,9 +2,9 @@
  * Mock data — Seção Tokenização IA
  * Dinamic Imobiliária / Arapongas-PR
  *
- * Modelo de monetização: cliente compra "créditos IA" (tokens prepagos via
- * OpenRouter — família Qwen: Flash, Plus e 3.7 Max) e consome conforme
- * atende leads.
+ * Modelo de monetização: cliente compra "créditos IA" (tokens prepagos)
+ * e consome conforme atende leads. Roteamento entre modelos de IA é
+ * abstraído do cliente — ele vê "rápido / padrão / premium".
  *
  * Squad: somente lê tipos de @/lib/mock-types.
  * Tudo aqui é fictício mas realista (custos, modelos, tokens).
@@ -94,22 +94,22 @@ export interface TopModelo {
 
 export const TOP_MODELOS: TopModelo[] = [
   {
-    nome: "Qwen 3.7 Max",
-    slug: "qwen/qwen3.7-max",
+    nome: "Modelo Rápido",
+    slug: "fast",
     percent: 87,
     custoBRL: 198.4,
     cor: "indigo",
   },
   {
-    nome: "Qwen Flash",
-    slug: "qwen/qwen3.6-flash",
+    nome: "Modelo Padrão",
+    slug: "standard",
     percent: 10,
     custoBRL: 22.3,
     cor: "sky",
   },
   {
-    nome: "Qwen Plus",
-    slug: "qwen/qwen3.6-plus",
+    nome: "Modelo Premium",
+    slug: "premium",
     percent: 3,
     custoBRL: 6.8,
     cor: "amber",
@@ -133,7 +133,7 @@ export const TOKEN_HISTORICO: TokenRecord[] = [
     id: "tk-001",
     ts: tsAtras(0, 4),
     conversa: "Conversa #ABC1234",
-    modelo: "qwen3.7-max",
+    modelo: "rapido",
     tokensIn: 412,
     tokensOut: 168,
     costBRL: 0.018,
@@ -142,7 +142,7 @@ export const TOKEN_HISTORICO: TokenRecord[] = [
     id: "tk-002",
     ts: tsAtras(0, 11),
     conversa: "Conversa #DEF5678",
-    modelo: "qwen3.7-max",
+    modelo: "rapido",
     tokensIn: 287,
     tokensOut: 94,
     costBRL: 0.012,
@@ -151,7 +151,7 @@ export const TOKEN_HISTORICO: TokenRecord[] = [
     id: "tk-003",
     ts: tsAtras(0, 19),
     conversa: "Conversa #GHI9012",
-    modelo: "qwen-flash",
+    modelo: "padrao",
     tokensIn: 643,
     tokensOut: 215,
     costBRL: 0.024,
@@ -160,7 +160,7 @@ export const TOKEN_HISTORICO: TokenRecord[] = [
     id: "tk-004",
     ts: tsAtras(0, 27),
     conversa: "Conversa #JKL3456",
-    modelo: "qwen3.7-max",
+    modelo: "rapido",
     tokensIn: 198,
     tokensOut: 71,
     costBRL: 0.008,
@@ -169,7 +169,7 @@ export const TOKEN_HISTORICO: TokenRecord[] = [
     id: "tk-005",
     ts: tsAtras(0, 38),
     conversa: "Conversa #MNO7890",
-    modelo: "qwen3.7-max",
+    modelo: "rapido",
     tokensIn: 372,
     tokensOut: 142,
     costBRL: 0.016,
@@ -178,7 +178,7 @@ export const TOKEN_HISTORICO: TokenRecord[] = [
     id: "tk-006",
     ts: tsAtras(0, 52),
     conversa: "Conversa #PQR2345",
-    modelo: "qwen3.7-max",
+    modelo: "rapido",
     tokensIn: 356,
     tokensOut: 142,
     costBRL: 0.015,
@@ -187,7 +187,7 @@ export const TOKEN_HISTORICO: TokenRecord[] = [
     id: "tk-007",
     ts: tsAtras(1, 9),
     conversa: "Conversa #STU6789",
-    modelo: "qwen3.7-max",
+    modelo: "rapido",
     tokensIn: 521,
     tokensOut: 197,
     costBRL: 0.022,
@@ -196,7 +196,7 @@ export const TOKEN_HISTORICO: TokenRecord[] = [
     id: "tk-008",
     ts: tsAtras(1, 24),
     conversa: "Conversa #VWX0123",
-    modelo: "qwen-flash",
+    modelo: "padrao",
     tokensIn: 467,
     tokensOut: 153,
     costBRL: 0.019,
@@ -205,7 +205,7 @@ export const TOKEN_HISTORICO: TokenRecord[] = [
     id: "tk-009",
     ts: tsAtras(2, 47),
     conversa: "Conversa #YZA4567",
-    modelo: "qwen3.7-max",
+    modelo: "rapido",
     tokensIn: 318,
     tokensOut: 108,
     costBRL: 0.013,
@@ -214,7 +214,7 @@ export const TOKEN_HISTORICO: TokenRecord[] = [
     id: "tk-010",
     ts: tsAtras(5, 12),
     conversa: "Conversa #BCD8901",
-    modelo: "qwen3.7-max",
+    modelo: "rapido",
     tokensIn: 234,
     tokensOut: 89,
     costBRL: 0.01,

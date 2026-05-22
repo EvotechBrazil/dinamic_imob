@@ -4,8 +4,8 @@ import { ArrowUpRight, Cpu } from "lucide-react";
 
 /**
  * <ProviderInfo />
- * Mini-card horizontal explicando o roteamento entre modelos Qwen
- * (Qwen Flash pra queries baratas, Qwen 3.7 Max pra consultas complexas).
+ * Mini-card horizontal explicando o roteamento entre modelos de IA
+ * (rápido pra queries baratas, premium pra consultas complexas).
  */
 export function ProviderInfo() {
   return (
@@ -16,13 +16,13 @@ export function ProviderInfo() {
 
       <div className="flex-1 min-w-0">
         <div className="text-sm font-semibold text-ink">
-          Usamos OpenRouter — família Qwen
+          Roteamento inteligente entre modelos de IA
         </div>
         <p className="mt-0.5 text-xs leading-relaxed text-muted">
-          Roteamento inteligente: queries rápidas vão pra{" "}
-          <span className="font-medium text-ink">Qwen Flash</span> (mais barato),
-          consultas complexas pra{" "}
-          <span className="font-medium text-ink">Qwen 3.7 Max</span>. Você
+          Queries rápidas vão pro{" "}
+          <span className="font-medium text-ink">modelo rápido</span> (mais
+          barato), consultas complexas pro{" "}
+          <span className="font-medium text-ink">modelo premium</span>. Você
           economiza sem perder qualidade.
         </p>
       </div>
