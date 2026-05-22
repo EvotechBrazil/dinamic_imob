@@ -51,10 +51,15 @@ export function Topbar() {
       (entries) => {
         const visible = entries
           .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio);
+          .sort(
+            (a, b) => b.intersectionRect.height - a.intersectionRect.height
+          );
         if (visible[0]) setActiveId(visible[0].target.id);
       },
-      { rootMargin: "-30% 0px -50% 0px", threshold: [0.1, 0.4, 0.8] }
+      {
+        rootMargin: "-30% 0px -50% 0px",
+        threshold: [0, 0.25, 0.5, 0.75, 1],
+      }
     );
     sections.forEach((s) => observer.observe(s));
     return () => observer.disconnect();
