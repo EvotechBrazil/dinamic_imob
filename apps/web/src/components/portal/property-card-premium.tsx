@@ -35,17 +35,24 @@ export function PropertyCardPremium({ property }: PropertyCardPremiumProps) {
   const isAluguel = property.finalidade === "aluguel";
   const isLancamento =
     property.tipo === "apartamento" &&
-    property.destaque &&
     property.finalidade === "venda" &&
-    (property.titulo.toLowerCase().includes("lança") ||
-      property.titulo.toLowerCase().includes("novo"));
+    property.preco >= 500000;
 
   // Galeria rotate on hover (1s/foto) — only if > 1 foto
   const handleMouseEnter = () => {
     if (fotos.length <= 1) return;
+    if (galleryTimerRef.current !== null) {
+      window.clearInterval(galleryTimerRef.current);
+    }
     galleryTimerRef.current = window.setInterval(() => {
       setPhotoIdx((idx) => (idx + 1) % fotos.length);
     }, 1000);
+  };
+
+  // Mobile: tap cycles to next photo (no hover support on touch devices)
+  const handleTouchEnd = () => {
+    if (fotos.length <= 1) return;
+    setPhotoIdx((idx) => (idx + 1) % fotos.length);
   };
 
   const handleMouseLeave = () => {
@@ -105,7 +112,10 @@ export function PropertyCardPremium({ property }: PropertyCardPremiumProps) {
       )}
     >
       {/* Imagem com gallery hover + badges + favorito */}
-      <div className="relative aspect-[4/3] overflow-hidden bg-[var(--portal-bg)]">
+      <div
+        onTouchEnd={handleTouchEnd}
+        className="relative aspect-[4/3] overflow-hidden bg-[var(--portal-bg)]"
+      >
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img
           src={fotos[photoIdx]}
@@ -115,7 +125,7 @@ export function PropertyCardPremium({ property }: PropertyCardPremiumProps) {
 
         {property.destaque && (
           <span className="absolute left-3 top-3 inline-flex items-center gap-1 rounded-full bg-[var(--portal-gold)] px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-md">
-            ⭐ Destaque
+            <span aria-hidden="true">⭐</span> Destaque
           </span>
         )}
 
@@ -131,15 +141,16 @@ export function PropertyCardPremium({ property }: PropertyCardPremiumProps) {
         <button
           type="button"
           aria-label={isFavorited ? "Remover dos favoritos" : "Favoritar imóvel"}
+          aria-pressed={isFavorited}
           onClick={(e) => {
             e.stopPropagation();
             setIsFavorited((v) => !v);
           }}
-          className="absolute bottom-3 right-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/90 shadow-md backdrop-blur transition hover:bg-white"
+          className="absolute bottom-3 right-3 flex h-11 w-11 items-center justify-center rounded-full bg-white/90 shadow-md backdrop-blur transition hover:bg-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portal-gold)] focus-visible:ring-offset-2"
         >
           <Heart
             className={cn(
-              "h-4 w-4 transition",
+              "h-5 w-5 transition",
               isFavorited
                 ? "fill-rose-500 stroke-rose-500"
                 : "fill-none stroke-[var(--portal-text-muted)]"
@@ -221,7 +232,7 @@ export function PropertyCardPremium({ property }: PropertyCardPremiumProps) {
         <div className="mt-4 flex gap-2">
           <button
             type="button"
-            className="flex-1 rounded-xl bg-[var(--portal-cta-black)] py-2.5 text-sm font-semibold text-white transition hover:bg-[var(--portal-cta-black-hover)]"
+            className="flex-1 rounded-xl bg-[var(--portal-cta-black)] py-2.5 text-sm font-semibold text-white transition hover:bg-[var(--portal-cta-black-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portal-gold)] focus-visible:ring-offset-2"
           >
             Ver detalhes
           </button>
@@ -237,9 +248,9 @@ export function PropertyCardPremium({ property }: PropertyCardPremiumProps) {
                 })
               );
             }}
-            className="flex h-10 items-center gap-1.5 rounded-xl border border-[var(--portal-border)] bg-white px-4 text-sm font-medium text-[var(--portal-text)] transition hover:border-[var(--portal-gold)] hover:text-[var(--portal-gold-dark)]"
+            className="flex h-11 items-center gap-1.5 rounded-xl border border-[var(--portal-border)] bg-white px-4 text-sm font-medium text-[var(--portal-text)] transition hover:border-[var(--portal-gold)] hover:text-[var(--portal-gold-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portal-gold)] focus-visible:ring-offset-2"
           >
-            💬 Saber mais
+            <span aria-hidden="true">💬</span> Saber mais
           </button>
         </div>
       </div>

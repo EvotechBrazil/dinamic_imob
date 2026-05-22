@@ -22,10 +22,9 @@ const FILTERS: FilterPill[] = [
     key: "lancamentos",
     label: "Lançamentos",
     match: (p) =>
+      p.tipo === "apartamento" &&
       p.finalidade === "venda" &&
-      Boolean(p.destaque) &&
-      (p.titulo.toLowerCase().includes("lança") ||
-        p.titulo.toLowerCase().includes("novo")),
+      p.preco >= 500000,
   },
   { key: "todos", label: "Todos", match: () => true },
 ];
@@ -71,9 +70,15 @@ export function FeaturedProperties() {
     const matcher = FILTERS.find((f) => f.key === active);
     let list = matcher ? PROPERTIES.filter(matcher.match) : PROPERTIES;
     if (bairroFilter) {
-      list = list.filter(
-        (p) => p.bairro.toLowerCase() === bairroFilter.toLowerCase()
-      );
+      const needle = bairroFilter.toLowerCase();
+      list = list.filter((p) => {
+        const haystack = p.bairro.toLowerCase();
+        return (
+          haystack === needle ||
+          haystack.includes(needle) ||
+          needle.includes(haystack)
+        );
+      });
     }
     return list;
   }, [active, bairroFilter]);
@@ -139,13 +144,14 @@ export function FeaturedProperties() {
                 key={f.key}
                 role="tab"
                 aria-selected={isActive}
+                aria-controls="portal-featured-panel"
                 type="button"
                 onClick={() => {
                   setActive(f.key);
                   setBairroFilter(null);
                 }}
                 className={cn(
-                  "rounded-full px-4 py-2 text-sm font-medium transition",
+                  "rounded-full px-4 py-2.5 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portal-gold)] focus-visible:ring-offset-2",
                   isActive
                     ? "bg-[var(--portal-cta-black)] text-white shadow-md"
                     : "border border-[var(--portal-border)] bg-white text-[var(--portal-text)] hover:border-[var(--portal-gold)] hover:text-[var(--portal-gold-dark)]"
@@ -171,8 +177,9 @@ export function FeaturedProperties() {
             <span className="text-[var(--portal-text-muted)]">Bairro:</span>
             <button
               type="button"
+              aria-label={`Remover filtro de bairro: ${bairroFilter}`}
               onClick={() => setBairroFilter(null)}
-              className="inline-flex items-center gap-2 rounded-full bg-[var(--portal-gold-soft)] px-3 py-1 font-medium text-[var(--portal-gold-darker)] hover:bg-[var(--portal-gold)]/20"
+              className="inline-flex items-center gap-2 rounded-full bg-[var(--portal-gold-soft)] px-3 py-1 font-medium text-[var(--portal-gold-darker)] hover:bg-[var(--portal-gold)]/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portal-gold)] focus-visible:ring-offset-2"
             >
               {bairroFilter}
               <span aria-hidden className="text-base leading-none">×</span>
@@ -192,13 +199,18 @@ export function FeaturedProperties() {
                 setActive("todos");
                 setBairroFilter(null);
               }}
-              className="mt-4 text-sm font-medium text-[var(--portal-gold-dark)] hover:underline"
+              className="mt-4 rounded text-sm font-medium text-[var(--portal-gold-dark)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portal-gold)] focus-visible:ring-offset-2"
             >
               Limpar filtros
             </button>
           </div>
         ) : (
-          <div className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
+          <div
+            id="portal-featured-panel"
+            role="tabpanel"
+            aria-label="Imóveis filtrados"
+            className="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3"
+          >
             {visible.map((p) => (
               <PropertyCardPremium key={p.id} property={p} />
             ))}
@@ -211,7 +223,7 @@ export function FeaturedProperties() {
             <button
               type="button"
               onClick={() => setVisibleCount((c) => c + LOAD_INCREMENT)}
-              className="rounded-xl border border-[var(--portal-border)] bg-white px-8 py-3 text-sm font-medium text-[var(--portal-text)] transition hover:border-[var(--portal-gold)] hover:text-[var(--portal-gold-dark)]"
+              className="rounded-xl border border-[var(--portal-border)] bg-white px-8 py-3 text-sm font-medium text-[var(--portal-text)] transition hover:border-[var(--portal-gold)] hover:text-[var(--portal-gold-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portal-gold)] focus-visible:ring-offset-2"
             >
               Ver mais {Math.min(LOAD_INCREMENT, filtered.length - visibleCount)} imóveis
             </button>

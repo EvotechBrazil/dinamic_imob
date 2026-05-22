@@ -70,23 +70,23 @@ export function Neighborhoods() {
               {/* Overlay gradient */}
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent" />
 
-              {/* Pin marker hover */}
-              <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              {/* Pin marker — sempre visível em mobile, hover-only em desktop */}
+              <div className="pointer-events-none absolute inset-0 flex items-center justify-center opacity-100 transition-opacity duration-300 sm:opacity-0 sm:group-hover:opacity-100">
                 <span className="absolute h-12 w-12 animate-ping rounded-full bg-[var(--portal-gold)]/60" />
                 <span className="relative flex h-10 w-10 items-center justify-center rounded-full bg-[var(--portal-gold)] shadow-lg">
                   <MapPin className="h-5 w-5 text-white" aria-hidden />
                 </span>
               </div>
 
-              {/* Mini badge "Explorar" */}
-              <span className="pointer-events-none absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-1 text-xs font-medium text-white opacity-0 backdrop-blur transition group-hover:opacity-100">
+              {/* Mini badge "Explorar" — sempre visível em mobile, hover-only em desktop */}
+              <span className="pointer-events-none absolute right-3 top-3 inline-flex items-center gap-1 rounded-full bg-white/20 px-2.5 py-1 text-xs font-medium text-white opacity-100 backdrop-blur transition sm:opacity-0 sm:group-hover:opacity-100">
                 <ArrowUpRight className="h-3 w-3" aria-hidden /> Explorar
               </span>
 
               {/* Textos */}
               <div className="absolute bottom-4 left-4 right-4 text-white">
                 <h3
-                  className="text-2xl font-bold leading-tight lg:text-3xl"
+                  className="text-lg font-bold leading-tight sm:text-2xl lg:text-3xl"
                   style={{ fontFamily: "var(--font-portal-display), Montserrat, sans-serif" }}
                 >
                   {n.nome}
