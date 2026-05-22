@@ -32,8 +32,12 @@ const FILTERS: { id: Filter; label: string; icon: React.ReactNode }[] = [
   { id: "todos", label: "Todos", icon: null },
 ];
 
+const INITIAL_VISIBLE = 6;
+const TOTAL_IMOVEIS = PROPERTIES.length;
+
 export function ImoveisSection() {
   const [filter, setFilter] = React.useState<Filter>("destaques");
+  const [showAll, setShowAll] = React.useState(false);
 
   const filtered = React.useMemo(() => {
     if (filter === "destaques") return PROPERTIES.filter((p) => p.destaque);
@@ -41,7 +45,13 @@ export function ImoveisSection() {
     return PROPERTIES.filter((p) => p.finalidade === filter);
   }, [filter]);
 
-  const visible = filtered.slice(0, 6);
+  React.useEffect(() => {
+    setShowAll(false);
+  }, [filter]);
+
+  const canExpand = filtered.length > INITIAL_VISIBLE;
+  const visible =
+    showAll || !canExpand ? filtered : filtered.slice(0, INITIAL_VISIBLE);
 
   return (
     <section
@@ -53,19 +63,27 @@ export function ImoveisSection() {
           <SectionHeader
             eyebrow="01 · Imóveis"
             title="O catálogo da Dinamic, sempre atualizado."
-            subtitle="628 imóveis ativos em Arapongas-PR — apartamentos, casas, terrenos e comerciais. Pra comprar ou alugar, a IA encontra o seu match em segundos."
+            subtitle={`${TOTAL_IMOVEIS} imóveis ativos em Arapongas-PR — apartamentos, casas, terrenos e comerciais. Pra comprar ou alugar, a IA encontra o seu match em segundos.`}
           />
 
-          <Button
-            type="button"
-            variant="outline"
-            size="sm"
-            onClick={openChatWith("Me mostra todos os imóveis disponíveis")}
-            className="inline-flex shrink-0 items-center gap-1.5"
-          >
-            Ver todos os 628
-            <ArrowRight className="h-3.5 w-3.5" />
-          </Button>
+          {canExpand && (
+            <Button
+              type="button"
+              variant="outline"
+              size="sm"
+              onClick={() => setShowAll((v) => !v)}
+              aria-expanded={showAll}
+              className="inline-flex shrink-0 items-center gap-1.5"
+            >
+              {showAll ? "Ver menos" : `Ver todos os ${filtered.length}`}
+              <ArrowRight
+                className={cn(
+                  "h-3.5 w-3.5 transition-transform",
+                  showAll && "rotate-90"
+                )}
+              />
+            </Button>
+          )}
         </div>
 
         {/* Filter pills */}
