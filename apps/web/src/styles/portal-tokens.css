@@ -176,3 +176,37 @@
     animation: none !important;
   }
 }
+
+/* ============================================================
+ * Override do ChatMessage reusado da landing executiva.
+ * Dentro do escopo [data-portal] o chat IA usa paleta gold/black,
+ * não a indigo/primary do admin. Landing exec preserva o indigo.
+ * ============================================================ */
+[data-portal] .bg-primary {
+  background-color: var(--portal-cta-black) !important;
+}
+[data-portal] .hover\:bg-primary:hover {
+  background-color: var(--portal-cta-black-hover) !important;
+}
+[data-portal] .text-primary {
+  color: var(--portal-gold-dark) !important;
+}
+[data-portal] .bg-primary\/10 {
+  background-color: rgba(215, 154, 39, 0.12) !important;
+}
+[data-portal] .bg-primary\/20 {
+  background-color: rgba(215, 154, 39, 0.20) !important;
+}
+[data-portal] .border-primary {
+  border-color: var(--portal-gold) !important;
+}
+[data-portal] .ring-primary {
+  --tw-ring-color: var(--portal-gold) !important;
+}
+/* Avatar do usuário (mensagem do lado direito) — converte slate-200 em gold soft */
+[data-portal] .chat-conversation .bg-slate-200 {
+  background-color: var(--portal-gold-soft) !important;
+}
+[data-portal] .chat-conversation .text-slate-600 {
+  color: var(--portal-gold-dark) !important;
+}
