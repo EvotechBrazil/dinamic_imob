@@ -1,8 +1,13 @@
-import { Facebook, Instagram, Phone, Search } from "lucide-react";
+import { Search } from "lucide-react";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Badge } from "@/components/ui/badge";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  FacebookIcon,
+  InstagramIcon,
+  WhatsAppIcon,
+} from "@/components/ui/brand-icons";
 import { cn, initials } from "@/lib/utils";
 import type { ChannelType, Conversation, Setor } from "@/lib/mock-types";
 import { CHANNEL_LABELS, SETOR_LABELS } from "@/lib/mock-types";
@@ -89,27 +94,27 @@ export function ConversationList({
             </TabsTrigger>
             <TabsTrigger
               value="whatsapp"
-              className="h-7 data-[state=active]:bg-surface data-[state=active]:text-emerald-600"
+              className="h-7 text-emerald-600/70 data-[state=active]:bg-surface data-[state=active]:text-emerald-600"
               aria-label="WhatsApp"
               title="WhatsApp"
             >
-              <Phone className="h-3 w-3" />
+              <WhatsAppIcon className="h-3.5 w-3.5" />
             </TabsTrigger>
             <TabsTrigger
               value="instagram"
-              className="h-7 data-[state=active]:bg-surface data-[state=active]:text-pink-600"
+              className="h-7 text-pink-600/70 data-[state=active]:bg-surface data-[state=active]:text-pink-600"
               aria-label="Instagram"
               title="Instagram"
             >
-              <Instagram className="h-3 w-3" />
+              <InstagramIcon className="h-3.5 w-3.5" />
             </TabsTrigger>
             <TabsTrigger
               value="facebook"
-              className="h-7 data-[state=active]:bg-surface data-[state=active]:text-sky-600"
+              className="h-7 text-blue-600/70 data-[state=active]:bg-surface data-[state=active]:text-blue-600"
               aria-label="Facebook"
               title="Facebook"
             >
-              <Facebook className="h-3 w-3" />
+              <FacebookIcon className="h-3.5 w-3.5" />
             </TabsTrigger>
           </TabsList>
         </Tabs>
