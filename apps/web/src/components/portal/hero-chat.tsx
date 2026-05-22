@@ -7,7 +7,8 @@ import {
   useScroll,
   useTransform,
 } from "framer-motion";
-import { Sparkles, ArrowUp, Check } from "lucide-react";
+import { ArrowUp, Check } from "lucide-react";
+import Image from "next/image";
 import { useChat } from "@/components/chat-widget/use-chat";
 import { ChatMessageBubble } from "@/components/chat-widget/chat-message";
 import {
@@ -194,11 +195,18 @@ export function HeroChat() {
                   delay: 0.1,
                 }}
                 style={{ y: iconY }}
-                className="mx-auto h-20 w-20 lg:h-24 lg:w-24 rounded-3xl bg-gradient-to-br from-amber-400 via-portal-gold to-portal-gold-dark shadow-portal-cta flex items-center justify-center"
+                className="mx-auto relative h-20 w-20 lg:h-24 lg:w-24 overflow-hidden"
+                role="img"
+                aria-label="Dinamic Imobiliária"
               >
-                <Sparkles
-                  className="h-10 w-10 lg:h-12 lg:w-12 text-white"
-                  strokeWidth={2.5}
+                <Image
+                  src="/logo-dinamic.png"
+                  alt=""
+                  aria-hidden="true"
+                  width={375}
+                  height={250}
+                  priority
+                  className="absolute top-1/2 left-[-32%] h-auto w-[290%] max-w-none -translate-y-1/2"
                 />
               </motion.div>
 

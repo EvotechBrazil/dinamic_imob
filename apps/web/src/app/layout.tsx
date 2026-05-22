@@ -27,9 +27,8 @@ const fontMono = JetBrains_Mono({
 export const metadata: Metadata = {
   title: "Dinamic Imobiliária — Plataforma Integrada",
   description:
-    "Portal + IA Omnichannel + CRM + Financeiro de Locação + Jurídico LGPD. Plataforma proprietária da Dinamic Imobiliária — Arapongas-PR.",
+    "Portal + IA Dinamic Channel + CRM + Financeiro de Locação + Jurídico LGPD. Plataforma proprietária da Dinamic Imobiliária — Arapongas-PR.",
   metadataBase: new URL("https://dinamicimoveis.com.br"),
-  icons: { icon: "/favicon.ico" },
 };
 
 export default function RootLayout({
