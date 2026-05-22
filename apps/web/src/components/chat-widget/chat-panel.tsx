@@ -2,32 +2,57 @@
 
 import * as React from "react";
 import Image from "next/image";
-import { X, RotateCcw, Sparkles } from "lucide-react";
+import { X, RotateCcw } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChatMessageBubble } from "./chat-message";
 import { ChatInput } from "./chat-input";
 import { useChat } from "./use-chat";
 
+export interface PendingPrompt {
+  id: string;
+  prompt: string;
+  context?: string | null;
+}
+
 interface ChatPanelProps {
   open: boolean;
   onClose: () => void;
+  pendingPrompt?: PendingPrompt | null;
+  onPendingHandled?: () => void;
 }
 
-const SUGGESTIONS = [
-  "Quero alugar apto 3 dorm no Jardim Tropical até R$ 2.500",
-  "Quais imóveis vocês têm pra venda no Centro?",
-  "Como agendo uma visita?",
+const WELCOME_MESSAGE = `Olá! Eu sou a IA da **Dinamic Imobiliária**. Posso te ajudar a achar o imóvel ideal em Arapongas — alugar, comprar, agendar visita. Me conta o que você procura?`;
+
+const QUICK_REPLIES = [
+  "Quero alugar até R$ 2.500",
+  "Quero comprar apto no Centro",
+  "Imóveis com 3 dormitórios",
+  "Agendar visita",
 ];
 
-export function ChatPanel({ open, onClose }: ChatPanelProps) {
+export function ChatPanel({
+  open,
+  onClose,
+  pendingPrompt,
+  onPendingHandled,
+}: ChatPanelProps) {
   const { messages, isStreaming, error, send, stop, reset } = useChat();
   const scrollRef = React.useRef<HTMLDivElement>(null);
+  const lastHandledRef = React.useRef<string | null>(null);
 
   React.useEffect(() => {
     if (!open) return;
     const el = scrollRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [messages, open]);
+
+  React.useEffect(() => {
+    if (!open || !pendingPrompt) return;
+    if (lastHandledRef.current === pendingPrompt.id) return;
+    lastHandledRef.current = pendingPrompt.id;
+    void send(pendingPrompt.prompt, pendingPrompt.context ?? null);
+    onPendingHandled?.();
+  }, [open, pendingPrompt, send, onPendingHandled]);
 
   return (
     <AnimatePresence>
@@ -90,51 +115,47 @@ export function ChatPanel({ open, onClose }: ChatPanelProps) {
             ref={scrollRef}
             className="thin-scroll flex-1 overflow-y-auto bg-app px-3 py-4"
           >
-            {messages.length === 0 ? (
-              <div className="flex h-full flex-col items-center justify-center px-4 text-center">
-                <div className="grid h-12 w-12 place-items-center rounded-2xl bg-primary/10 text-primary">
-                  <Sparkles className="h-5 w-5" />
-                </div>
-                <h3 className="mt-3 font-display text-base font-semibold text-ink">
-                  Olá! Em que posso ajudar?
-                </h3>
-                <p className="mt-1 text-xs text-muted">
-                  Sou a IA da Dinamic. Posso falar sobre nossos imóveis e
-                  encaminhar você a um corretor humano quando precisar.
-                </p>
-                <div className="mt-5 flex w-full flex-col gap-2">
-                  {SUGGESTIONS.map((s) => (
-                    <button
-                      key={s}
-                      onClick={() => send(s)}
-                      className="rounded-lg border border-border bg-white px-3 py-2 text-left text-xs text-ink shadow-sm transition hover:border-primary hover:bg-primary/5"
-                    >
-                      {s}
-                    </button>
-                  ))}
-                </div>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-3">
-                {messages.map((m, i) => (
+            <div className="flex flex-col gap-3">
+              {messages.length === 0 && (
+                <>
                   <ChatMessageBubble
-                    key={m.id}
-                    role={m.role}
-                    content={m.content}
-                    streaming={
-                      isStreaming &&
-                      i === messages.length - 1 &&
-                      m.role === "assistant"
-                    }
+                    role="assistant"
+                    content={WELCOME_MESSAGE}
+                    streaming={false}
                   />
-                ))}
-                {error && (
-                  <p className="rounded-md bg-red-50 px-3 py-2 text-xs text-red-700">
-                    {error}
-                  </p>
-                )}
-              </div>
-            )}
+                  <div className="flex flex-wrap gap-2 pl-1">
+                    {QUICK_REPLIES.map((q) => (
+                      <button
+                        key={q}
+                        type="button"
+                        aria-label={q}
+                        onClick={() => send(q)}
+                        className="rounded-full border border-primary/30 bg-primary/5 px-3 py-1.5 text-xs font-medium text-primary transition hover:bg-primary/10"
+                      >
+                        {q}
+                      </button>
+                    ))}
+                  </div>
+                </>
+              )}
+              {messages.map((m, i) => (
+                <ChatMessageBubble
+                  key={m.id}
+                  role={m.role}
+                  content={m.content}
+                  streaming={
+                    isStreaming &&
+                    i === messages.length - 1 &&
+                    m.role === "assistant"
+                  }
+                />
+              ))}
+              {error && (
+                <p className="rounded-md bg-red-50 px-3 py-2 text-xs text-red-700">
+                  {error}
+                </p>
+              )}
+            </div>
           </div>
 
           {/* input */}

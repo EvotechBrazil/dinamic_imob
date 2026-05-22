@@ -13,9 +13,9 @@ export function Footer() {
               <Image
                 src="/logo-dinamic.png"
                 alt="Dinamic Imóveis"
-                width={210}
-                height={140}
-                className="h-11 w-auto"
+                width={240}
+                height={160}
+                className="h-14 w-auto"
               />
               <span className="rounded-md border border-border bg-app/60 px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.16em] text-muted">
                 CRECI-J 03226
