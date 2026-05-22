@@ -1,7 +1,6 @@
 "use client";
 
 import * as React from "react";
-import Link from "next/link";
 import { ArrowRight, Home, Key, Star } from "lucide-react";
 import { motion } from "framer-motion";
 import { SectionHeader } from "@/components/layout";
@@ -9,6 +8,20 @@ import { Button } from "@/components/ui/button";
 import { PropertyCard } from "@/components/sections/crm/property-card";
 import { PROPERTIES } from "@/components/sections/crm/mock";
 import { cn } from "@/lib/utils";
+
+/**
+ * Abre o ChatWidget com um prompt pré-preenchido via custom event.
+ * O ChatWidget escuta `dinamic:open-chat-widget`.
+ */
+function openChatWith(prompt: string) {
+  return () => {
+    window.dispatchEvent(
+      new CustomEvent("dinamic:open-chat-widget", {
+        detail: { prompt },
+      })
+    );
+  };
+}
 
 type Filter = "destaques" | "venda" | "aluguel" | "todos";
 
@@ -33,7 +46,7 @@ export function ImoveisSection() {
   return (
     <section
       id="imoveis"
-      className="scroll-mt-20 border-t border-border bg-app py-16"
+      className="scroll-mt-28 border-t border-border bg-app py-16"
     >
       <div className="section-container">
         <div className="flex flex-col items-start justify-between gap-6 sm:flex-row sm:items-end">
@@ -43,11 +56,15 @@ export function ImoveisSection() {
             subtitle="628 imóveis ativos em Arapongas-PR — apartamentos, casas, terrenos e comerciais. Pra comprar ou alugar, a IA encontra o seu match em segundos."
           />
 
-          <Button asChild variant="outline" size="sm" className="shrink-0">
-            <Link href="#omnichannel" className="inline-flex items-center gap-1.5">
-              Ver todos os 628
-              <ArrowRight className="h-3.5 w-3.5" />
-            </Link>
+          <Button
+            type="button"
+            variant="outline"
+            size="sm"
+            onClick={openChatWith("Me mostra todos os imóveis disponíveis")}
+            className="inline-flex shrink-0 items-center gap-1.5"
+          >
+            Ver todos os 628
+            <ArrowRight className="h-3.5 w-3.5" />
           </Button>
         </div>
 
@@ -109,8 +126,14 @@ export function ImoveisSection() {
               </p>
             </div>
           </div>
-          <Button asChild size="sm">
-            <Link href="#omnichannel">Falar com a IA</Link>
+          <Button
+            type="button"
+            size="sm"
+            onClick={openChatWith(
+              "Estou procurando um imóvel — pode me ajudar a filtrar pelo bairro, dormitórios e orçamento?"
+            )}
+          >
+            Falar com a IA
           </Button>
         </div>
       </div>

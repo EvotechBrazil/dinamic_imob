@@ -81,7 +81,7 @@ export function Topbar() {
             width={273}
             height={182}
             priority
-            className="h-[78px] w-auto transition-transform duration-200 group-hover:scale-[1.02]"
+            className="h-[100px] w-auto transition-transform duration-200 group-hover:scale-[1.02]"
           />
         </Link>
 
