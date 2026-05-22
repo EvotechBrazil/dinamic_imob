@@ -19,7 +19,7 @@ export function CRMSection() {
       id="crm"
       className="scroll-mt-28 border-t border-border bg-app py-16"
     >
-      <div className="section-container">
+      <div className="mx-auto max-w-[1600px] px-4 sm:px-6 lg:px-8">
         <SectionHeader
           eyebrow="04 · CRM"
           title="Funil + ficha do lead em um clique."

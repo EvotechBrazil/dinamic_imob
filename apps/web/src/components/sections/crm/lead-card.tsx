@@ -1,10 +1,22 @@
 "use client";
 
-import { MapPin, GripVertical } from "lucide-react";
+import { MapPin, GripVertical, MessageCircle, Instagram, Facebook, Clock } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
-import type { Lead } from "@/lib/mock-types";
-import { SETOR_LABELS } from "@/lib/mock-types";
+import type { ChannelType, Lead } from "@/lib/mock-types";
+import { CHANNEL_LABELS, SETOR_LABELS } from "@/lib/mock-types";
+
+const CHANNEL_ICONS: Record<ChannelType, React.ComponentType<{ className?: string }>> = {
+  whatsapp: MessageCircle,
+  instagram: Instagram,
+  facebook: Facebook,
+};
+
+const CHANNEL_OVERLAY_STYLE: Record<ChannelType, string> = {
+  whatsapp: "text-emerald-600",
+  instagram: "text-pink-600",
+  facebook: "text-sky-600",
+};
 
 const formatBRL = (value: number) =>
   new Intl.NumberFormat("pt-BR", {
@@ -44,33 +56,53 @@ export function LeadCard({ lead }: LeadCardProps) {
         className="absolute right-1 top-1 h-3.5 w-3.5 text-muted opacity-0 transition group-hover:opacity-60"
       />
 
-      {/* Linha 1: avatar + nome + setor */}
-      <div className="flex items-center gap-2">
-        <Avatar className="h-8 w-8 shrink-0">
-          <AvatarImage src={lead.avatarUrl} alt={lead.nome} />
-          <AvatarFallback className="text-[10px]">
-            {initials(lead.nome)}
-          </AvatarFallback>
-        </Avatar>
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-medium text-ink">{lead.nome}</p>
-          <p className="text-[10px] uppercase tracking-wider text-muted">
-            {SETOR_LABELS[lead.setor]}
+      {/* Linha 0: setor (chip) */}
+      <div className="flex items-center justify-between gap-2 pr-4">
+        <span className="text-[10px] font-semibold uppercase tracking-wider text-muted">
+          {SETOR_LABELS[lead.setor]}
+        </span>
+      </div>
+
+      {/* Linha 1: avatar (com overlay de canal) + nome */}
+      <div className="mt-2 flex items-start gap-2.5">
+        <div className="relative shrink-0">
+          <Avatar className="h-9 w-9">
+            <AvatarImage src={lead.avatarUrl} alt={lead.nome} />
+            <AvatarFallback className="text-[10px]">
+              {initials(lead.nome)}
+            </AvatarFallback>
+          </Avatar>
+          {lead.origemCanal && (() => {
+            const Icon = CHANNEL_ICONS[lead.origemCanal];
+            return (
+              <span
+                title={`Veio via ${CHANNEL_LABELS[lead.origemCanal]}`}
+                className={cn(
+                  "absolute -bottom-0.5 -right-0.5 inline-flex h-4 w-4 items-center justify-center rounded-full border border-border bg-white shadow-sm",
+                  CHANNEL_OVERLAY_STYLE[lead.origemCanal]
+                )}
+              >
+                <Icon className="h-2.5 w-2.5" />
+              </span>
+            );
+          })()}
+        </div>
+        <div className="min-w-0 flex-1 pt-0.5">
+          <p className="line-clamp-2 text-sm font-medium leading-snug text-ink">
+            {lead.nome}
           </p>
         </div>
       </div>
 
-      {/* Linha 2: bairro + ultima interação */}
+      {/* Linha 2: bairro */}
       <div className="mt-2 flex items-center gap-1 text-xs text-muted">
         <MapPin className="h-3 w-3 shrink-0" aria-hidden />
         <span className="truncate">{lead.bairro}</span>
-        <span aria-hidden>·</span>
-        <span className="shrink-0">{lead.ultimaInteracao}</span>
       </div>
 
       {/* Linha 3: orçamento + intenção pill */}
       <div className="mt-2.5 flex items-center justify-between gap-2">
-        <span className="font-mono text-sm font-semibold text-primary">
+        <span className="font-display text-sm font-semibold text-primary">
           {formatBRL(lead.orcamento)}
         </span>
         <span
@@ -81,6 +113,12 @@ export function LeadCard({ lead }: LeadCardProps) {
         >
           {lead.intencao}
         </span>
+      </div>
+
+      {/* Rodapé: última interação */}
+      <div className="mt-2 flex items-center gap-1 border-t border-border/60 pt-2 text-[10px] text-muted">
+        <Clock className="h-3 w-3 shrink-0" aria-hidden />
+        <span className="truncate">{lead.ultimaInteracao}</span>
       </div>
     </div>
   );

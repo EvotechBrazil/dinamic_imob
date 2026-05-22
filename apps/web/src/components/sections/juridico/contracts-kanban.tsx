@@ -4,6 +4,10 @@
  * <ContractsKanban />
  * Pipeline visual de contratos jurídicos — drag-and-drop entre 5 etapas.
  *
+ * Visual alinhado ao task-kanban (mesma DNA): cards bem espaçados, chip de
+ * stage no topo do card, título com line-clamp-2 sem truncate, valor em
+ * font-display, footer com período compacto.
+ *
  * Como os mocks atuais só têm 3 statuses reais ("ativo" | "vencendo" | "encerrado"),
  * "virtualizamos" 5 colunas pra demonstrar o ciclo de vida completo do contrato:
  *
@@ -33,7 +37,7 @@ import {
   type DragStartEvent,
 } from "@dnd-kit/core";
 import { AnimatePresence, motion } from "framer-motion";
-import { Calendar, FileSignature, Link2, MoreHorizontal } from "lucide-react";
+import { Calendar, FileSignature, Link2 } from "lucide-react";
 
 import { cn } from "@/lib/utils";
 import type { Contract } from "@/lib/mock-types";
@@ -65,39 +69,59 @@ const STAGE_LABELS: Record<StageId, string> = {
   vencendo: "Vencendo / Encerrado",
 };
 
+// Chip curto pra mostrar no topo do card (precisa caber em qualquer coluna)
+const STAGE_CARD_CHIP_LABEL: Record<StageId, string> = {
+  minuta: "Minuta",
+  revisao: "Revisão",
+  assinatura: "Assinatura",
+  vigente: "Vigente",
+  vencendo: "Renovar",
+};
+
 const STAGE_STYLE: Record<
   StageId,
-  { dot: string; pill: string; column: string; overBg: string }
+  {
+    dot: string;
+    pill: string; // contador no header da coluna
+    column: string;
+    overBg: string;
+    cardChip: string; // chip de stage NO card (top)
+  }
 > = {
   minuta: {
     dot: "bg-sky-500",
     pill: "bg-sky-100 text-sky-700",
     column: "border-sky-200",
     overBg: "bg-sky-100/60",
+    cardChip: "bg-sky-100 text-sky-700",
   },
   revisao: {
     dot: "bg-amber-500",
     pill: "bg-amber-100 text-amber-700",
     column: "border-amber-200",
     overBg: "bg-amber-100/60",
+    cardChip: "bg-amber-100 text-amber-700",
   },
   assinatura: {
     dot: "bg-violet-500",
     pill: "bg-violet-100 text-violet-700",
     column: "border-violet-200",
     overBg: "bg-violet-100/60",
+    cardChip: "bg-violet-100 text-violet-700",
   },
   vigente: {
     dot: "bg-emerald-500",
     pill: "bg-emerald-100 text-emerald-700",
     column: "border-emerald-200",
     overBg: "bg-emerald-100/60",
+    cardChip: "bg-emerald-100 text-emerald-700",
   },
   vencendo: {
     dot: "bg-rose-500",
     pill: "bg-rose-100 text-rose-700",
     column: "border-rose-200 bg-rose-50/30",
     overBg: "bg-rose-100/60",
+    cardChip: "bg-rose-100 text-rose-700",
   },
 };
 
@@ -142,26 +166,27 @@ const fmtBRL = (v: number) =>
     maximumFractionDigits: 0,
   });
 
-const fmtPeriodo = (inicio: string, fim: string) => {
-  const fmt = (iso: string) =>
-    new Date(iso).toLocaleDateString("pt-BR", {
-      month: "short",
-      year: "2-digit",
-    });
-  return `${fmt(inicio)} → ${fmt(fim)}`;
-};
+/**
+ * Formato compacto "mar/25" pra caber em coluna estreita.
+ * Remove ponto que `toLocaleDateString` injeta em alguns runtimes ("mar.").
+ */
+const fmtMonthYear = new Intl.DateTimeFormat("pt-BR", {
+  month: "short",
+  year: "2-digit",
+});
 
-const statusBadge: Record<
-  Contract["status"],
-  { label: string; cls: string }
-> = {
-  ativo: { label: "Ativo", cls: "bg-emerald-100 text-emerald-700" },
-  vencendo: { label: "Vencendo", cls: "bg-amber-100 text-amber-700" },
-  encerrado: { label: "Encerrado", cls: "bg-slate-200 text-slate-600" },
-};
+function fmtPeriodoCompacto(inicio: string, fim: string): string {
+  const fmt = (iso: string) =>
+    fmtMonthYear
+      .format(new Date(iso))
+      .replace(/\./g, "")
+      .replace(/\s+de\s+/, "/")
+      .replace(/\s/, "/");
+  return `${fmt(inicio)} → ${fmt(fim)}`;
+}
 
 // ============================================================
-// Card individual
+// Card individual — DNA do task-card
 // ============================================================
 function ContractCard({
   contract,
@@ -170,60 +195,74 @@ function ContractCard({
   contract: Contract;
   stage: StageId;
 }) {
+  const style = STAGE_STYLE[stage];
   const showAssinaturaChip = stage === "assinatura";
+  const showRenovacaoChip =
+    stage === "vencendo" && contract.status === "vencendo";
   const showTaskVinculada =
     stage === "vencendo" && contract.status === "vencendo";
 
-  const sb = statusBadge[contract.status];
-
   return (
-    <div className="rounded-lg border border-border bg-surface p-3 shadow-sm transition hover:shadow-md">
+    <div className="relative flex flex-col gap-2 rounded-xl border border-border bg-white p-3 shadow-sm transition hover:shadow-md">
+      {/* Topo: chip de stage + valor */}
       <div className="flex items-start justify-between gap-2">
-        <div className="min-w-0 flex-1">
-          <p className="truncate text-sm font-medium text-ink">
-            {contract.locatario}
-          </p>
-          <p className="mt-0.5 truncate text-xs text-muted">
-            {contract.imovel}
-          </p>
-        </div>
         <span
           className={cn(
-            "shrink-0 rounded-full px-1.5 py-0.5 text-[10px] font-semibold",
-            sb.cls
+            "rounded-full px-2 py-0.5 text-[10px] font-semibold uppercase tracking-wide",
+            style.cardChip
           )}
         >
-          {sb.label}
+          {STAGE_CARD_CHIP_LABEL[stage]}
         </span>
-      </div>
-
-      <div className="mt-2 flex items-center justify-between gap-2">
-        <span className="font-display text-sm font-semibold text-ink">
+        <span className="font-display text-base font-semibold text-ink">
           {fmtBRL(contract.valor)}
         </span>
-        <span className="text-[10px] uppercase tracking-wider text-muted">
-          {contract.bairro}
-        </span>
       </div>
 
-      <div className="mt-2 flex items-center gap-1.5 text-xs text-muted">
-        <Calendar className="h-3 w-3" aria-hidden />
-        <span>{fmtPeriodo(contract.periodoInicio, contract.periodoFim)}</span>
-      </div>
+      {/* Título: locatário (sem truncate, line-clamp pra segurança) */}
+      <h5 className="break-words text-sm font-medium leading-snug text-ink line-clamp-2">
+        {contract.locatario}
+      </h5>
 
-      {showAssinaturaChip && (
-        <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-rose-50 px-2 py-0.5 text-[10px] font-medium text-rose-700">
-          <FileSignature className="h-3 w-3" aria-hidden />
-          Recolher assinatura
+      {/* Subtítulo: imóvel + bairro */}
+      <p className="line-clamp-1 text-xs text-muted">
+        {contract.imovel}
+        <span className="text-muted/60"> · </span>
+        <span className="text-muted">{contract.bairro}</span>
+      </p>
+
+      {/* Chips de ação (situacionais) */}
+      {(showAssinaturaChip || showRenovacaoChip) && (
+        <div className="flex flex-wrap items-center gap-1">
+          {showAssinaturaChip && (
+            <span className="inline-flex items-center gap-1 rounded-md bg-rose-50 px-1.5 py-0.5 text-[10px] font-medium text-rose-700">
+              <FileSignature className="h-3 w-3 shrink-0" aria-hidden />
+              Recolher assinatura
+            </span>
+          )}
+          {showRenovacaoChip && (
+            <span className="inline-flex items-center gap-1 rounded-md bg-rose-50 px-1.5 py-0.5 text-[10px] font-medium text-rose-700">
+              Renovação
+            </span>
+          )}
         </div>
       )}
 
+      {/* Task vinculada badge */}
       {showTaskVinculada && (
-        <div className="mt-2 inline-flex items-center gap-1 rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-medium text-amber-700">
-          <Link2 className="h-3 w-3" aria-hidden />
+        <div className="inline-flex w-fit items-center gap-1 rounded-md border border-amber-200 bg-amber-50 px-1.5 py-0.5 text-[10px] font-medium text-amber-700">
+          <Link2 className="h-3 w-3 shrink-0" aria-hidden />
           Task vinculada
         </div>
       )}
+
+      {/* Rodapé: período compacto */}
+      <div className="mt-1 flex items-center gap-1.5 border-t border-border/60 pt-2 text-[11px] text-muted">
+        <Calendar className="h-3.5 w-3.5 shrink-0" aria-hidden />
+        <span className="truncate">
+          {fmtPeriodoCompacto(contract.periodoInicio, contract.periodoFim)}
+        </span>
+      </div>
     </div>
   );
 }
@@ -379,7 +418,7 @@ export function ContractsKanban() {
               <div
                 key={stage}
                 className={cn(
-                  "flex w-72 shrink-0 flex-col rounded-xl border bg-app/40 lg:w-auto lg:min-w-0 lg:shrink",
+                  "flex w-72 shrink-0 flex-col rounded-xl border bg-app/40 transition-all lg:w-auto lg:min-w-0 lg:shrink",
                   style.column
                 )}
               >
@@ -405,13 +444,6 @@ export function ContractsKanban() {
                       {contratos.length}
                     </motion.span>
                   </div>
-                  <button
-                    type="button"
-                    aria-label="Opções"
-                    className="rounded p-1 text-muted transition hover:bg-app hover:text-ink"
-                  >
-                    <MoreHorizontal className="h-3.5 w-3.5" />
-                  </button>
                 </div>
 
                 <DroppableColumn
