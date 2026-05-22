@@ -145,7 +145,7 @@ function StatCard({ icon: Icon, value, suffix, label, helper, animated }: Stat) 
       <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-[var(--portal-gold-soft)] text-[var(--portal-gold-dark)]">
         <Icon className="h-6 w-6" aria-hidden="true" />
       </div>
-      <div className="font-display text-4xl font-bold text-[var(--portal-text)] lg:text-5xl">
+      <div className="font-portal-display text-4xl font-bold text-[var(--portal-text)] lg:text-5xl">
         {animated && typeof value === "number" ? (
           <AnimatedCounter to={value} duration={1.2} suffix={suffix ?? ""} />
         ) : (
@@ -153,7 +153,7 @@ function StatCard({ icon: Icon, value, suffix, label, helper, animated }: Stat) 
         )}
       </div>
       <div className="mt-1 text-sm text-[var(--portal-text-muted)]">{label}</div>
-      <div className="mt-2 px-2 text-xs text-[var(--portal-text-subtle)]">
+      <div className="mt-2 px-2 text-xs text-[var(--portal-text-muted)]">
         {helper}
       </div>
     </div>
@@ -206,7 +206,7 @@ function TestimonialCarousel() {
             exit={{ opacity: 0, y: -10 }}
             transition={{ duration: 0.4 }}
           >
-            <p className="text-center font-display text-xl italic leading-relaxed text-[var(--portal-text)] lg:text-2xl">
+            <p className="text-center font-portal-display text-xl italic leading-relaxed text-[var(--portal-text)] lg:text-2xl">
               &ldquo;{current.quote}&rdquo;
             </p>
             <div className="mt-6 flex items-center justify-center gap-3">
@@ -229,7 +229,7 @@ function TestimonialCarousel() {
           type="button"
           onClick={goPrev}
           aria-label="Depoimento anterior"
-          className="absolute -left-2 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white p-2 text-[var(--portal-text-muted)] transition-colors hover:text-[var(--portal-text)] lg:flex"
+          className="absolute -left-2 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white p-2 text-[var(--portal-text-muted)] transition-colors hover:text-[var(--portal-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portal-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-white lg:flex"
           style={{ boxShadow: "var(--shadow-portal-card)" }}
         >
           <ChevronLeft className="h-5 w-5" aria-hidden="true" />
@@ -238,7 +238,7 @@ function TestimonialCarousel() {
           type="button"
           onClick={goNext}
           aria-label="Próximo depoimento"
-          className="absolute -right-2 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white p-2 text-[var(--portal-text-muted)] transition-colors hover:text-[var(--portal-text)] lg:flex"
+          className="absolute -right-2 top-1/2 z-10 hidden -translate-y-1/2 rounded-full bg-white p-2 text-[var(--portal-text-muted)] transition-colors hover:text-[var(--portal-text)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portal-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-white lg:flex"
           style={{ boxShadow: "var(--shadow-portal-card)" }}
         >
           <ChevronRight className="h-5 w-5" aria-hidden="true" />
@@ -251,9 +251,9 @@ function TestimonialCarousel() {
             key={i}
             type="button"
             onClick={() => setIndex(i)}
-            aria-label={`Depoimento ${i + 1}`}
+            aria-label={`Depoimento ${i + 1} de ${TESTIMONIALS.length}`}
             className={cn(
-              "h-1.5 rounded-full transition-all",
+              "h-1.5 rounded-full transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portal-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-white",
               i === index
                 ? "w-8 bg-[var(--portal-gold)]"
                 : "w-1.5 bg-[var(--portal-border-strong)] hover:bg-[var(--portal-text-subtle)]",
@@ -273,7 +273,7 @@ export function TrustBlock() {
           <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[var(--portal-gold-dark)]">
             Por que escolher
           </p>
-          <h2 className="mt-3 font-display text-3xl font-bold tracking-tight text-[var(--portal-text)] lg:text-4xl">
+          <h2 className="mt-3 font-portal-display text-3xl font-bold tracking-tight text-[var(--portal-text)] lg:text-4xl">
             Confiança que se constrói com tempo.
             <br className="hidden sm:inline" /> E com CRECI.
           </h2>

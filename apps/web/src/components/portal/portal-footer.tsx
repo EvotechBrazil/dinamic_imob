@@ -10,7 +10,7 @@ export function PortalFooter() {
           {/* COL 1 — Marca */}
           <div className="col-span-2 lg:col-span-1">
             <div className="flex items-baseline gap-2">
-              <span className="font-display text-3xl font-extrabold tracking-tight text-white">
+              <span className="font-portal-display text-3xl font-extrabold tracking-tight text-white">
                 Dinamic
               </span>
               <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[var(--portal-gold)]">
@@ -27,7 +27,7 @@ export function PortalFooter() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Instagram"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portal-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--portal-cta-black)]"
               >
                 <InstagramIcon className="h-4 w-4 text-white" />
               </a>
@@ -36,7 +36,7 @@ export function PortalFooter() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="Facebook"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portal-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--portal-cta-black)]"
               >
                 <FacebookIcon className="h-4 w-4 text-white" />
               </a>
@@ -45,7 +45,7 @@ export function PortalFooter() {
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label="YouTube"
-                className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20"
+                className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 transition hover:bg-white/20 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portal-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--portal-cta-black)]"
               >
                 <Youtube className="h-4 w-4 text-white" />
               </a>
@@ -61,7 +61,7 @@ export function PortalFooter() {
               <li>
                 <Link
                   href="#sobre"
-                  className="text-white/70 transition hover:text-white"
+                  className="text-white/70 transition hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--portal-gold)] focus-visible:rounded"
                 >
                   Sobre nós
                 </Link>
@@ -69,7 +69,7 @@ export function PortalFooter() {
               <li>
                 <Link
                   href="#equipe"
-                  className="text-white/70 transition hover:text-white"
+                  className="text-white/70 transition hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--portal-gold)] focus-visible:rounded"
                 >
                   Equipe
                 </Link>
@@ -77,7 +77,7 @@ export function PortalFooter() {
               <li>
                 <Link
                   href="#creci"
-                  className="text-white/70 transition hover:text-white"
+                  className="text-white/70 transition hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--portal-gold)] focus-visible:rounded"
                 >
                   CRECI
                 </Link>
@@ -85,7 +85,7 @@ export function PortalFooter() {
               <li>
                 <Link
                   href="#lgpd"
-                  className="text-white/70 transition hover:text-white"
+                  className="text-white/70 transition hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--portal-gold)] focus-visible:rounded"
                 >
                   Política LGPD
                 </Link>
@@ -93,7 +93,7 @@ export function PortalFooter() {
               <li>
                 <Link
                   href="#termos"
-                  className="text-white/70 transition hover:text-white"
+                  className="text-white/70 transition hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--portal-gold)] focus-visible:rounded"
                 >
                   Termos de uso
                 </Link>
@@ -110,7 +110,7 @@ export function PortalFooter() {
               <li>
                 <Link
                   href="#comprar"
-                  className="text-white/70 transition hover:text-white"
+                  className="text-white/70 transition hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--portal-gold)] focus-visible:rounded"
                 >
                   Comprar
                 </Link>
@@ -118,7 +118,7 @@ export function PortalFooter() {
               <li>
                 <Link
                   href="#alugar"
-                  className="text-white/70 transition hover:text-white"
+                  className="text-white/70 transition hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--portal-gold)] focus-visible:rounded"
                 >
                   Alugar
                 </Link>
@@ -126,7 +126,7 @@ export function PortalFooter() {
               <li>
                 <Link
                   href="#lancamentos"
-                  className="text-white/70 transition hover:text-white"
+                  className="text-white/70 transition hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--portal-gold)] focus-visible:rounded"
                 >
                   Lançamentos
                 </Link>
@@ -134,7 +134,7 @@ export function PortalFooter() {
               <li>
                 <Link
                   href="#bairros"
-                  className="text-white/70 transition hover:text-white"
+                  className="text-white/70 transition hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--portal-gold)] focus-visible:rounded"
                 >
                   Bairros
                 </Link>
@@ -142,7 +142,7 @@ export function PortalFooter() {
               <li>
                 <Link
                   href="#anuncie"
-                  className="text-white/70 transition hover:text-white"
+                  className="text-white/70 transition hover:text-white focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[var(--portal-gold)] focus-visible:rounded"
                 >
                   Anuncie seu imóvel
                 </Link>

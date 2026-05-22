@@ -41,7 +41,7 @@ export function FinalCta() {
 
       {/* Content */}
       <div className="relative z-10 mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 text-center">
-        <h2 className="font-display text-4xl font-bold tracking-tight text-white lg:text-5xl">
+        <h2 className="font-portal-display text-4xl font-bold tracking-tight text-white lg:text-5xl">
           Não encontrou o imóvel ideal?
         </h2>
         <p className="mt-4 text-lg text-white/80 lg:text-xl">
@@ -54,7 +54,7 @@ export function FinalCta() {
             href={VENDAS_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex flex-1 items-center justify-center gap-3 rounded-xl bg-[var(--portal-whatsapp)] px-6 py-4 font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:bg-[var(--portal-whatsapp-dark)]"
+            className="group flex flex-1 items-center justify-center gap-3 rounded-xl bg-[var(--portal-whatsapp)] px-6 py-4 font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:bg-[var(--portal-whatsapp-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--portal-cta-black)]"
             style={{ boxShadow: "var(--shadow-portal-whatsapp)" }}
           >
             <WhatsAppIcon className="h-6 w-6 shrink-0" />
@@ -71,7 +71,7 @@ export function FinalCta() {
             href={LOCACAO_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="group flex flex-1 items-center justify-center gap-3 rounded-xl bg-[var(--portal-whatsapp)] px-6 py-4 font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:bg-[var(--portal-whatsapp-dark)]"
+            className="group flex flex-1 items-center justify-center gap-3 rounded-xl bg-[var(--portal-whatsapp)] px-6 py-4 font-semibold text-white transition-all duration-200 hover:scale-[1.02] hover:bg-[var(--portal-whatsapp-dark)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--portal-cta-black)]"
             style={{ boxShadow: "var(--shadow-portal-whatsapp)" }}
           >
             <WhatsAppIcon className="h-6 w-6 shrink-0" />

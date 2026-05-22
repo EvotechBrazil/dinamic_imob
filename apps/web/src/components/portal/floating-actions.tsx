@@ -21,13 +21,16 @@ export function FloatingActions() {
         type="button"
         onClick={openChatWidget}
         aria-label="Falar com a IA"
-        className="group relative flex h-11 w-11 items-center justify-center rounded-full bg-[var(--portal-cta-black)] transition-transform duration-200 hover:scale-110 active:scale-95 sm:h-12 sm:w-12"
+        className="group relative flex h-11 w-11 items-center justify-center rounded-full bg-[var(--portal-cta-black)] transition-transform duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--portal-gold)] focus-visible:ring-offset-2 focus-visible:ring-offset-white active:scale-95 sm:h-12 sm:w-12"
         style={{ boxShadow: "var(--shadow-portal-card)" }}
       >
         <MessageCircle className="h-5 w-5 text-[var(--portal-gold)]" />
 
         {/* Tooltip */}
-        <span className="pointer-events-none absolute right-full top-1/2 mr-3 -translate-y-1/2 whitespace-nowrap rounded-lg bg-[var(--portal-cta-black)] px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute right-full top-1/2 mr-3 -translate-y-1/2 whitespace-nowrap rounded-lg bg-[var(--portal-cta-black)] px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
+        >
           Falar com a IA
           <span
             className="absolute left-full top-1/2 -translate-y-1/2 border-4 border-transparent"
@@ -42,7 +45,7 @@ export function FloatingActions() {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Falar no WhatsApp"
-        className="group relative flex h-12 w-12 items-center justify-center rounded-full bg-[var(--portal-whatsapp)] transition-transform duration-200 hover:scale-110 active:scale-95 sm:h-14 sm:w-14"
+        className="group relative flex h-12 w-12 items-center justify-center rounded-full bg-[var(--portal-whatsapp)] transition-transform duration-200 hover:scale-110 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--portal-cta-black)] active:scale-95 sm:h-14 sm:w-14"
         style={{ boxShadow: "var(--shadow-portal-whatsapp)" }}
       >
         <WhatsAppIcon className="h-6 w-6 text-white" />
@@ -54,7 +57,10 @@ export function FloatingActions() {
         />
 
         {/* Tooltip */}
-        <span className="pointer-events-none absolute right-full top-1/2 mr-3 -translate-y-1/2 whitespace-nowrap rounded-lg bg-[var(--portal-cta-black)] px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100">
+        <span
+          aria-hidden="true"
+          className="pointer-events-none absolute right-full top-1/2 mr-3 -translate-y-1/2 whitespace-nowrap rounded-lg bg-[var(--portal-cta-black)] px-3 py-1.5 text-xs font-medium text-white opacity-0 shadow-lg transition-opacity duration-200 group-hover:opacity-100 group-focus-visible:opacity-100"
+        >
           Online <span className="text-emerald-400">·</span> Resposta em min
           <span
             className="absolute left-full top-1/2 -translate-y-1/2 border-4 border-transparent"
