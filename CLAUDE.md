@@ -95,7 +95,7 @@ Hoje: `backend/` e `frontend/` vazios; `docs/dinamic_web.md` contém a proposta 
 - **Calendário corretor:** agenda interna no admin (sem Google Calendar no MVP).
 - **Flex49:** scraper e export proprietários adiados; reabordar pós-demo.
 
-## Estado atual (2026-05-21 noite)
+## Estado atual (2026-05-22 — dia da entrega)
 
 ✅ **Sprint 0 concluído.** Landing demo executiva entregue por 3 squads paralelas e validada:
 - TypeScript 0 erros, ESLint 0 warnings, `GET /` 200 OK
@@ -104,8 +104,13 @@ Hoje: `backend/` e `frontend/` vazios; `docs/dinamic_web.md` contém a proposta 
 - `pnpm dev` em apps/web sobe em ~4s, compila em 15.9s
 - Repo: `EvotechBrazil/dinamic_imob` (HTTPS, branch `main`)
 
-🟡 **Fase atual: POLIMENTO antes da entrega ao cliente 2026-05-22.**
-Áreas: copy comercial, spacing, micro-interactions, perf, mobile/tablet, a11y, mensagens IA contextuais. Detalhes em `memory/project_landing_demo_polimento.md`.
+🟡 **Fase atual: POLIMENTO + bugfixes finais — entrega ao cliente HOJE (2026-05-22).**
+
+**Aplicado hoje (2026-05-22):**
+- ✅ **D do logo** consistente nas surfaces de brand: ícone do hero (`apps/web/src/components/portal/hero-chat.tsx`), avatar das bolhas da IA (`apps/web/src/components/chat-widget/chat-message.tsx`) e favicon (override removido em `apps/web/src/app/layout.tsx` → Next auto-serve `src/app/icon.svg`). Padrão de crop: `<Image>` em wrapper `overflow-hidden` com `w-[290%] left-[-32%]` pra mostrar só a região do D do PNG.
+- ✅ **Fix Jam 307d5243** — botão preto "Falar com a IA" do `FloatingActions` não acionava chat no `/portal`. Root cause: `ChatWidget` (listener de `dinamic:open-chat-widget`) só estava montado em `app/page.tsx`, faltava no `app/portal/layout.tsx`. Fix: adicionada prop `hideButton` no `chat-widget/index.tsx` e montado no `portal/layout.tsx` com `hideButton` pra não duplicar FAB.
+
+Áreas que continuam em polimento: copy comercial, spacing, micro-interactions, perf, mobile/tablet, a11y, mensagens IA contextuais. Detalhes em `memory/project_landing_demo_polimento.md`.
 
 ## Como retomar polimento
 
