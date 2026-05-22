@@ -95,11 +95,54 @@ Hoje: `backend/` e `frontend/` vazios; `docs/dinamic_web.md` contém a proposta 
 - **Calendário corretor:** agenda interna no admin (sem Google Calendar no MVP).
 - **Flex49:** scraper e export proprietários adiados; reabordar pós-demo.
 
-## Próximos passos imediatos
+## Estado atual (2026-05-21 noite)
 
-1. Conectar `origin` ao `EvotechBrazil/dinamic_imob` (repo já existe).
-2. Sprint 0 revisado: monorepo skeleton + design tokens + landing pública (hero+seções) + admin shell com 2-3 dashboards Tremor populados com mock + chat widget mockado.
-3. Após demo aprovada: ativar adapters reais (OpenRouter, Evolution, Asaas) e voltar ao plano original Sprint 1-7.
+✅ **Sprint 0 concluído.** Landing demo executiva entregue por 3 squads paralelas e validada:
+- TypeScript 0 erros, ESLint 0 warnings, `GET /` 200 OK
+- 6 seções rodando: Omnichannel · Financeiro · CRM · Tokenização · Jurídico/LGPD · Dashboards
+- Chat IA flutuante real (OpenRouter Qwen3.7-max)
+- `pnpm dev` em apps/web sobe em ~4s, compila em 15.9s
+- Repo: `EvotechBrazil/dinamic_imob` (HTTPS, branch `main`)
+
+🟡 **Fase atual: POLIMENTO antes da entrega ao cliente 2026-05-22.**
+Áreas: copy comercial, spacing, micro-interactions, perf, mobile/tablet, a11y, mensagens IA contextuais. Detalhes em `memory/project_landing_demo_polimento.md`.
+
+## Como retomar polimento
+
+```powershell
+cd "E:\Projetos\Dinamic_Imob" ; claude
+```
+
+Primeiro prompt no novo Claude:
+
+```
+Retomar Dinamic. Landing demo executiva ESTA RODANDO (validada hoje).
+Cliente ve 2026-05-22. Fase atual = polimento antes da entrega.
+
+Ler primeiro nessa ordem:
+1. memory/project_landing_demo_polimento.md (focus de polimento + lista 10 areas)
+2. docs/prompts/landing-demo-cliente.md (briefing original — DoD)
+3. CLAUDE.md (estado atual)
+
+Comecar por:
+1. cd apps/web && pnpm dev (sobe em http://localhost:3000)
+2. Abrir browser e fazer auditoria visual secao por secao
+3. Listar ajustes em ordem de prioridade
+4. Atacar 1 por 1 com commits granulares feat(landing/polish): ...
+
+Foco: visual clean + copy persuasivo + perf mobile + micro-interactions.
+NAO mexer em backend, db, ou estrutura — so polir o que ja existe em
+apps/web/src/{components,app,styles,lib}.
+
+Confirma que leu e comeca pela auditoria visual.
+```
+
+## Histórico de fases
+
+- ~~Sprint 0~~ ✅ — fundação (monorepo, docker-compose, .env, OpenRouter ativa) + landing demo entregue
+- **Polimento** 🟡 — fase atual (poucos dias até cliente)
+- Pós-demo: portar `vendor/jpasv-chat-bullq` → `apps/api conversations + ai-agents` (task #15 backlog)
+- Sprint 1-7: voltar ao plano original (`docs/squads/`)
 
 ## Como retomar este projeto
 
