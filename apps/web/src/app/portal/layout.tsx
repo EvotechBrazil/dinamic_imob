@@ -44,11 +44,12 @@ export default function PortalLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div
+    <main
       data-portal
-      className={`${fontPortalDisplay.variable} min-h-screen bg-portal-bg text-portal-text`}
+      suppressHydrationWarning
+      className={`${fontPortalDisplay.variable} min-h-screen overflow-x-hidden bg-portal-bg text-portal-text`}
     >
       {children}
-    </div>
+    </main>
   );
 }

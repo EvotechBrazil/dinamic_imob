@@ -9,8 +9,8 @@
   --portal-bg: #f6f8fa;
   --portal-surface: #ffffff;
   --portal-text: #1f2933;
-  --portal-text-muted: #64748b;
-  --portal-text-subtle: #94a3b8;
+  --portal-text-muted: #475569;
+  --portal-text-subtle: #6b7785;
   --portal-border: #e2e8f0;
   --portal-border-strong: #cbd5e1;
 
@@ -155,4 +155,24 @@
 }
 [data-portal] .portal-thin-scroll::-webkit-scrollbar-track {
   background: transparent;
+}
+
+/* ============================================================
+ * Acessibilidade — respeita prefers-reduced-motion
+ * ============================================================ */
+@media (prefers-reduced-motion: reduce) {
+  [data-portal] *,
+  [data-portal] *::before,
+  [data-portal] *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  [data-portal] .portal-blob,
+  [data-portal] .portal-confetti-piece,
+  [data-portal] .portal-online-pulse,
+  [data-portal] .portal-skeleton {
+    animation: none !important;
+  }
 }

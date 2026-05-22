@@ -33,27 +33,49 @@ export function formatBRL(
 
 /**
  * Heurística pra detectar mensagem de IA que confirmou agendamento de visita.
- * Usado no hero-chat pra disparar confete dourado.
- * Match leve — false positive aceitável (recompensa visual extra > falta dela).
+ *
+ * IDEAL: backend deveria expor o marker estruturado [[AGENDAMENTO]]{json}[[/AGENDAMENTO]]
+ * via header X-Agendamento-Fired ou chunk sentinel.
+ * Por enquanto, fallback heurístico alinhado ao system prompt da IA Dinamic.
+ *
+ * Markers PRIMÁRIOS dispatcham confete sozinhos (alta especificidade).
+ * Markers CONTEXTUAIS exigem âncora (agend/visit/marcad) pra evitar false positive
+ * em "vou encaminhar o anúncio" etc.
+ *
+ * Usado em: hero-chat.tsx → fireGoldConfetti.
  */
 export function isAgendamentoConfirmado(content: string): boolean {
   const normalized = content.toLowerCase();
-  const markers = [
+
+  // Markers principais (cobrem alta confiança sozinhos)
+  const primaryMarkers = [
+    "agendamento confirmado",
+    "visita confirmada",
+    "visita marcada",
+    "confirmado a visita",
+    "confirmada sua visita",
+    "está confirmada", // novo: cobre "sua visita ao apto X está confirmada"
+    "agendei pra",
+    "agendei para",
+    "agendar a visita", // marker canônico do system prompt da IA
+  ];
+  if (primaryMarkers.some((m) => normalized.includes(m))) return true;
+
+  // Markers contextuais: só dispara confete se vier acompanhado de palavra-âncora
+  const contextualMarkers = [
     "vou encaminhar",
     "vou repassar",
     "tá agendado",
     "está agendado",
-    "agendamento confirmado",
-    "visita confirmada",
-    "visita marcada",
+    "agendado pra",
+    "agendado para",
     "te vejo lá",
-    "anotei aqui",
-    "confirmado a visita",
-    "confirmada sua visita",
-    "agendei pra",
-    "agendei para",
   ];
-  return markers.some((m) => normalized.includes(m));
+  const hasContextual = contextualMarkers.some((m) => normalized.includes(m));
+  if (!hasContextual) return false;
+
+  // Âncora: a frase precisa mencionar agendar, visita ou marcada
+  return /(agend|visit|marcad)/i.test(normalized);
 }
 
 /**

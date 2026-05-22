@@ -1,9 +1,9 @@
+@import "../styles/tokens.css";
+@import "../styles/portal-tokens.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-
-@import "../styles/tokens.css";
-@import "../styles/portal-tokens.css";
 
 html,
 body {

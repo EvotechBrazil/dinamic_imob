@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import Image from "next/image";
@@ -29,14 +29,70 @@ export function PortalHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
 
+  const hamburgerRef = useRef<HTMLButtonElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const drawerRef = useRef<HTMLElement | null>(null);
+
   // Body scroll lock enquanto drawer mobile esta aberto
   useEffect(() => {
+    if (!menuOpen) return;
     if (typeof document === "undefined") return;
     const previous = document.body.style.overflow;
-    document.body.style.overflow = menuOpen ? "hidden" : previous;
+    document.body.style.overflow = "hidden";
     return () => {
       document.body.style.overflow = previous;
     };
+  }, [menuOpen]);
+
+  // ESC fecha drawer + Tab focus trap
+  useEffect(() => {
+    if (!menuOpen) return;
+    if (typeof window === "undefined") return;
+
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        event.preventDefault();
+        setMenuOpen(false);
+        return;
+      }
+      if (event.key === "Tab" && drawerRef.current) {
+        const focusables = drawerRef.current.querySelectorAll<HTMLElement>(
+          'a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])',
+        );
+        if (focusables.length === 0) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        const active = document.activeElement as HTMLElement | null;
+        if (event.shiftKey && active === first) {
+          event.preventDefault();
+          last.focus();
+        } else if (!event.shiftKey && active === last) {
+          event.preventDefault();
+          first.focus();
+        }
+      }
+    };
+
+    window.addEventListener("keydown", onKeyDown);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown);
+    };
+  }, [menuOpen]);
+
+  // Focus management: ao abrir, foca no X; ao fechar, volta pro hamburger
+  useEffect(() => {
+    if (menuOpen) {
+      // pequeno delay pra esperar drawer montar no DOM
+      const t = window.setTimeout(() => {
+        closeButtonRef.current?.focus();
+      }, 50);
+      return () => {
+        window.clearTimeout(t);
+      };
+    }
+    // Drawer fechou: restaura foco no hamburger
+    hamburgerRef.current?.focus();
+    return undefined;
   }, [menuOpen]);
 
   // Sticky search bar aparece apos rolar > STICKY_THRESHOLD
@@ -97,12 +153,12 @@ export function PortalHeader() {
             ))}
           </nav>
 
-          {/* CTA WhatsApp desktop */}
+          {/* CTA WhatsApp desktop (md+ ja mostra pra iPad) */}
           <a
             href={WA_VENDAS}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden h-10 items-center gap-2 rounded-lg bg-portal-whatsapp px-4 text-white shadow-md transition hover:shadow-portal-whatsapp lg:flex"
+            className="hidden h-11 items-center gap-2 rounded-lg bg-portal-whatsapp px-4 text-white shadow-md transition hover:shadow-portal-whatsapp md:flex"
           >
             <WhatsAppIcon className="h-4 w-4" />
             <span className="text-sm font-semibold">(43) 98847-8713</span>
@@ -110,12 +166,13 @@ export function PortalHeader() {
 
           {/* Hamburger mobile */}
           <button
+            ref={hamburgerRef}
             type="button"
             onClick={() => setMenuOpen(true)}
             aria-label="Abrir menu"
             aria-expanded={menuOpen}
             aria-controls="portal-mobile-drawer"
-            className="inline-flex h-10 w-10 items-center justify-center rounded-md text-portal-text transition hover:bg-portal-gold-soft hover:text-portal-gold-dark lg:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-md text-portal-text transition hover:bg-portal-gold-soft hover:text-portal-gold-dark lg:hidden"
           >
             <Menu className="h-6 w-6" />
           </button>
@@ -142,6 +199,7 @@ export function PortalHeader() {
               role="dialog"
               aria-modal="true"
               aria-label="Menu principal"
+              ref={drawerRef}
               className="fixed right-0 top-0 z-50 flex h-full w-80 max-w-[85vw] flex-col gap-4 bg-white p-6 lg:hidden"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
@@ -157,10 +215,11 @@ export function PortalHeader() {
                   className="h-10 w-auto"
                 />
                 <button
+                  ref={closeButtonRef}
                   type="button"
                   onClick={closeMenu}
                   aria-label="Fechar menu"
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-md text-portal-text transition hover:bg-portal-gold-soft hover:text-portal-gold-dark"
+                  className="inline-flex h-11 w-11 items-center justify-center rounded-md text-portal-text transition hover:bg-portal-gold-soft hover:text-portal-gold-dark"
                 >
                   <X className="h-6 w-6" />
                 </button>
@@ -240,15 +299,14 @@ export function PortalHeader() {
             transition={{ duration: 0.25 }}
           >
             <div className="mx-auto flex h-full max-w-3xl items-center px-4">
-              <input
-                type="text"
-                readOnly
-                placeholder="Pergunte sobre imóveis em Arapongas..."
+              <button
+                type="button"
                 onClick={handleStickySearchFocus}
-                onFocus={handleStickySearchFocus}
-                aria-label="Voltar ao topo para conversar com a IA"
-                className="h-10 w-full rounded-lg border border-portal-border bg-portal-bg px-4 text-sm text-portal-text placeholder:text-portal-text-subtle focus:border-portal-gold focus:outline-none focus:ring-2 focus:ring-portal-gold/20"
-              />
+                aria-label="Voltar ao topo e abrir busca"
+                className="h-11 w-full rounded-lg border border-portal-border bg-portal-bg px-4 text-left text-sm text-portal-text-subtle transition hover:border-portal-gold focus:border-portal-gold focus:outline-none focus:ring-2 focus:ring-portal-gold/20"
+              >
+                Pergunte sobre imóveis em Arapongas...
+              </button>
             </div>
           </motion.div>
         ) : null}

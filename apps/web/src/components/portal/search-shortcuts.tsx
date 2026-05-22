@@ -59,7 +59,7 @@ export function SearchShortcuts() {
       aria-label="Atalhos de busca"
       className="bg-white border-y border-portal-border py-4 px-4"
     >
-      <div className="max-w-7xl mx-auto">
+      <div className="max-w-7xl mx-auto relative">
         <div
           className="flex gap-3 px-1 overflow-x-auto sm:overflow-visible sm:flex-wrap sm:justify-center sm:px-0 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden"
           style={{ scrollbarWidth: "none" }}
@@ -74,7 +74,7 @@ export function SearchShortcuts() {
                 aria-label={`Filtrar por ${label}`}
                 aria-pressed={isActive}
                 className={cn(
-                  "shrink-0 inline-flex items-center gap-2 border px-5 py-2.5 rounded-full transition font-medium text-sm whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-portal-gold/30",
+                  "shrink-0 inline-flex items-center gap-2 border px-5 py-2.5 min-h-11 rounded-full transition font-medium text-sm leading-tight whitespace-nowrap focus:outline-none focus:ring-2 focus:ring-portal-gold/30",
                   isActive
                     ? "bg-portal-gold-soft border-portal-gold text-portal-gold-dark"
                     : "bg-white border-portal-border hover:border-portal-gold hover:text-portal-gold-dark",
@@ -86,6 +86,10 @@ export function SearchShortcuts() {
             );
           })}
         </div>
+        <div
+          className="pointer-events-none absolute inset-y-0 right-0 w-8 bg-gradient-to-l from-white to-transparent sm:hidden"
+          aria-hidden="true"
+        />
       </div>
     </section>
   );

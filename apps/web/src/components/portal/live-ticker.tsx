@@ -37,9 +37,7 @@ export function LiveTicker(): JSX.Element {
 
   return (
     <div
-      role="status"
-      aria-live="polite"
-      aria-label="Atividade ao vivo da plataforma"
+      aria-hidden="true"
       onMouseEnter={() => setIsPaused(true)}
       onMouseLeave={() => setIsPaused(false)}
       className="relative z-50 bg-portal-cta-black py-2 px-4 text-xs text-white sm:text-sm"

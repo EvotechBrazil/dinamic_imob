@@ -50,7 +50,7 @@ export function HeroChat() {
 
   const [input, setInput] = React.useState("");
   const [placeholderIndex, setPlaceholderIndex] = React.useState(0);
-  const [greeting, setGreeting] = React.useState<string>(() => getGreeting());
+  const [greeting, setGreeting] = React.useState<string>("Olá!");
   const [demoOverlay, setDemoOverlay] = React.useState<DemoOverlayState>({
     active: false,
     userMessage: null,
@@ -99,6 +99,13 @@ export function HeroChat() {
     node.scrollTo({ top: node.scrollHeight, behavior: "smooth" });
   }, [messages, isStreaming]);
 
+  // Cancela demo overlay quando user começa a digitar.
+  React.useEffect(() => {
+    if (input.length > 0 && demoOverlay.active) {
+      setDemoOverlay({ active: false, userMessage: null, aiMessage: null });
+    }
+  }, [input.length, demoOverlay.active]);
+
   // Confete dourado quando IA confirma agendamento (dedup por id).
   React.useEffect(() => {
     if (messages.length === 0) return;
@@ -115,16 +122,18 @@ export function HeroChat() {
   const handleSend = React.useCallback(async () => {
     const text = input.trim();
     if (!text) return;
+    if (isStreaming) return;
     setInput("");
     await send(text);
-  }, [input, send]);
+  }, [input, isStreaming, send]);
 
   const handleSuggestion = React.useCallback(
     async (text: string) => {
+      if (isStreaming) return;
       setInput("");
       await send(text);
     },
-    [send],
+    [isStreaming, send],
   );
 
   const handleKeyDown = React.useCallback(
@@ -198,7 +207,7 @@ export function HeroChat() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
-                className="font-portal-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-portal-text mt-8 text-center"
+                className="font-portal-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-portal-text mt-8 text-center"
               >
                 {greeting}
               </motion.h1>
@@ -235,7 +244,8 @@ export function HeroChat() {
                   <button
                     type="button"
                     onClick={() => void handleSend()}
-                    disabled={!input.trim()}
+                    disabled={!input.trim() || isStreaming}
+                    aria-disabled={!input.trim() || isStreaming}
                     aria-label="Enviar mensagem"
                     className="absolute bottom-3 right-3 h-11 w-11 rounded-xl bg-portal-gold text-white shadow-portal-cta hover:shadow-lg disabled:bg-portal-text-subtle disabled:shadow-none disabled:cursor-not-allowed transition flex items-center justify-center"
                   >
@@ -272,7 +282,7 @@ export function HeroChat() {
                             <ChatMessageBubble
                               role="assistant"
                               content={demoOverlay.aiMessage}
-                              streaming={!demoOverlay.aiMessage.endsWith(".")}
+                              streaming={false}
                             />
                           )}
                         </div>
@@ -293,7 +303,8 @@ export function HeroChat() {
                     key={s}
                     type="button"
                     onClick={() => void handleSuggestion(s)}
-                    className="rounded-full bg-white border border-portal-border px-4 py-2.5 text-sm font-medium text-portal-text hover:border-portal-gold hover:bg-portal-gold-soft transition cursor-pointer"
+                    disabled={isStreaming}
+                    className="rounded-full bg-white border border-portal-border px-4 py-2.5 text-sm font-medium text-portal-text hover:border-portal-gold hover:bg-portal-gold-soft transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                   >
                     {s}
                   </button>
@@ -342,7 +353,7 @@ export function HeroChat() {
 
                 <div
                   ref={scrollRef}
-                  className="portal-thin-scroll max-h-[60vh] overflow-y-auto p-4 flex flex-col gap-3"
+                  className="portal-thin-scroll max-h-[50vh] sm:max-h-[60vh] overflow-y-auto p-4 flex flex-col gap-3"
                 >
                   {messages.map((m, i) => (
                     <ChatMessageBubble
