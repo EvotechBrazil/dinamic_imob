@@ -47,15 +47,17 @@ export function Hero() {
           </div>
           <h1 className="font-display text-4xl font-bold leading-[1.05] tracking-tight text-ink sm:text-5xl lg:text-6xl">
             Toda a Dinamic em{" "}
-            <span className="bg-gradient-to-r from-indigo-600 via-indigo-500 to-amber-500 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-amber-500 via-yellow-400 to-amber-600 bg-clip-text text-transparent drop-shadow-[0_1px_0_rgba(180,120,20,0.15)]">
               um só lugar.
             </span>
           </h1>
           <p className="mt-5 max-w-2xl text-lg leading-relaxed text-muted">
-            Atendimento IA 24/7, catálogo de imóveis vivo, financeiro auditável,
-            CRM com funil e contratos LGPD-nativos. Construído sob medida pra
-            Dinamic Imobiliária — você no controle de tudo, sem depender de
-            ninguém.
+            IA atendendo 24/7, catálogo de imóveis vivo, financeiro auditável e
+            CRM com funil que captura cada lead.{" "}
+            <span className="font-medium text-ink">
+              Sob medida pra Dinamic
+            </span>{" "}
+            — dados, marca e operação no seu controle.
           </p>
 
           <div className="mt-7 flex flex-wrap items-center gap-3">
