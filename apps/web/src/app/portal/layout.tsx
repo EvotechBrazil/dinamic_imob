@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
+import { ChatWidget } from "@/components/chat-widget";
 
 const fontPortalDisplay = Montserrat({
   subsets: ["latin"],
@@ -50,6 +51,7 @@ export default function PortalLayout({
       className={`${fontPortalDisplay.variable} min-h-screen overflow-x-hidden bg-portal-bg text-portal-text`}
     >
       {children}
+      <ChatWidget hideButton />
     </main>
   );
 }
