@@ -27,13 +27,13 @@ export function DashboardsSection() {
   return (
     <section
       id="dashboards"
-      className="scroll-mt-20 border-t border-border bg-surface py-16"
+      className="scroll-mt-28 border-t border-border bg-surface py-16"
     >
       <div className="section-container">
         <SectionHeader
-          eyebrow="06 · Dashboards"
+          eyebrow="07 · Dashboards"
           title="Visão consolidada num só olhar."
-          subtitle="6 KPIs vivos, 2 charts respirando — o sócio sabe da Dinamic em 30 segundos pela manhã."
+          subtitle="6 KPIs vivos, 2 charts respirando — você sabe a saúde da Dinamic em 30 segundos pela manhã, do celular ou do escritório."
         />
 
         {/* Parte A — KPI Grid 6 cards */}

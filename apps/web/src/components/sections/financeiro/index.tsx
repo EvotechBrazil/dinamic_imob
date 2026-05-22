@@ -26,13 +26,13 @@ export function FinanceiroSection() {
   return (
     <section
       id="financeiro"
-      className="scroll-mt-20 border-t border-border bg-surface py-16 lg:py-24"
+      className="scroll-mt-28 border-t border-border bg-surface py-16 lg:py-24"
     >
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <SectionHeader
-          eyebrow="02 · Financeiro"
+          eyebrow="03 · Financeiro"
           title="Receita, repasses, inadimplência — auditável."
-          subtitle="Todo dinheiro da Dinamic em tempo real. PIX, boleto, repasse — sem planilha."
+          subtitle="Todo dinheiro da Dinamic em tempo real. PIX, boleto e repasse com histórico rastreável — sem planilha, sem perde-perde no fim do mês."
         />
 
         <div className="mt-10 space-y-6">
@@ -45,7 +45,11 @@ export function FinanceiroSection() {
               <ReceivableChart data={FINANCEIRO_CHART} />
             </div>
             <div className="lg:col-span-1">
-              <AiCta />
+              <AiCta
+                kpis={FINANCEIRO_KPIS}
+                chart={FINANCEIRO_CHART}
+                boletos={PROXIMOS_BOLETOS}
+              />
             </div>
           </div>
 

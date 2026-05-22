@@ -23,13 +23,13 @@ export function JuridicoSection() {
   return (
     <section
       id="juridico"
-      className="scroll-mt-20 border-t border-border bg-app py-16"
+      className="scroll-mt-28 border-t border-border bg-app py-16"
     >
       <div className="section-container">
         <SectionHeader
-          eyebrow="05 · Jurídico + LGPD"
+          eyebrow="06 · Jurídico + LGPD"
           title="Contratos e privacidade sob controle."
-          subtitle="142 contratos ativos, todos versionados. Cada dado pessoal sob política LGPD auditável."
+          subtitle="Cada contrato versionado, cada dado pessoal sob política LGPD auditável. A Dinamic guarda só o necessário — e prova quando perguntarem."
         />
 
         <div className="space-y-6">

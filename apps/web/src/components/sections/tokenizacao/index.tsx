@@ -30,13 +30,13 @@ export function TokenizacaoSection() {
   return (
     <section
       id="tokenizacao"
-      className="scroll-mt-20 border-t border-border bg-surface py-16"
+      className="scroll-mt-28 border-t border-border bg-surface py-16"
     >
       <div className="section-container">
         <SectionHeader
-          eyebrow="04 · Central de Tokenização IA"
+          eyebrow="05 · Tokenização IA"
           title="Você paga só o que usa de IA."
-          subtitle="Modelo: Qwen3.7-max via OpenRouter. Cada token contabilizado em R$ — sem surpresa no fim do mês."
+          subtitle="Claude 3.5 Haiku via OpenRouter, com Sonnet 4.5 disponível pra consultas pesadas. Cada token contabilizado em R$ — transparência total, sem surpresa no fim do mês."
         />
 
         {/* Top: BalanceCard + ConsumptionChart */}

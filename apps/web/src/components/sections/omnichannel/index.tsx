@@ -73,9 +73,9 @@ export function OmnichannelSection() {
     >
       <div className="section-container">
         <SectionHeader
-          eyebrow="Dinamic Channel comercial"
-          title="Tudo numa só inbox"
-          subtitle="WhatsApp, Instagram e Facebook num só lugar, com a IA classificando, respondendo e direcionando pro corretor certo."
+          eyebrow="02 · Dinamic Channel"
+          title="Tudo numa só inbox."
+          subtitle="WhatsApp, Instagram e Facebook num só lugar — a IA classifica, responde e encaminha pro corretor certo, sem perder lead nenhum."
         />
 
         {/* KPIs row */}
