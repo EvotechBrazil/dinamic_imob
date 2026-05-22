@@ -1,0 +1,158 @@
+/* ============================================================
+ * Portal público Dinamic Imobiliária — design tokens
+ * Escopo: ativos quando elemento (ou ancestor) tem [data-portal]
+ * NÃO afeta landing executiva em /
+ * ============================================================ */
+
+[data-portal] {
+  /* base */
+  --portal-bg: #f6f8fa;
+  --portal-surface: #ffffff;
+  --portal-text: #1f2933;
+  --portal-text-muted: #64748b;
+  --portal-text-subtle: #94a3b8;
+  --portal-border: #e2e8f0;
+  --portal-border-strong: #cbd5e1;
+
+  /* marca */
+  --portal-gold: #d79a27;
+  --portal-gold-soft: #fbf3de;
+  --portal-gold-dark: #b07f1e;
+  --portal-gold-darker: #8b6515;
+
+  /* ações */
+  --portal-cta-black: #111827;
+  --portal-cta-black-hover: #1f2937;
+  --portal-whatsapp: #25d366;
+  --portal-whatsapp-dark: #1fae56;
+
+  /* status */
+  --portal-success: #16a34a;
+  --portal-warning: #ea580c;
+  --portal-danger: #dc2626;
+
+  /* sombras (consumidas via Tailwind shadow-portal-card etc OU style inline) */
+  --shadow-portal-card: 0 1px 3px rgba(15, 23, 42, 0.06),
+    0 1px 2px rgba(15, 23, 42, 0.04);
+  --shadow-portal-card-hover: 0 8px 24px rgba(15, 23, 42, 0.1),
+    0 2px 6px rgba(15, 23, 42, 0.06);
+  --shadow-portal-cta: 0 10px 30px rgba(215, 154, 39, 0.25);
+  --shadow-portal-whatsapp: 0 10px 30px rgba(37, 211, 102, 0.3);
+
+  /* tipografia override (Montserrat aplicada via next/font) */
+  font-family: var(--font-portal-display), "Montserrat", -apple-system,
+    BlinkMacSystemFont, "Segoe UI", sans-serif;
+  color: var(--portal-text);
+}
+
+[data-portal] h1,
+[data-portal] h2,
+[data-portal] h3,
+[data-portal] h4,
+[data-portal] h5,
+[data-portal] h6 {
+  font-family: var(--font-portal-display), "Montserrat", -apple-system,
+    sans-serif;
+  letter-spacing: -0.02em;
+}
+
+/* selection dourado dentro do portal */
+[data-portal] ::selection {
+  background: rgba(215, 154, 39, 0.22);
+  color: var(--portal-text);
+}
+
+/* ============================================================
+ * Animations específicas do portal
+ * ============================================================ */
+
+/* Blob dourado animado pro hero background */
+@keyframes portal-blob-drift {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -40px) scale(1.05);
+  }
+  66% {
+    transform: translate(-20px, 30px) scale(0.95);
+  }
+}
+
+.portal-blob {
+  animation: portal-blob-drift 30s ease-in-out infinite;
+}
+
+/* Confete dourado CSS (uau item L) — divs absolutas dispatched via JS */
+@keyframes portal-confetti-fall {
+  0% {
+    transform: translateY(-20vh) rotate(0deg);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(120vh) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+.portal-confetti-piece {
+  position: fixed;
+  top: 0;
+  width: 10px;
+  height: 14px;
+  pointer-events: none;
+  z-index: 9999;
+  animation: portal-confetti-fall 1.6s cubic-bezier(0.16, 0.84, 0.44, 1)
+    forwards;
+}
+
+/* Pulse pra badges online */
+@keyframes portal-online-pulse {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgba(74, 222, 128, 0.7);
+  }
+  50% {
+    box-shadow: 0 0 0 8px rgba(74, 222, 128, 0);
+  }
+}
+
+.portal-online-pulse {
+  animation: portal-online-pulse 1.8s ease-in-out infinite;
+}
+
+/* Skeleton shimmer pro loading premium (uau item I) */
+@keyframes portal-skeleton-shimmer {
+  0% {
+    background-position: -468px 0;
+  }
+  100% {
+    background-position: 468px 0;
+  }
+}
+
+.portal-skeleton {
+  background: linear-gradient(
+    90deg,
+    #e2e8f0 0%,
+    #f1f5f9 20%,
+    #e2e8f0 40%,
+    #e2e8f0 100%
+  );
+  background-size: 800px 100%;
+  animation: portal-skeleton-shimmer 1.4s linear infinite;
+}
+
+/* Custom scrollbar dentro do portal */
+[data-portal] .portal-thin-scroll::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+[data-portal] .portal-thin-scroll::-webkit-scrollbar-thumb {
+  background: var(--portal-border-strong);
+  border-radius: 3px;
+}
+[data-portal] .portal-thin-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}

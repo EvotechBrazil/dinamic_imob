@@ -26,6 +26,14 @@ const config: Config = {
       pattern:
         /^(ring-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900))$/,
     },
+    {
+      pattern:
+        /^(fill-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900))$/,
+    },
+    {
+      pattern:
+        /^(stroke-(?:slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose)-(?:50|100|200|300|400|500|600|700|800|900))$/,
+    },
   ],
   theme: {
     transparent: "transparent",
@@ -73,6 +81,28 @@ const config: Config = {
         warning: "#F59E0B",
         danger: "#EF4444",
         info: "#0EA5E9",
+        // Portal público Dinamic — escopado via [data-portal] em CSS, mas
+        // disponibilizado como utility classes (bg-portal-gold etc).
+        portal: {
+          bg: "#F6F8FA",
+          surface: "#FFFFFF",
+          text: "#1F2933",
+          "text-muted": "#64748B",
+          "text-subtle": "#94A3B8",
+          border: "#E2E8F0",
+          "border-strong": "#CBD5E1",
+          gold: "#D79A27",
+          "gold-soft": "#FBF3DE",
+          "gold-dark": "#B07F1E",
+          "gold-darker": "#8B6515",
+          "cta-black": "#111827",
+          "cta-black-hover": "#1F2937",
+          whatsapp: "#25D366",
+          "whatsapp-dark": "#1FAE56",
+          success: "#16A34A",
+          warning: "#EA580C",
+          danger: "#DC2626",
+        },
         // Tremor (light)
         tremor: {
           brand: {
@@ -104,6 +134,11 @@ const config: Config = {
         "tremor-input": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
         "tremor-card": "0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.07)",
         "tremor-dropdown": "0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)",
+        "portal-card": "0 1px 3px rgba(15, 23, 42, 0.06), 0 1px 2px rgba(15, 23, 42, 0.04)",
+        "portal-card-hover":
+          "0 8px 24px rgba(15, 23, 42, 0.10), 0 2px 6px rgba(15, 23, 42, 0.06)",
+        "portal-cta": "0 10px 30px rgba(215, 154, 39, 0.25)",
+        "portal-whatsapp": "0 10px 30px rgba(37, 211, 102, 0.30)",
       },
       borderRadius: {
         "tremor-small": "0.375rem",
@@ -120,6 +155,12 @@ const config: Config = {
         display: ["var(--font-display)", "ui-sans-serif", "system-ui"],
         sans: ["var(--font-sans)", "ui-sans-serif", "system-ui"],
         mono: ["var(--font-mono)", "ui-monospace", "monospace"],
+        "portal-display": [
+          "var(--font-portal-display)",
+          "Montserrat",
+          "ui-sans-serif",
+          "system-ui",
+        ],
       },
       keyframes: {
         "accordion-down": {
