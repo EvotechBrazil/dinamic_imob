@@ -12,7 +12,12 @@
 // ============================================================
 export type ChannelType = "whatsapp" | "instagram" | "facebook";
 
-export type Setor = "vendas" | "locacao" | "captacao" | "financeiro";
+export type Setor =
+  | "vendas"
+  | "locacao"
+  | "captacao"
+  | "financeiro"
+  | "juridico";
 
 export type ConversationStatus = "pending" | "open" | "snoozed" | "closed";
 
@@ -233,6 +238,7 @@ export const SETOR_LABELS: Record<Setor, string> = {
   locacao: "Locação",
   captacao: "Captação",
   financeiro: "Financeiro",
+  juridico: "Jurídico",
 };
 
 export const LEAD_STATUS_LABELS: Record<LeadStatus, string> = {
@@ -243,4 +249,92 @@ export const LEAD_STATUS_LABELS: Record<LeadStatus, string> = {
   proposta: "Proposta",
   fechado: "Fechado",
   perdido: "Perdido",
+};
+
+// ============================================================
+// Task Manager (ClickUp-style cross-cutting)
+// ============================================================
+export type TaskStatus =
+  | "a_fazer"
+  | "em_andamento"
+  | "aguardando_terceiros"
+  | "em_revisao"
+  | "concluida"
+  | "bloqueada";
+
+export type TaskPriority = "baixa" | "normal" | "alta" | "urgente";
+
+export type TaskLabel =
+  | "recolher_assinatura"
+  | "aguardando_documento"
+  | "boleto_emitir"
+  | "visita_confirmar"
+  | "contrato_revisar"
+  | "lgpd_processar"
+  | "vistoria_agendar"
+  | "comissao_pagar"
+  | "follow_up_lead"
+  | "renovacao";
+
+export type TaskOrigem = "ia" | "evento_sistema" | "manual";
+
+export type TaskLinkedEntityTipo =
+  | "contrato"
+  | "boleto"
+  | "lead"
+  | "conversa"
+  | "imovel"
+  | "lgpd_request";
+
+export interface TaskLinkedEntity {
+  tipo: TaskLinkedEntityTipo;
+  id: string;
+  titulo: string;
+}
+
+export interface Task {
+  id: string;
+  titulo: string;
+  descricao?: string;
+  status: TaskStatus;
+  prioridade: TaskPriority;
+  setor: Setor;
+  responsavelNome?: string;
+  responsavelAvatarUrl?: string;
+  prazo?: string; // ISO date
+  criadaEm: string;
+  atualizadaEm: string;
+  labels: TaskLabel[];
+  linkedTo?: TaskLinkedEntity;
+  origem: TaskOrigem;
+  bloqueadaPor?: string;
+}
+
+export const TASK_STATUS_LABELS: Record<TaskStatus, string> = {
+  a_fazer: "A fazer",
+  em_andamento: "Em andamento",
+  aguardando_terceiros: "Aguardando",
+  em_revisao: "Em revisão",
+  concluida: "Concluída",
+  bloqueada: "Bloqueada",
+};
+
+export const TASK_PRIORITY_LABELS: Record<TaskPriority, string> = {
+  baixa: "Baixa",
+  normal: "Normal",
+  alta: "Alta",
+  urgente: "Urgente",
+};
+
+export const TASK_LABEL_LABELS: Record<TaskLabel, string> = {
+  recolher_assinatura: "Recolher assinatura",
+  aguardando_documento: "Aguardando documento",
+  boleto_emitir: "Emitir boleto",
+  visita_confirmar: "Confirmar visita",
+  contrato_revisar: "Revisar contrato",
+  lgpd_processar: "Processar LGPD",
+  vistoria_agendar: "Agendar vistoria",
+  comissao_pagar: "Pagar comissão",
+  follow_up_lead: "Follow-up lead",
+  renovacao: "Renovação",
 };

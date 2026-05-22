@@ -9,6 +9,7 @@ import type {
   LeadStatus,
   Setor,
 } from "@/lib/mock-types";
+import { triggerVisitScheduled } from "./task-triggers";
 
 interface StoredLead extends Lead {
   addedAt?: number;
@@ -83,5 +84,16 @@ export function addLead(input: AddLeadInput): StoredLead {
   };
 
   store.set(id, lead);
+
+  try {
+    triggerVisitScheduled({
+      leadId: lead.id,
+      leadNome: lead.nome,
+      bairro: lead.bairro,
+    });
+  } catch (err) {
+    console.error("[lead-store] triggerVisitScheduled falhou", err);
+  }
+
   return lead;
 }

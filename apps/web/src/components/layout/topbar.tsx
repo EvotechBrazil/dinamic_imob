@@ -15,6 +15,7 @@ const NAV_ITEMS = [
   { id: "crm", label: "CRM" },
   { id: "tokenizacao", label: "Tokenização" },
   { id: "juridico", label: "Jurídico" },
+  { id: "tarefas", label: "Tarefas" },
   { id: "dashboards", label: "Dashboards" },
 ] as const;
 

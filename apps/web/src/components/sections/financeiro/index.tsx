@@ -7,12 +7,21 @@
  *   2) Grid 2 colunas:
  *      - Esquerda (col-span-2): AreaChart Recebido vs Previsto (ReceivableChart)
  *      - Direita  (col-span-1): CTA da IA (AiCta)
- *   3) Tabela completa de próximos vencimentos (BoletosTable) — full width
+ *   3) Toggle Pipeline (Kanban) ↔ Tabela detalhada — default Pipeline
  */
 
+"use client";
+
 import { SectionHeader } from "@/components/layout/section-header";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 
 import { AiCta } from "./ai-cta";
+import { BoletosKanban } from "./boletos-kanban";
 import { BoletosTable } from "./boletos-table";
 import { KpiGrid } from "./kpi-grid";
 import {
@@ -53,8 +62,19 @@ export function FinanceiroSection() {
             </div>
           </div>
 
-          {/* 3) Tabela de boletos */}
-          <BoletosTable boletos={PROXIMOS_BOLETOS} />
+          {/* 3) Toggle Pipeline ↔ Tabela */}
+          <Tabs defaultValue="pipeline">
+            <TabsList>
+              <TabsTrigger value="pipeline">Pipeline</TabsTrigger>
+              <TabsTrigger value="tabela">Tabela detalhada</TabsTrigger>
+            </TabsList>
+            <TabsContent value="pipeline" className="mt-4">
+              <BoletosKanban boletos={PROXIMOS_BOLETOS} />
+            </TabsContent>
+            <TabsContent value="tabela" className="mt-4">
+              <BoletosTable boletos={PROXIMOS_BOLETOS} />
+            </TabsContent>
+          </Tabs>
         </div>
       </div>
     </section>

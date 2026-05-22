@@ -361,6 +361,42 @@ export function Kanban() {
       ],
     }));
 
+    if (newStatus === "fechado" && result.status !== "fechado") {
+      fetch("/api/tasks", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          titulo: `Revisar contrato — ${result.lead.nome}`,
+          setor: "juridico",
+          prioridade: "alta",
+          labels: ["contrato_revisar"],
+          linkedTo: {
+            tipo: "contrato",
+            id: result.lead.id,
+            titulo: `Contrato — ${result.lead.nome}`,
+          },
+          origem: "evento_sistema",
+        }),
+      }).catch(() => {});
+      fetch("/api/tasks", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({
+          titulo: `Emitir boleto entrada — ${result.lead.nome}`,
+          setor: "financeiro",
+          prioridade: "urgente",
+          labels: ["boleto_emitir"],
+          linkedTo: {
+            tipo: "boleto",
+            id: result.lead.id,
+            titulo: `Sinal — ${result.lead.nome}`,
+          },
+          origem: "evento_sistema",
+        }),
+      }).catch(() => {});
+      window.dispatchEvent(new CustomEvent("dinamic:tasks-refresh"));
+    }
+
     const newToast: ToastInfo = {
       id: `t-${Date.now()}`,
       name: result.lead.nome,

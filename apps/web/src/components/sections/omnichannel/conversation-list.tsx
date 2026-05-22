@@ -34,6 +34,7 @@ const setorBadgeClass: Record<Setor, string> = {
   locacao: "bg-emerald-100 text-emerald-700",
   captacao: "bg-amber-100 text-amber-700",
   financeiro: "bg-slate-200 text-slate-700",
+  juridico: "bg-sky-100 text-sky-700",
 };
 
 interface ConversationListProps {

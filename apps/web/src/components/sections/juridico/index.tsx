@@ -13,8 +13,15 @@
  */
 
 import { SectionHeader } from "@/components/layout";
+import {
+  Tabs,
+  TabsContent,
+  TabsList,
+  TabsTrigger,
+} from "@/components/ui/tabs";
 
 import { ComplianceBanner } from "./compliance-banner";
+import { ContractsKanban } from "./contracts-kanban";
 import { ContractsTable } from "./contracts-table";
 import { JuridicoKpiRow } from "./juridico-kpi-row";
 import { LgpdPanel } from "./lgpd-panel";
@@ -36,7 +43,20 @@ export function JuridicoSection() {
           <JuridicoKpiRow />
 
           <div className="grid gap-6 lg:grid-cols-3">
-            <ContractsTable />
+            <div className="lg:col-span-2">
+              <Tabs defaultValue="pipeline">
+                <TabsList>
+                  <TabsTrigger value="pipeline">Pipeline</TabsTrigger>
+                  <TabsTrigger value="tabela">Tabela detalhada</TabsTrigger>
+                </TabsList>
+                <TabsContent value="pipeline" className="mt-4">
+                  <ContractsKanban />
+                </TabsContent>
+                <TabsContent value="tabela" className="mt-4">
+                  <ContractsTable />
+                </TabsContent>
+              </Tabs>
+            </div>
             <LgpdPanel />
           </div>
 
