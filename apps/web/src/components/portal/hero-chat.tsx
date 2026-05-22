@@ -236,9 +236,9 @@ export function HeroChat() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
-                className="max-w-2xl mx-auto mt-10 relative"
+                className="max-w-3xl mx-auto mt-10 relative"
               >
-                <div className="bg-white border border-portal-border rounded-2xl shadow-portal-card focus-within:ring-2 focus-within:ring-portal-gold focus-within:border-portal-gold transition p-4 pr-16">
+                <div className="bg-white border border-portal-border rounded-2xl shadow-portal-card focus-within:ring-2 focus-within:ring-portal-gold focus-within:border-portal-gold transition p-5 pr-16">
                   <textarea
                     ref={textareaRef}
                     rows={1}
@@ -247,7 +247,7 @@ export function HeroChat() {
                     onKeyDown={handleKeyDown}
                     placeholder={PLACEHOLDERS[placeholderIndex]}
                     aria-label="Conte pra IA o que você procura"
-                    className="min-h-[60px] max-h-[200px] resize-none w-full outline-none text-base placeholder:text-portal-text-subtle font-medium bg-transparent"
+                    className="min-h-[112px] max-h-[260px] resize-none w-full outline-none text-base lg:text-lg placeholder:text-portal-text-subtle font-medium bg-transparent leading-relaxed"
                   />
                   <button
                     type="button"
@@ -402,8 +402,8 @@ export function HeroChat() {
               </div>
 
               {/* Input continua visível abaixo do card */}
-              <div className="max-w-2xl mx-auto mt-6 relative">
-                <div className="bg-white border border-portal-border rounded-2xl shadow-portal-card focus-within:ring-2 focus-within:ring-portal-gold focus-within:border-portal-gold transition p-4 pr-16">
+              <div className="max-w-3xl mx-auto mt-6 relative">
+                <div className="bg-white border border-portal-border rounded-2xl shadow-portal-card focus-within:ring-2 focus-within:ring-portal-gold focus-within:border-portal-gold transition p-5 pr-16">
                   <textarea
                     ref={textareaRef}
                     rows={1}
@@ -412,7 +412,7 @@ export function HeroChat() {
                     onKeyDown={handleKeyDown}
                     placeholder={PLACEHOLDERS[placeholderIndex]}
                     aria-label="Continue a conversa"
-                    className="min-h-[60px] max-h-[200px] resize-none w-full outline-none text-base placeholder:text-portal-text-subtle font-medium bg-transparent"
+                    className="min-h-[112px] max-h-[260px] resize-none w-full outline-none text-base lg:text-lg placeholder:text-portal-text-subtle font-medium bg-transparent leading-relaxed"
                   />
                   <button
                     type="button"
