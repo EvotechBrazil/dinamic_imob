@@ -69,7 +69,7 @@ export function Topbar() {
       )}
       style={{ zIndex: "var(--z-topbar)" as unknown as number }}
     >
-      <div className="section-container flex h-28 items-center justify-between">
+      <div className="section-container flex h-36 items-center justify-between">
         <Link
           href="/"
           aria-label="Dinamic Imóveis — Arapongas-PR"
@@ -78,10 +78,10 @@ export function Topbar() {
           <Image
             src="/logo-dinamic.png"
             alt="Dinamic Imóveis"
-            width={273}
-            height={182}
+            width={384}
+            height={256}
             priority
-            className="h-[100px] w-auto transition-transform duration-200 group-hover:scale-[1.02]"
+            className="h-[128px] w-auto transition-transform duration-200 group-hover:scale-[1.02]"
           />
         </Link>
 
@@ -131,7 +131,7 @@ export function Topbar() {
       {mobileOpen && (
         <>
           <div
-            className="fixed inset-0 top-28 z-40 bg-ink/40 lg:hidden"
+            className="fixed inset-0 top-36 z-40 bg-ink/40 lg:hidden"
             onClick={() => setMobileOpen(false)}
             aria-hidden
           />

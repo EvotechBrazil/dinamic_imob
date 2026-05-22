@@ -11,6 +11,7 @@ import {
   Download,
   Eye,
   FileSignature,
+  MessageCircle,
   Plus,
   RefreshCw,
 } from "lucide-react";
@@ -74,6 +75,42 @@ const STATUS_LABELS: Record<ContractStatus, string> = {
 };
 
 type Filter = "todos" | ContractStatus;
+
+// ============================================================
+// Chat IA bridge
+// ============================================================
+function openChatWith(prompt: string, context?: string) {
+  return () => {
+    window.dispatchEvent(
+      new CustomEvent("dinamic:open-chat-widget", {
+        detail: { prompt, context },
+      })
+    );
+  };
+}
+
+function buildPrompt(c: Contract): string {
+  switch (c.status) {
+    case "ativo":
+      return `Me mostra os detalhes do contrato de ${c.locatario} — ${c.imovel}. Quando termina?`;
+    case "vencendo":
+      return `O contrato de ${c.locatario} (${c.imovel}) tá vencendo. Qual o próximo passo — renovação ou notificação?`;
+    case "encerrado":
+      return `Me lembra os detalhes do contrato encerrado de ${c.locatario}: período e fechamento`;
+  }
+}
+
+function buildContext(c: Contract): string {
+  return JSON.stringify({
+    tipo: "contrato",
+    inquilino: c.locatario,
+    imovel: c.imovel,
+    status: c.status,
+    inicio: c.periodoInicio,
+    fim: c.periodoFim,
+    valorMensal: c.valor,
+  });
+}
 
 const FILTERS: { value: Filter; label: string }[] = [
   { value: "todos", label: "Todos" },
@@ -146,11 +183,25 @@ export function ContractsTable() {
                   </td>
                 </tr>
               )}
-              {filtered.map((c) => (
+              {filtered.map((c) => {
+                const handleOpenChat = openChatWith(
+                  buildPrompt(c),
+                  buildContext(c)
+                );
+                return (
                 <tr
                   key={c.id}
+                  role="button"
+                  tabIndex={0}
+                  onClick={handleOpenChat}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      handleOpenChat();
+                    }
+                  }}
                   className={cn(
-                    "border-b border-border/60 last:border-b-0 transition-colors hover:bg-slate-50/60",
+                    "group cursor-pointer border-b border-border/60 last:border-b-0 transition-colors hover:bg-primary/5 focus:bg-primary/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
                     c.status === "vencendo" && "bg-amber-50/50"
                   )}
                 >
@@ -192,47 +243,60 @@ export function ContractsTable() {
                     </Badge>
                   </td>
                   <td className="px-4 py-3 text-right">
-                    <Popover>
-                      <PopoverTrigger asChild>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          className="h-7 gap-1 px-2 text-xs text-muted hover:text-primary"
+                    <div className="flex items-center justify-end gap-1">
+                      <MessageCircle
+                        aria-hidden
+                        className="h-3.5 w-3.5 text-primary opacity-0 transition-opacity group-hover:opacity-100 group-focus:opacity-100"
+                      />
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={(e) => e.stopPropagation()}
+                            onKeyDown={(e) => e.stopPropagation()}
+                            className="h-7 gap-1 px-2 text-xs text-muted hover:text-primary"
+                          >
+                            Ações
+                            <ChevronRight className="h-3 w-3" />
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent
+                          align="end"
+                          className="w-40 p-1 text-sm"
+                          onClick={(e) => e.stopPropagation()}
                         >
-                          Ações
-                          <ChevronRight className="h-3 w-3" />
-                        </Button>
-                      </PopoverTrigger>
-                      <PopoverContent
-                        align="end"
-                        className="w-40 p-1 text-sm"
-                      >
-                        <button
-                          type="button"
-                          className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left hover:bg-slate-100"
-                        >
-                          <Eye className="h-3.5 w-3.5 text-muted" />
-                          Ver
-                        </button>
-                        <button
-                          type="button"
-                          className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left hover:bg-slate-100"
-                        >
-                          <RefreshCw className="h-3.5 w-3.5 text-muted" />
-                          Renovar
-                        </button>
-                        <button
-                          type="button"
-                          className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left hover:bg-slate-100"
-                        >
-                          <Download className="h-3.5 w-3.5 text-muted" />
-                          Baixar PDF
-                        </button>
-                      </PopoverContent>
-                    </Popover>
+                          <button
+                            type="button"
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left hover:bg-slate-100"
+                          >
+                            <Eye className="h-3.5 w-3.5 text-muted" />
+                            Ver
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left hover:bg-slate-100"
+                          >
+                            <RefreshCw className="h-3.5 w-3.5 text-muted" />
+                            Renovar
+                          </button>
+                          <button
+                            type="button"
+                            onClick={(e) => e.stopPropagation()}
+                            className="flex w-full items-center gap-2 rounded-sm px-2 py-1.5 text-left hover:bg-slate-100"
+                          >
+                            <Download className="h-3.5 w-3.5 text-muted" />
+                            Baixar PDF
+                          </button>
+                        </PopoverContent>
+                      </Popover>
+                    </div>
                   </td>
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>

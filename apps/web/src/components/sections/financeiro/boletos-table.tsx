@@ -4,6 +4,7 @@ import {
   ArrowUpRight,
   CheckCircle2,
   Clock,
+  MessageCircle,
   XCircle,
 } from "lucide-react";
 import { useMemo } from "react";
@@ -60,6 +61,42 @@ const STATUS_CFG: Record<
     icon: XCircle,
   },
 };
+
+function openChatWith(prompt: string, context?: string) {
+  return () => {
+    window.dispatchEvent(
+      new CustomEvent("dinamic:open-chat-widget", {
+        detail: { prompt, context },
+      }),
+    );
+  };
+}
+
+function buildBoletoPrompt(b: Boleto): string {
+  switch (b.status) {
+    case "pago":
+      return `Me explica o último pagamento de ${b.locatario} — quando entrou, valor e bairro`;
+    case "pendente":
+      return `O aluguel de ${b.locatario} (${b.imovel} no ${b.bairro}) vence em ${b.vencimento}. Como abordar pra confirmar pagamento?`;
+    case "vencido":
+      return `O aluguel de ${b.locatario} (${b.imovel} no ${b.bairro}) tá ${b.diasAtraso ?? 0} dias atrasado. Sugere uma abordagem de cobrança`;
+    case "cancelado":
+      return `Por que o boleto de ${b.locatario} foi cancelado?`;
+  }
+}
+
+function buildBoletoContext(b: Boleto): string {
+  return JSON.stringify({
+    tipo: "boleto",
+    locatario: b.locatario,
+    imovel: b.imovel,
+    bairro: b.bairro,
+    valor: b.valor,
+    vencimento: b.vencimento,
+    status: b.status,
+    ...(b.diasAtraso ? { diasAtraso: b.diasAtraso } : {}),
+  });
+}
 
 function getInitials(name: string) {
   return name
@@ -129,12 +166,26 @@ export function BoletosTable({ boletos }: BoletosTableProps) {
               const gradient =
                 AVATAR_GRADIENTS[i % AVATAR_GRADIENTS.length] ??
                 AVATAR_GRADIENTS[0];
+              const openHandler = openChatWith(
+                buildBoletoPrompt(b),
+                buildBoletoContext(b),
+              );
 
               return (
                 <tr
                   key={b.id}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`Perguntar pra IA sobre ${b.locatario}`}
+                  onClick={openHandler}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" || e.key === " ") {
+                      e.preventDefault();
+                      openHandler();
+                    }
+                  }}
                   className={cn(
-                    "transition-colors hover:bg-app/60",
+                    "group cursor-pointer transition-colors hover:bg-primary/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40",
                     cfg.row,
                   )}
                 >
@@ -169,16 +220,22 @@ export function BoletosTable({ boletos }: BoletosTableProps) {
                     ) : null}
                   </td>
                   <td className="px-6 py-3.5">
-                    <Badge
-                      variant="outline"
-                      className={cn(
-                        "gap-1 border font-medium",
-                        cfg.badge,
-                      )}
-                    >
-                      <Icon className="h-3 w-3" />
-                      {cfg.label}
-                    </Badge>
+                    <div className="flex items-center justify-between gap-2">
+                      <Badge
+                        variant="outline"
+                        className={cn(
+                          "gap-1 border font-medium",
+                          cfg.badge,
+                        )}
+                      >
+                        <Icon className="h-3 w-3" />
+                        {cfg.label}
+                      </Badge>
+                      <MessageCircle
+                        className="h-4 w-4 text-primary opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100"
+                        aria-hidden="true"
+                      />
+                    </div>
                   </td>
                 </tr>
               );

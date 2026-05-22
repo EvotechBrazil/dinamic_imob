@@ -9,6 +9,7 @@
 import { DonutChart } from "@tremor/react";
 import { PieChart } from "lucide-react";
 
+import { AnimatedNumber } from "@/components/ui/animated-number";
 import {
   Card,
   CardContent,
@@ -77,7 +78,11 @@ export function SetorDistribution() {
                       <span className="font-medium text-ink">{s.name}</span>
                     </div>
                     <span className="text-sm font-semibold text-ink">
-                      {s.value}%
+                      <AnimatedNumber
+                        value={s.value}
+                        duration={1.2}
+                        format={(n) => `${n}%`}
+                      />
                     </span>
                   </div>
                   <div

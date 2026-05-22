@@ -1,7 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowUp, Sparkles } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
 import {
@@ -17,6 +17,16 @@ import { cn, formatBRL, formatNumberBR, relativeTime } from "@/lib/utils";
 import { TOKEN_HISTORICO } from "./mock";
 
 type FilterKey = "todos" | "hoje" | "semana";
+
+function openChatWith(prompt: string, context?: string) {
+  return () => {
+    window.dispatchEvent(
+      new CustomEvent("dinamic:open-chat-widget", {
+        detail: { prompt, context },
+      }),
+    );
+  };
+}
 
 const MODELO_BADGE: Record<
   string,
@@ -96,15 +106,41 @@ export function HistoryTable() {
                   label: r.modelo,
                   variant: "muted" as const,
                 };
+                const totalTokens = r.tokensIn + r.tokensOut;
+                const dataLabel = relativeTime(r.ts);
+                const prompt = `Me explica esse consumo de IA: ${r.conversa} (${badge.label}) em ${dataLabel}, gastei ${formatNumberBR(totalTokens)} tokens (~${formatBRL(r.costBRL)}). Foi necessário ou dá pra otimizar?`;
+                const context = JSON.stringify({
+                  tipo: "consumo_ia",
+                  id: r.id,
+                  ts: r.ts,
+                  quando: dataLabel,
+                  conversa: r.conversa,
+                  modelo: r.modelo,
+                  tokensIn: r.tokensIn,
+                  tokensOut: r.tokensOut,
+                  totalTokens,
+                  costBRL: r.costBRL,
+                });
+                const handleOpen = openChatWith(prompt, context);
                 return (
                   <tr
                     key={r.id}
-                    className="transition-colors hover:bg-app/60"
+                    role="button"
+                    tabIndex={0}
+                    onClick={handleOpen}
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter" || e.key === " ") {
+                        e.preventDefault();
+                        handleOpen();
+                      }
+                    }}
+                    aria-label={`Abrir chat IA sobre ${r.conversa} em ${dataLabel}`}
+                    className="group cursor-pointer transition-colors hover:bg-primary/5 focus:bg-primary/5 focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/40"
                   >
                     <td className="px-6 py-3 text-ink">
                       <div className="flex flex-col">
                         <span className="text-sm font-medium">
-                          {relativeTime(r.ts)}
+                          {dataLabel}
                         </span>
                       </div>
                     </td>
@@ -129,13 +165,19 @@ export function HistoryTable() {
                       </div>
                     </td>
                     <td className="px-6 py-3 text-right">
-                      <span
-                        className={cn(
-                          "font-mono text-sm font-semibold text-accent",
-                        )}
-                      >
-                        {formatBRL(r.costBRL)}
-                      </span>
+                      <div className="flex items-center justify-end gap-2">
+                        <span
+                          className={cn(
+                            "font-mono text-sm font-semibold text-accent",
+                          )}
+                        >
+                          {formatBRL(r.costBRL)}
+                        </span>
+                        <Sparkles
+                          aria-hidden="true"
+                          className="h-3.5 w-3.5 text-primary opacity-0 transition-opacity group-hover:opacity-100 group-focus:opacity-100"
+                        />
+                      </div>
                     </td>
                   </tr>
                 );

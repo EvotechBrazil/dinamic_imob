@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { AnimatePresence, motion } from "framer-motion";
 import {
   CheckCircle2,
   Clock4,
@@ -10,13 +11,13 @@ import {
 import type { LucideIcon } from "lucide-react";
 import { SectionHeader } from "@/components/layout";
 import { cn } from "@/lib/utils";
-import type { ChatMessage, KPI } from "@/lib/mock-types";
+import type { AgentRun, ChatMessage, KPI } from "@/lib/mock-types";
 import {
   ACTIVE_CONVERSATION_ID,
-  ACTIVE_MESSAGES,
-  AGENT_RUNS,
   CONVERSATIONS,
+  MESSAGES_BY_CONVERSATION,
   OMNICHANNEL_KPIS,
+  RUNS_BY_CONVERSATION,
 } from "./mock";
 import { AgentRunsSidebar } from "./agent-runs-sidebar";
 import { ChatPanel } from "./chat-panel";
@@ -41,14 +42,12 @@ export function OmnichannelSection() {
   );
 
   /**
-   * Só temos thread completa (8 mensagens) pra Mariana Silva.
-   * Pras outras conversas, mostramos uma única bubble inbound com
-   * `ultimaMsg` — suficiente pra demo, sem inflar mock.
+   * Thread completa de mensagens + runs IA por conversa, com fallback
+   * pra uma única bubble inbound caso o mock não tenha entrada (defensivo).
    */
   const messages: ChatMessage[] = useMemo(() => {
-    if (activeConversation.id === ACTIVE_CONVERSATION_ID) {
-      return ACTIVE_MESSAGES;
-    }
+    const fromMap = MESSAGES_BY_CONVERSATION[activeConversation.id];
+    if (fromMap && fromMap.length > 0) return fromMap;
     return [
       {
         id: `${activeConversation.id}-preview`,
@@ -62,14 +61,19 @@ export function OmnichannelSection() {
     ];
   }, [activeConversation]);
 
+  const runs: AgentRun[] = useMemo(
+    () => RUNS_BY_CONVERSATION[activeConversation.id] ?? [],
+    [activeConversation]
+  );
+
   return (
     <section
       id="omnichannel"
-      className="scroll-mt-20 border-t border-border bg-app py-20"
+      className="scroll-mt-28 border-t border-border bg-app py-20"
     >
       <div className="section-container">
         <SectionHeader
-          eyebrow="Omnichannel comercial"
+          eyebrow="Dinamic Channel comercial"
           title="Tudo numa só inbox"
           subtitle="WhatsApp, Instagram e Facebook num só lugar, com a IA classificando, respondendo e direcionando pro corretor certo."
         />
@@ -91,11 +95,33 @@ export function OmnichannelSection() {
               channelFilter={channelFilter}
               onChangeFilter={setChannelFilter}
             />
-            <ChatPanel
-              conversation={activeConversation}
-              messages={messages}
-            />
-            <AgentRunsSidebar runs={AGENT_RUNS} />
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={`chat-${activeConversation.id}`}
+                initial={{ opacity: 0, x: 8 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -8 }}
+                transition={{ duration: 0.18, ease: "easeOut" }}
+                className="h-full min-h-0"
+              >
+                <ChatPanel
+                  conversation={activeConversation}
+                  messages={messages}
+                />
+              </motion.div>
+            </AnimatePresence>
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={`runs-${activeConversation.id}`}
+                initial={{ opacity: 0, x: 8 }}
+                animate={{ opacity: 1, x: 0 }}
+                exit={{ opacity: 0, x: -8 }}
+                transition={{ duration: 0.18, ease: "easeOut" }}
+                className="h-full min-h-0"
+              >
+                <AgentRunsSidebar runs={runs} />
+              </motion.div>
+            </AnimatePresence>
           </div>
         </div>
 

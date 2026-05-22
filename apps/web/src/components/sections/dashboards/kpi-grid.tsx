@@ -18,6 +18,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
+import { AnimatedNumber } from "@/components/ui/animated-number";
 import { cn } from "@/lib/utils";
 import type { KPI } from "@/lib/mock-types";
 
@@ -41,6 +42,53 @@ const HIGHLIGHT_LABELS = new Set(["Imóveis ativos", "Receita"]);
 /** Sufixo do delta: "pp" para campos em %, "%" para o resto. */
 function deltaSuffix(kpi: KPI): string {
   return kpi.suffix === "%" ? "pp" : "%";
+}
+
+/**
+ * Converte o valor do KPI (que pode vir como `number` ou como string
+ * pré-formatada no padrão BR — "48.200", "1.250,50") num número finito
+ * que o AnimatedNumber consiga animar. Devolve também:
+ * - `decimals`: quantas casas o valor original tinha (pra animar 2.8 com 1).
+ * - `useGrouping`: se a string original tinha separador de milhar (pra
+ *   preservar "48.200" durante a animação).
+ */
+function parseKpiValue(raw: KPI["value"]): {
+  numeric: number;
+  decimals: number;
+  useGrouping: boolean;
+} {
+  if (typeof raw === "number") {
+    const text = raw.toString();
+    const dotIdx = text.indexOf(".");
+    const decimals = dotIdx === -1 ? 0 : text.length - dotIdx - 1;
+    return { numeric: raw, decimals, useGrouping: false };
+  }
+
+  // String BR: ponto = milhar, vírgula = decimal.
+  const trimmed = raw.trim();
+  const useGrouping = trimmed.includes(".");
+  const normalized = trimmed.replace(/\./g, "").replace(",", ".");
+  const parsed = Number.parseFloat(normalized);
+
+  if (!Number.isFinite(parsed)) {
+    return { numeric: 0, decimals: 0, useGrouping: false };
+  }
+
+  const commaIdx = trimmed.indexOf(",");
+  const decimals = commaIdx === -1 ? 0 : trimmed.length - commaIdx - 1;
+  return { numeric: parsed, decimals, useGrouping };
+}
+
+/** Formatter BR para o valor intermediário do count-up. */
+function formatKpi(
+  n: number,
+  options: { decimals: number; useGrouping: boolean }
+): string {
+  return n.toLocaleString("pt-BR", {
+    minimumFractionDigits: options.decimals,
+    maximumFractionDigits: options.decimals,
+    useGrouping: options.useGrouping,
+  });
 }
 
 export function KpiGrid() {
@@ -93,11 +141,26 @@ export function KpiGrid() {
               {kpi.label}
             </p>
 
-            {/* Valor */}
+            {/* Valor — count-up animado ao entrar no viewport */}
             <p className="mt-1 font-display text-2xl font-bold text-ink xl:text-3xl">
-              {kpi.prefix ?? ""}
-              {kpi.value}
-              {kpi.suffix ?? ""}
+              {(() => {
+                const { numeric, decimals, useGrouping } = parseKpiValue(
+                  kpi.value
+                );
+                return (
+                  <AnimatedNumber
+                    value={numeric}
+                    decimals={decimals}
+                    duration={1.5}
+                    format={(n) =>
+                      `${kpi.prefix ?? ""}${formatKpi(n, {
+                        decimals,
+                        useGrouping,
+                      })}${kpi.suffix ?? ""}`
+                    }
+                  />
+                );
+              })()}
             </p>
 
             {/* Helper */}
