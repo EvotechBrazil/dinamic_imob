@@ -52,7 +52,7 @@ export function Neighborhoods() {
             <div className="font-display-noir font-bold text-4xl md:text-5xl lg:text-6xl leading-none tracking-tight text-noir-text-mute group-hover:text-noir-text transition-colors duration-500">
               {b.name}
             </div>
-            <div className="font-body-noir text-[13px] uppercase tracking-[0.2em] text-noir-text-mute mt-4 opacity-0 translate-y-5 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500">
+            <div className="font-body-noir text-[13px] uppercase tracking-[0.2em] text-noir-text-mute mt-4 opacity-0 translate-y-5 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-500 max-md:opacity-100 max-md:translate-y-0">
               {b.imoveis} imóveis · ticket médio {b.ticket}
             </div>
           </button>

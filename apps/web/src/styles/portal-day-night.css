@@ -66,3 +66,15 @@
   .portal-stars .portal-star { animation: none !important; }
   .portal-hero-img-cycle { filter: brightness(0.55) saturate(1.1); }
 }
+
+/* Mobile: desliga sticky/altura fixa do card stack pra cards flow em coluna.
+   !important pra sobrescrever utilities Tailwind no JSX (sticky top-[10vh] h-[80vh]).
+   GSAP scrub já é desligado via gsap.matchMedia em sticky-card-stack.tsx. */
+@media (max-width: 900px) {
+  .stack-card {
+    position: relative !important;
+    top: auto !important;
+    height: auto !important;
+    min-height: auto !important;
+  }
+}

@@ -82,28 +82,34 @@ export function StickyCardStack() {
   React.useEffect(() => {
     const el = sectionRef.current;
     if (!el) return;
-    const cards = el.querySelectorAll<HTMLDivElement>(".stack-card");
-    const triggers: ScrollTrigger[] = [];
-    cards.forEach((card, i) => {
-      if (i === cards.length - 1) return;
-      const inner = card.querySelector<HTMLDivElement>(".card-inner");
-      const next = cards[i + 1];
-      if (!inner || !next) return;
-      const anim = gsap.to(inner, {
-        scale: 0.92,
-        opacity: 0.4,
-        ease: "none",
-        scrollTrigger: {
-          trigger: next,
-          start: "top bottom",
-          end: "top 10vh",
-          scrub: true,
-        },
+    const mm = gsap.matchMedia();
+    mm.add("(min-width: 901px)", () => {
+      const cards = el.querySelectorAll<HTMLDivElement>(".stack-card");
+      const triggers: ScrollTrigger[] = [];
+      cards.forEach((card, i) => {
+        if (i === cards.length - 1) return;
+        const inner = card.querySelector<HTMLDivElement>(".card-inner");
+        const next = cards[i + 1];
+        if (!inner || !next) return;
+        const anim = gsap.to(inner, {
+          scale: 0.92,
+          opacity: 0.4,
+          ease: "none",
+          scrollTrigger: {
+            trigger: next,
+            start: "top bottom",
+            end: "top 10vh",
+            scrub: true,
+          },
+        });
+        if (anim.scrollTrigger) triggers.push(anim.scrollTrigger);
       });
-      if (anim.scrollTrigger) triggers.push(anim.scrollTrigger);
+      return () => {
+        triggers.forEach((t) => t.kill());
+      };
     });
     return () => {
-      triggers.forEach((t) => t.kill());
+      mm.revert();
     };
   }, []);
 

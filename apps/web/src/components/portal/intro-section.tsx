@@ -66,12 +66,15 @@ export function IntroSection() {
           Nossa IA atende em 30 segundos, dia ou noite, e passa o bastão pra
           um corretor especialista quando você quer agendar visita.
         </p>
-        <div ref={statsRef} className="mt-20 grid grid-cols-3 gap-6 pt-8 border-t border-noir-amber">
-          {STATS.map((s) => (
-            <div key={s.label}>
+        <div ref={statsRef} className="mt-20 grid grid-cols-2 sm:grid-cols-3 gap-6 pt-8 border-t border-noir-amber">
+          {STATS.map((s, i) => (
+            <div
+              key={s.label}
+              className={i === STATS.length - 1 ? "col-span-2 sm:col-span-1" : undefined}
+            >
               <div
                 data-stat-num
-                className="font-display-noir font-bold text-4xl md:text-5xl lg:text-6xl text-noir-text leading-none mb-3"
+                className="font-display-noir font-bold text-[28px] sm:text-4xl md:text-5xl lg:text-6xl text-noir-text leading-none mb-3"
               >
                 {s.num}
               </div>

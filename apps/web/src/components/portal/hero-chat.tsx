@@ -185,7 +185,7 @@ export function HeroChat() {
   return (
     <section
       className={cn(
-        "relative min-h-[calc(100vh-80px)] flex items-center justify-center px-4 py-16 lg:py-24 overflow-hidden",
+        "relative min-h-[calc(100svh-80px)] flex items-center justify-center px-4 py-8 sm:py-16 lg:py-24 overflow-hidden",
         "text-[var(--noir-text)]",
       )}
     >
@@ -212,7 +212,7 @@ export function HeroChat() {
                   delay: 0.1,
                 }}
                 style={{ y: iconY }}
-                className="mx-auto relative h-20 w-20 lg:h-24 lg:w-24 overflow-hidden"
+                className="mx-auto relative h-14 w-14 sm:h-20 sm:w-20 lg:h-24 lg:w-24 overflow-hidden"
                 role="img"
                 aria-label="Dinamic Imobiliária"
               >
@@ -232,7 +232,7 @@ export function HeroChat() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
-                className="font-[var(--font-syncopate)] text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-[var(--noir-text)] mt-8 text-center"
+                className="font-[var(--font-syncopate)] text-2xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-[var(--noir-text)] mt-4 sm:mt-8 text-center"
                 style={{ fontFamily: "var(--font-syncopate), Manrope, ui-sans-serif, system-ui" }}
               >
                 {greeting}
@@ -243,9 +243,9 @@ export function HeroChat() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.5 }}
-                className="max-w-3xl mx-auto mt-10 relative"
+                className="max-w-3xl mx-auto mt-6 sm:mt-10 relative"
               >
-                <div className="bg-[color:color-mix(in_oklab,var(--noir-surface)_70%,transparent)] border border-[var(--noir-border)] rounded-2xl backdrop-blur-xl shadow-2xl focus-within:ring-2 focus-within:ring-[var(--noir-amber)] focus-within:border-[var(--noir-amber)] transition p-5 pr-16">
+                <div className="bg-[color:color-mix(in_oklab,var(--noir-surface)_70%,transparent)] border border-[var(--noir-border)] rounded-2xl backdrop-blur-xl shadow-2xl focus-within:ring-2 focus-within:ring-[var(--noir-amber)] focus-within:border-[var(--noir-amber)] transition p-4 pr-14 sm:p-5 sm:pr-16">
                   <textarea
                     ref={textareaRef}
                     rows={1}
@@ -254,7 +254,7 @@ export function HeroChat() {
                     onKeyDown={handleKeyDown}
                     placeholder={PLACEHOLDERS[placeholderIndex]}
                     aria-label="Conte pra IA o que você procura"
-                    className="min-h-[112px] max-h-[260px] resize-none w-full outline-none text-base lg:text-lg placeholder:text-[var(--noir-text-subtle)] text-[var(--noir-text)] bg-transparent leading-relaxed"
+                    className="min-h-[80px] sm:min-h-[112px] max-h-[260px] resize-none w-full outline-none text-base lg:text-lg placeholder:text-[var(--noir-text-subtle)] text-[var(--noir-text)] bg-transparent leading-relaxed"
                     style={{ fontFamily: "var(--font-manrope), ui-sans-serif, system-ui" }}
                   />
                   <button
@@ -318,7 +318,7 @@ export function HeroChat() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5, duration: 0.5 }}
-                className="flex flex-wrap justify-center gap-2 mt-6 max-w-3xl mx-auto px-4"
+                className="flex flex-nowrap overflow-x-auto sm:flex-wrap sm:overflow-visible justify-start sm:justify-center gap-2 mt-4 sm:mt-6 max-w-3xl mx-auto px-4 portal-thin-scroll [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
               >
                 {SUGGESTIONS.map((s) => (
                   <button
@@ -326,7 +326,7 @@ export function HeroChat() {
                     type="button"
                     onClick={() => void handleSuggestion(s)}
                     disabled={isStreaming}
-                    className="rounded-full bg-[color:color-mix(in_oklab,var(--noir-bg)_50%,transparent)] border border-[var(--noir-border)] px-4 py-2.5 text-sm font-medium text-[var(--noir-text)] hover:border-[var(--noir-amber)] hover:bg-[color:color-mix(in_oklab,var(--noir-amber)_10%,transparent)] hover:text-[var(--noir-amber-soft)] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="shrink-0 sm:shrink whitespace-nowrap rounded-full bg-[color:color-mix(in_oklab,var(--noir-bg)_50%,transparent)] border border-[var(--noir-border)] px-4 py-2.5 text-sm font-medium text-[var(--noir-text)] hover:border-[var(--noir-amber)] hover:bg-[color:color-mix(in_oklab,var(--noir-amber)_10%,transparent)] hover:text-[var(--noir-amber-soft)] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     style={{ fontFamily: "var(--font-manrope), ui-sans-serif, system-ui" }}
                   >
                     {s}
@@ -339,7 +339,7 @@ export function HeroChat() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.6, duration: 0.5 }}
-                className="flex items-center justify-center gap-4 sm:gap-6 mt-8 flex-wrap"
+                className="flex items-center justify-center gap-4 sm:gap-6 mt-6 sm:mt-8 flex-wrap"
               >
                 {PROOF_POINTS.map((p) => (
                   <span
