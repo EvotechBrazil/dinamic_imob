@@ -4,56 +4,86 @@
 
 Plataforma própria custom para a **Dinamic Imobiliária** (Arapongas-PR) — substitui o site atual da Flex49/Code49 e adiciona sistema de gestão completo: Portal público + Agente IA (chat + WhatsApp) + CRM + Financeiro de locação. Cliente atual: ~628 imóveis ativos, 2 números WhatsApp ((43) 98847-8713 vendas / (43) 98847-8670 locações).
 
-**Status:** Planejamento concluído e aprovado. Implementação ainda não iniciada. Sprint 0 (fundação + repo) é o próximo passo.
+**Status atual:** Fase 3 do portal concluída e em produção. Próximo passo: voltar ao plano original (Sprint 1 backend modules) ou iterar visual conforme feedback do cliente.
+
+## Em produção
+
+- **Portal público:** https://dinamic-imob-web.vercel.app/portal — redesign Editorial Noir cinematic, chat IA OpenRouter funcionando, agendamento de visita por email Resend
+- **Repositório:** https://github.com/EvotechBrazil/dinamic_imob — branch `main` sincronizada
+- **Hosting:** Vercel (apps/web). Apps/api e apps/worker ainda local-only.
 
 ## Documentos de referência
 
 - **Plano aprovado (fonte da verdade):** `C:\Users\Tiago\.claude\plans\vamos-iniciar-um-novo-virtual-lobster.md`
 - **Proposta estratégica original (27 seções, 20 módulos IA):** `docs/dinamic_web.md`
-- **Repositório GitHub:** `https://github.com/EvotechBrazil/dinamic_imob` (precisa ser criado/conectado)
+- **Plano Fase 3 (redesign portal):** `C:\Users\Tiago\.claude\plans\nossa-pagina-portal-de-mighty-flurry.md`
+- **Specs técnicas Fase 3:** `docs/portal-mockups/spec-dia-noite.md`, `docs/portal-mockups/spec-lovable-panel.md`, `docs/portal-mockups/mobile-audit.md`
 
 ## Decisões já fechadas (não revisitar sem conversar)
 
 - **Estratégia:** 100% custom (propriedade total código + dados)
 - **Prazo:** MVP em 60 dias (8 sprints) — escopo "fino mas ponta-a-ponta" em cada módulo
 - **MVP inclui:** Portal público + Agente IA chat web + Agente IA WhatsApp + CRM funil + Financeiro locação + Demanda reprimida + Radar de imóvel + Páginas SEO IA-geradas
-- **Migração:** scraper automático puxa 628 imóveis do Flex49
+- **Migração:** scraper automático puxa 628 imóveis do Flex49 (adiada pós-demo)
 - **Equipe:** pequena (~10 pessoas), com urgência
 - **CRUD universal:** ~45 entidades com CRUD completo no admin desde o lançamento (via CRUD Generator Pattern)
 - **Arquitetura:** **Modular Monolith desacoplado** — bounded contexts, event bus interno, adapter pattern para tudo externo, dependency inversion. Microsserviços ficam pra fase 3+.
 
-## Stack técnica fixada
+## Stack técnica
 
-- **Frontend:** Next.js 14 App Router + TypeScript + Tailwind v4 + shadcn/ui + **Origin UI** React (`originui.com`) + **Tremor + Recharts + TanStack Table v8** (admin) + react-hook-form + zod + Mapbox GL + next-pwa
-- **Backend:** NestJS modular monolith + Prisma + PostgreSQL 16 + BullMQ + Redis + Meilisearch + pgvector + Cloudflare R2
-- **IA:** Anthropic Claude API (Haiku 4.5 + Sonnet 4.6 com prompt caching)
-- **Integrações:** Meta WhatsApp Cloud API · Asaas · D4Sign · Mapbox · ViaCEP
-- **Monorepo:** pnpm + Turborepo
-- **Hosting:** Vercel (web) + Railway (api + worker + Postgres + Redis + Meilisearch)
-- **Observabilidade:** Sentry + Better Stack + PostHog
+### Frontend (apps/web — em produção)
 
-## Referências de design
+- Next.js 14 App Router + TypeScript
+- Tailwind v3.4 + shadcn/ui + Origin UI (legado)
+- **Editorial Noir tema (rota /portal):** Syncopate (display) + Manrope (body) + CSS vars `--noir-*`
+- **Animação:** Lenis smooth scroll + GSAP ScrollTrigger
+- Framer Motion + lucide-react
+- next/font/google pra Syncopate, Manrope, Plus Jakarta Sans, Inter, Montserrat
+- Mapbox GL (preparado, não ativo)
+- next-pwa (preparado, não ativo)
 
-- **Portal público (landing):** ImobiBrasil (`painel1.imobibrasil.app.br`) — estrutura + estética Tremor Solar
-- **Admin/dashboards:** Tremor Blocks (templates Planner/Dashboard/Overview)
-- **Biblioteca de componentes (admin + portal):** Origin UI React (`originui.com`)
+### Backend (apps/api, apps/worker — ainda local)
 
-## Estrutura do repositório (objetivo)
+- NestJS modular monolith
+- Prisma + PostgreSQL 16
+- BullMQ + Redis
+- Meilisearch + pgvector
+- Cloudflare R2 (preparado, não ativo)
 
-```
-dinamic_imob/
-├── apps/web/      # Next.js (público + admin + auth)
-├── apps/api/      # NestJS modular monolith
-├── apps/worker/   # BullMQ workers
-├── packages/db/         # Prisma schema + migrations + seeds
-├── packages/shared/     # zod BR validators, types, formatters
-├── packages/contracts/  # Interfaces TS dos módulos
-├── packages/ui/         # shadcn + OriginUI + Tremor wrappers
-├── packages/ai-prompts/ # Prompts versionados
-└── docs/                # ARCHITECTURE.md, MODULES.md, ADRs/
-```
+### IA
 
-Hoje: `backend/` e `frontend/` vazios; `docs/dinamic_web.md` contém a proposta estratégica original.
+- **OpenRouter** (clonando pattern do `evofit/alicia`) com Qwen / Sonnet 4.6 — ativo em produção
+- API key configurada na Vercel — ver memory `reference-vercel-envs`
+
+### Integrações externas
+
+- **Ativas em produção:** OpenRouter (chat IA), Resend (email agendamento)
+- **Adiadas:** Meta WhatsApp Cloud API (Evolution primeiro), Asaas, D4Sign, Mapbox, ViaCEP
+
+### Monorepo
+
+- pnpm + Turborepo
+- `apps/web`, `apps/api`, `apps/worker`
+- `packages/db`, `packages/shared`, `packages/contracts`, `packages/ui`, `packages/ai-prompts`
+
+## Estrutura do /portal (Editorial Noir)
+
+Rota: `/portal` em `apps/web/src/app/portal/page.tsx`.
+
+Componentes ativos (em ordem renderizada):
+
+1. **`PortalHeader`** — mix-blend-difference + nav uppercase + CTA "Falar com a IA" pill amber + mobile drawer
+2. **`HeroChat`** + **`HeroBackground`** — foto fachada (`/portal/frente-imob.webp`) animando dia→noite (40s) + 25 estrelas + painel lovable dark central (logo D + greeting dinâmico + input grande + 4 chips + 3 proofs com check verde)
+3. **`IntroSection`** — 2-col text reveal "IMOBILIÁRIA LOCAL, IA 24/7" + 3 stats animados (628 / 12 / 8472-F)
+4. **`StickyCardStack`** — 3 imóveis featured com sticky + scrub scale/opacity em GSAP
+5. **`Neighborhoods`** — 4 bairros com hover expand (Centro · Jd Tropical · Industrial · Aeroporto)
+6. **`StatsBrutal`** — "12 / 628 / 97%" Syncopate gigante + counter animado
+7. **`PortalFooter`** — "VAMOS CONVERSAR" clamp 80-160px + 2 CTAs WhatsApp + logo D fantasma
+8. **`FloatingActions`** — botão flutuante WhatsApp + chat dispatcher
+
+CSS vars do tema em `apps/web/src/styles/portal-day-night.css`. Smooth scroll via `lenis-provider.tsx`. Noise overlay SVG via `noise-overlay.tsx`.
+
+Demo autoplay (uau item) está **desativado** a pedido do cliente — painel fica exposto sem instrução automática.
 
 ## Princípios não negociáveis ao codar aqui
 
@@ -67,92 +97,42 @@ Hoje: `backend/` e `frontend/` vazios; `docs/dinamic_web.md` contém a proposta 
 8. **README por módulo** documentando responsabilidades, eventos, dependências
 9. **Feature flags por módulo** — toggle sem deploy
 10. **LGPD nativo** — consentimento separado para radar, audit log de PII
+11. **Dev server DESLIGADO durante refator massivo** (4+ arquivos paralelos) — HMR quebra state runtime mesmo com código correto. Mata `pnpm dev`, faz tudo, depois sobe. Ver memory `feedback-dev-server-hmr`.
+12. **6+3 agents paralelos com arquivos disjuntos** — cada agent ganha lista explícita de paths, nunca 2 agents no mesmo arquivo. Ver memory `feedback-agents-paralelos-fase3`.
 
 ## Skills disponíveis (já configuradas)
 
 `nextjs-shadcn-saas`, `nestjs-multitenant`, `prisma-schema-design`, `brazilian-forms`, `brazilian-payments` (Asaas), `bullmq-workers`, `integration-adapter`, `lgpd-compliance`, `admin-dashboard` (Tremor + TanStack Table), `pwa-mobile-first`, `claude-api`.
 
-## Ajustes 2026-05-21 (parte 2) — estratégia local-first
-
-- **Stack 100% local via Docker Desktop durante todo dev.** docker-compose sobe Postgres 16 + Redis 7 + Meilisearch. apps/web, apps/api, apps/worker rodam local. Storage local em `./uploads` (não R2 ainda).
-- **Única integração externa ATIVA: OpenRouter.** API key em `.env.local` (NUNCA commitada). Modelos: Haiku 4.5 default + Sonnet 4.6 premium. Testada e respondendo no tom profissional caloroso (~R$ 0,002/conversa).
-- **Adiadas pra entrega ao cliente:** Vercel, Hostinger easypanel, Cloudflare (DNS+R2+WAF), Asaas, Meta WhatsApp Cloud API, D4Sign. Adapters implementados (mock + real stubs), mas só OpenRouter ativada de fato.
-- **Demo wow Sprint 1 Frontend já pode ter chat IA REAL** (não só mock UI) — antecipa parte da Sprint 3 Backend.
-- **Segurança:** OPENROUTER_API_KEY foi exposta em chat; recomendado rotar em https://openrouter.ai/keys quando der.
-
-## Ajustes da reunião 2026-05-21 (sobrepõem o plano original onde houver conflito)
-
-- **Hosting backend:** Hostinger + easypanel (não Railway). Frontend continua na Vercel.
-- **IA:** OpenRouter (clonando pattern do projeto `evofit/alicia`) — não Anthropic SDK direto.
-- **WhatsApp:** Evolution API primeiro (demo), Meta Cloud API depois (Sprint 3+). Templates HSM adiados.
-- **Asaas:** adapter/estrutura pronto, integração real adiada (pós-demo).
-- **Primeira entrega = "wow visual" pro cliente:** foco em landing pública + admin shell com dashboards Tremor populados com mock realista. Backend só stub.
-- **Identidade visual:** redesenha leve — indigo-600 `#4F46E5` + amber-500 `#F59E0B` + Plus Jakarta Sans (display) + Inter (body) + JetBrains Mono. Vibe Tremor Solar.
-- **Landing híbrida:** hero buscador grande + CTA "Fale com a IA"; 6 seções (featured / como IA ajuda / bairros+mapa / números / depoimentos / CTA contato).
-- **Dados demo:** mock realista — ~50–100 imóveis fictícios Arapongas (Centro, Jardim Tropical, Industrial), 30 leads, 15 contratos.
-- **Tom IA:** profissional caloroso (você, sem gírias, máx 1 emoji/msg).
-- **Atribuição:** round-robin por setor (vendas/locação/captação/financeiro) com fora-de-horário enfileirando pra abertura.
-- **Calendário corretor:** agenda interna no admin (sem Google Calendar no MVP).
-- **Flex49:** scraper e export proprietários adiados; reabordar pós-demo.
-
-## Estado atual (2026-05-22 — dia da entrega)
-
-✅ **Sprint 0 concluído.** Landing demo executiva entregue por 3 squads paralelas e validada:
-- TypeScript 0 erros, ESLint 0 warnings, `GET /` 200 OK
-- 6 seções rodando: Omnichannel · Financeiro · CRM · Tokenização · Jurídico/LGPD · Dashboards
-- Chat IA flutuante real (OpenRouter Qwen3.7-max)
-- `pnpm dev` em apps/web sobe em ~4s, compila em 15.9s
-- Repo: `EvotechBrazil/dinamic_imob` (HTTPS, branch `main`)
-
-🟡 **Fase atual: POLIMENTO + bugfixes finais — entrega ao cliente HOJE (2026-05-22).**
-
-**Aplicado hoje (2026-05-22):**
-- ✅ **D do logo** consistente nas surfaces de brand: ícone do hero (`apps/web/src/components/portal/hero-chat.tsx`), avatar das bolhas da IA (`apps/web/src/components/chat-widget/chat-message.tsx`) e favicon (override removido em `apps/web/src/app/layout.tsx` → Next auto-serve `src/app/icon.svg`). Padrão de crop: `<Image>` em wrapper `overflow-hidden` com `w-[290%] left-[-32%]` pra mostrar só a região do D do PNG.
-- ✅ **Fix Jam 307d5243** — botão preto "Falar com a IA" do `FloatingActions` não acionava chat no `/portal`. Root cause: `ChatWidget` (listener de `dinamic:open-chat-widget`) só estava montado em `app/page.tsx`, faltava no `app/portal/layout.tsx`. Fix: adicionada prop `hideButton` no `chat-widget/index.tsx` e montado no `portal/layout.tsx` com `hideButton` pra não duplicar FAB.
-
-Áreas que continuam em polimento: copy comercial, spacing, micro-interactions, perf, mobile/tablet, a11y, mensagens IA contextuais. Detalhes em `memory/project_landing_demo_polimento.md`.
-
-## Como retomar polimento
-
-```powershell
-cd "E:\Projetos\Dinamic_Imob" ; claude
-```
-
-Primeiro prompt no novo Claude:
-
-```
-Retomar Dinamic. Landing demo executiva ESTA RODANDO (validada hoje).
-Cliente ve 2026-05-22. Fase atual = polimento antes da entrega.
-
-Ler primeiro nessa ordem:
-1. memory/project_landing_demo_polimento.md (focus de polimento + lista 10 areas)
-2. docs/prompts/landing-demo-cliente.md (briefing original — DoD)
-3. CLAUDE.md (estado atual)
-
-Comecar por:
-1. cd apps/web && pnpm dev (sobe em http://localhost:3000)
-2. Abrir browser e fazer auditoria visual secao por secao
-3. Listar ajustes em ordem de prioridade
-4. Atacar 1 por 1 com commits granulares feat(landing/polish): ...
-
-Foco: visual clean + copy persuasivo + perf mobile + micro-interactions.
-NAO mexer em backend, db, ou estrutura — so polir o que ja existe em
-apps/web/src/{components,app,styles,lib}.
-
-Confirma que leu e comeca pela auditoria visual.
-```
-
 ## Histórico de fases
 
-- ~~Sprint 0~~ ✅ — fundação (monorepo, docker-compose, .env, OpenRouter ativa) + landing demo entregue
-- **Polimento** 🟡 — fase atual (poucos dias até cliente)
-- Pós-demo: portar `vendor/jpasv-chat-bullq` → `apps/api conversations + ai-agents` (task #15 backlog)
-- Sprint 1-7: voltar ao plano original (`docs/squads/`)
+- ~~Sprint 0~~ ✅ — fundação (monorepo, docker-compose, .env, OpenRouter ativa) + landing demo entregue (rota `/`)
+- ~~Polimento da landing demo executiva~~ ✅ — 2026-05-22
+- ~~**Fase 3** — Redesign Editorial Noir do `/portal`~~ ✅ — 2026-05-23, em produção Vercel
+- **Próximo:** decidir entre (a) iterar visual conforme feedback do cliente ou (b) voltar Sprint 1 backend (NestJS modules + Prisma + BullMQ workers)
 
 ## Como retomar este projeto
 
 Ler nesta ordem:
 1. Este `CLAUDE.md`
-2. O plano aprovado em `C:\Users\Tiago\.claude\plans\vamos-iniciar-um-novo-virtual-lobster.md`
-3. `docs/dinamic_web.md` se precisar contexto estratégico/comercial original
-4. `git log` para histórico de commits
+2. Memórias em `C:\Users\Tiago\.claude\projects\e--Projetos-Dinamic-Imob\memory\MEMORY.md` (índice)
+3. Specs Fase 3: `docs/portal-mockups/spec-*.md`
+4. O plano aprovado em `C:\Users\Tiago\.claude\plans\vamos-iniciar-um-novo-virtual-lobster.md` se precisar contexto estratégico
+5. `git log --oneline -20` para histórico recente
+
+Primeiro prompt sugerido no próximo Claude:
+
+```
+Retomar Dinamic. Portal /portal redesenhado (Editorial Noir) ESTA EM PRODUCAO
+em https://dinamic-imob-web.vercel.app/portal — chat IA + agendamento email
+funcionando.
+
+Ler primeiro nessa ordem:
+1. CLAUDE.md (estado atual)
+2. MEMORY.md em ~/.claude/projects/.../memory/ (indice de memorias)
+3. memory/project_fase3_editorial_noir.md (resumo da Fase 3)
+
+Proxima decisao: (a) iterar visual /portal conforme feedback do cliente
+ou (b) voltar Sprint 1 do plano original (apps/api NestJS modules).
+Me confirma qual antes de seguir.
+```
