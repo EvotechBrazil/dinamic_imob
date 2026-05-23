@@ -1,0 +1,931 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dinamic Imobiliária — Luxury Living Light</title>
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;700;800&family=Inter:wght@300;400;500&family=Manrope:wght@300;400;700&display=swap" rel="stylesheet">
+
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lenis@1.0.33/dist/lenis.min.js"></script>
+
+<style>
+:root {
+  --c-bg: #FAF7F2;
+  --c-surface: #FFFFFF;
+  --c-text: #0B0B14;
+  --c-text-mute: #6B7280;
+  --c-indigo: #4F46E5;
+  --c-indigo-deep: #3730A3;
+  --c-gold: #D79A27;
+  --c-gold-soft: #FBF3DE;
+  --c-border: #E8E2D6;
+}
+
+* { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+
+html, body {
+  background: var(--c-bg);
+  color: var(--c-text);
+  font-family: 'Inter', sans-serif;
+  font-weight: 300;
+  line-height: 1.6;
+  scroll-behavior: auto;
+}
+
+.font-display { font-family: 'Plus Jakarta Sans', sans-serif; }
+.font-body    { font-family: 'Inter', sans-serif; }
+.font-num     { font-family: 'Manrope', sans-serif; font-variant-numeric: tabular-nums; }
+.italic-edit  { font-family: 'Manrope', sans-serif; font-weight: 300; font-style: italic; }
+
+.tracking-tightest { letter-spacing: -0.04em; }
+.tracking-tighter  { letter-spacing: -0.03em; }
+.tracking-widestx  { letter-spacing: 0.22em; }
+
+.h-display-xl { font-size: clamp(56px, 9vw, 104px); line-height: 0.98; letter-spacing: -0.04em; }
+.h-display-lg { font-size: clamp(48px, 6vw, 80px); line-height: 1.02; letter-spacing: -0.035em; }
+.h-display-md { font-size: clamp(40px, 5vw, 64px); line-height: 1.05; letter-spacing: -0.03em; }
+.h-card-title { font-size: clamp(48px, 5vw, 72px); line-height: 1.02; letter-spacing: -0.03em; }
+.h-quote      { font-size: clamp(28px, 3.4vw, 48px); line-height: 1.4; }
+.h-bairro     { font-size: clamp(32px, 4vw, 56px); line-height: 1; letter-spacing: -0.03em; }
+.h-cta-final  { font-size: clamp(64px, 9vw, 120px); line-height: 0.95; letter-spacing: -0.04em; }
+.h-quote-mark { font-size: clamp(120px, 18vw, 240px); line-height: 0.5; }
+
+/* ----- TOPBAR ----- */
+header.topbar {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 50;
+  padding: 22px 6vw;
+  transition: background 0.4s ease, backdrop-filter 0.4s ease, border-color 0.4s ease, padding 0.3s ease;
+  border-bottom: 1px solid transparent;
+}
+header.topbar.scrolled {
+  background: rgba(255,255,255,0.82);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border-bottom-color: var(--c-border);
+  padding: 14px 6vw;
+}
+.topbar nav a {
+  position: relative;
+  color: var(--c-text);
+  font-weight: 400;
+  font-size: 14px;
+  transition: color 0.3s ease;
+}
+.topbar nav a::after {
+  content: '';
+  position: absolute;
+  left: 0; bottom: -6px;
+  width: 0; height: 1px;
+  background: var(--c-gold);
+  transition: width 0.35s ease;
+}
+.topbar nav a:hover { color: var(--c-indigo); }
+.topbar nav a:hover::after { width: 100%; }
+
+.btn-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 22px;
+  border-radius: 999px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  transition: all 0.3s cubic-bezier(.2,.7,.3,1);
+  white-space: nowrap;
+}
+.btn-amber { background: var(--c-gold); color: #fff; }
+.btn-amber:hover { background: var(--c-indigo); transform: translateY(-1px); box-shadow: 0 10px 30px -10px rgba(79,70,229,0.4); }
+.btn-indigo { background: var(--c-indigo); color: #fff; }
+.btn-indigo:hover { background: var(--c-indigo-deep); transform: translateY(-1px); box-shadow: 0 12px 30px -10px rgba(79,70,229,0.4); }
+.btn-outline-indigo { border: 2px solid var(--c-indigo); color: var(--c-indigo); background: transparent; }
+.btn-outline-indigo:hover { background: var(--c-indigo); color: #fff; transform: translateY(-1px); }
+
+.logo-d-wrap {
+  position: relative;
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  overflow: hidden;
+  background: var(--c-gold-soft);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+.logo-d-wrap img {
+  position: absolute;
+  width: 290%;
+  height: 290%;
+  left: -32%;
+  top: -95%;
+  object-fit: contain;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 18px;
+  border-radius: 999px;
+  border: 1px solid var(--c-border);
+  background: #fff;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--c-text);
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.chip:hover { border-color: var(--c-indigo); color: var(--c-indigo); }
+.chip.active {
+  background: var(--c-indigo);
+  color: #fff;
+  border-color: var(--c-indigo);
+}
+
+.eyebrow {
+  display: inline-block;
+  padding: 6px 14px;
+  background: var(--c-gold-soft);
+  color: var(--c-gold);
+  border: 1px solid rgba(215,154,39,0.25);
+  border-radius: 999px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+}
+
+/* ----- HERO ----- */
+.hero {
+  min-height: 100vh;
+  padding-top: 120px;
+  padding-bottom: 80px;
+  background: var(--c-bg);
+}
+.hero-grid {
+  display: grid;
+  grid-template-columns: 60% 40%;
+  gap: 4vw;
+  align-items: center;
+  padding-left: 8vw;
+  padding-right: 0;
+}
+.hero-photo-wrap {
+  position: relative;
+  height: 80vh;
+  overflow: hidden;
+  border-radius: 24px 0 0 24px;
+}
+.hero-photo {
+  width: 100%; height: 110%;
+  object-fit: cover;
+  will-change: transform;
+}
+.hero-photo-badge {
+  position: absolute;
+  right: 24px; bottom: 24px;
+  background: #fff;
+  border-radius: 14px;
+  padding: 14px 18px;
+  box-shadow: 0 20px 50px -20px rgba(11,11,20,0.18);
+  font-size: 13px;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+}
+.pulse-dot {
+  width: 8px; height: 8px;
+  background: #22c55e;
+  border-radius: 50%;
+  position: relative;
+}
+.pulse-dot::after {
+  content: '';
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  border: 2px solid #22c55e;
+  animation: pulse-ring 2.2s ease-out infinite;
+}
+@keyframes pulse-ring {
+  0%   { transform: scale(0.6); opacity: 1; }
+  100% { transform: scale(1.6); opacity: 0; }
+}
+
+.search-card {
+  background: #fff;
+  border-radius: 24px;
+  padding: 28px;
+  box-shadow: 0 30px 80px -30px rgba(11,11,20,0.18), 0 8px 20px -8px rgba(11,11,20,0.06);
+}
+.search-input {
+  width: 100%;
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: 14px;
+  padding: 18px 22px 18px 52px;
+  font-size: 16px;
+  font-weight: 400;
+  color: var(--c-text);
+  transition: border-color 0.3s ease, background 0.3s ease;
+}
+.search-input::placeholder { color: var(--c-text-mute); }
+.search-input:focus { outline: none; border-color: var(--c-indigo); background: #fff; }
+.search-icon { position: absolute; left: 20px; top: 50%; transform: translateY(-50%); color: var(--c-gold); }
+
+.select-mini {
+  width: 100%;
+  background: var(--c-bg);
+  border: 1px solid var(--c-border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  font-size: 14px;
+  color: var(--c-text);
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%236B7280' d='M6 8L0 0h12z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 16px center;
+}
+
+.stat-num { font-family: 'Manrope', sans-serif; font-weight: 700; font-variant-numeric: tabular-nums; font-size: 36px; line-height: 1; color: var(--c-text); }
+.stat-lbl { font-family: 'Inter', sans-serif; font-weight: 400; font-size: 13px; color: var(--c-text-mute); margin-top: 8px; }
+
+/* ----- Section util ----- */
+section.pad {
+  padding: 16vw 8vw;
+}
+.section-title { font-family: 'Plus Jakarta Sans', sans-serif; font-weight: 800; }
+.section-sub   { font-family: 'Inter', sans-serif; font-weight: 300; color: var(--c-text-mute); font-size: 20px; max-width: 640px; margin: 16px auto 0; line-height: 1.5; }
+
+/* ----- HOW (3 cards papel) ----- */
+.paper-card {
+  background: #fff;
+  border: 1px solid var(--c-gold);
+  border-radius: 24px;
+  padding: 40px 36px;
+  transition: transform 0.5s cubic-bezier(.2,.7,.3,1), box-shadow 0.5s ease;
+  position: relative;
+}
+.paper-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 30px 60px -30px rgba(11,11,20,0.18);
+}
+.paper-card .icon-box {
+  width: 56px; height: 56px;
+  border-radius: 14px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 24px;
+}
+.icon-amber { background: var(--c-gold-soft); color: var(--c-gold); }
+.icon-indigo { background: #EEF0FF; color: var(--c-indigo); }
+.icon-gold { background: var(--c-gold-soft); color: var(--c-gold); }
+
+/* ----- STACK CARDS ----- */
+.stack-section { background: var(--c-bg); }
+.stack-card {
+  position: sticky;
+  top: 10vh;
+  height: 90vh;
+  padding: 0 4vw;
+  display: flex;
+  align-items: center;
+}
+.stack-card .card-inner {
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  border-radius: 28px;
+  overflow: hidden;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  box-shadow: 0 40px 80px -40px rgba(11,11,20,0.25);
+  transform-origin: center top;
+}
+.stack-card .card-img {
+  background-size: cover;
+  background-position: center;
+  height: 100%;
+}
+.stack-card .card-text {
+  padding: 4vw 4vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 22px;
+}
+.stack-card .card-text .number {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--c-gold);
+}
+.divider-gold {
+  width: 60px;
+  height: 2px;
+  background: var(--c-gold);
+  border: none;
+  margin: 4px 0;
+}
+.specs-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 16px;
+  margin-top: 8px;
+}
+.spec {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-text-mute);
+}
+.spec strong {
+  display: block;
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--c-text);
+  letter-spacing: 0;
+  text-transform: none;
+  margin-bottom: 2px;
+  font-variant-numeric: tabular-nums;
+}
+.price-big {
+  font-family: 'Manrope', sans-serif;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+  font-size: clamp(40px, 4vw, 56px);
+  line-height: 1;
+  color: var(--c-text);
+  text-decoration: underline;
+  text-decoration-color: var(--c-gold);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 8px;
+}
+
+/* ----- BAIRROS ----- */
+.bairros-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
+  margin-top: 64px;
+}
+.bairro-card {
+  position: relative;
+  height: 400px;
+  border-radius: 24px;
+  overflow: hidden;
+  cursor: pointer;
+}
+.bairro-card img {
+  width: 100%; height: 100%;
+  object-fit: cover;
+  transition: transform 1s cubic-bezier(.2,.7,.3,1);
+}
+.bairro-card:hover img { transform: scale(1.05); }
+.bairro-card .overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(11,11,20,0.85) 0%, rgba(11,11,20,0.2) 45%, transparent 70%);
+}
+.bairro-card .label {
+  position: absolute;
+  left: 32px; right: 32px; bottom: 28px;
+  color: #fff;
+}
+.bairro-card .label h3 {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+}
+.bairro-card .label .meta {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 13px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--c-gold);
+  margin-top: 10px;
+}
+
+/* ----- DEPOIMENTO ----- */
+.quote-section {
+  background: #fff;
+  padding: 24vw 8vw 16vw;
+  text-align: center;
+}
+.quote-marks {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  color: var(--c-gold);
+}
+
+/* ----- CTA FINAL + FOOTER ----- */
+.cta-final-section { background: var(--c-bg); padding: 24vw 8vw 8vw; text-align: center; }
+.btn-cta-big {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 22px 44px;
+  border-radius: 999px;
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 17px;
+  transition: all 0.3s cubic-bezier(.2,.7,.3,1);
+}
+.btn-cta-big.solid { background: var(--c-indigo); color: #fff; }
+.btn-cta-big.solid:hover { background: var(--c-indigo-deep); transform: translateY(-2px); box-shadow: 0 20px 40px -16px rgba(79,70,229,0.5); }
+.btn-cta-big.ghost { border: 2px solid var(--c-indigo); color: var(--c-indigo); }
+.btn-cta-big.ghost:hover { background: var(--c-indigo); color: #fff; transform: translateY(-2px); }
+
+footer.foot {
+  padding: 8vw 8vw 4vw;
+  border-top: 1px solid var(--c-gold);
+  background: var(--c-bg);
+}
+footer.foot .logo-big {
+  position: relative;
+  width: 96px;
+  height: 96px;
+  border-radius: 18px;
+  overflow: hidden;
+  background: var(--c-gold-soft);
+}
+footer.foot .logo-big img {
+  position: absolute;
+  width: 290%;
+  height: 290%;
+  left: -32%;
+  top: -95%;
+  object-fit: contain;
+}
+.footer-col h5 {
+  font-family: 'Inter', sans-serif;
+  font-weight: 500;
+  font-size: 12px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--c-gold);
+  margin-bottom: 18px;
+}
+.footer-col a, .footer-col p {
+  display: block;
+  font-family: 'Inter', sans-serif;
+  font-weight: 400;
+  font-size: 14px;
+  color: var(--c-text);
+  margin-bottom: 10px;
+  transition: color 0.3s ease;
+}
+.footer-col a:hover { color: var(--c-indigo); }
+
+/* ----- Responsive ----- */
+@media (max-width: 1024px) {
+  .hero-grid { grid-template-columns: 1fr; padding: 0 6vw; }
+  .hero-photo-wrap { height: 60vh; border-radius: 24px; margin-top: 32px; }
+  .stack-card .card-inner { grid-template-columns: 1fr; }
+  .stack-card .card-img { min-height: 40vh; }
+  .stack-card .card-text { padding: 6vw; }
+  .bairros-grid { grid-template-columns: 1fr; }
+  .specs-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 768px) {
+  header.topbar nav { display: none; }
+  .hero { padding-top: 100px; }
+  .stack-card { position: relative; top: auto; height: auto; margin-bottom: 24px; }
+  .stack-card .card-inner { height: auto; }
+}
+
+.fade-up { opacity: 0; }
+</style>
+</head>
+<body>
+
+<!-- ================== 1. TOPBAR ================== -->
+<header class="topbar">
+  <div class="flex items-center justify-between gap-8 max-w-[1600px] mx-auto">
+    <a href="#" class="flex items-center gap-3">
+      <span class="logo-d-wrap"><img src="./assets/logo-d.png" alt="D" /></span>
+      <span class="font-display font-extrabold text-xl tracking-tighter">Dinamic</span>
+    </a>
+    <nav class="hidden lg:flex items-center gap-10 font-body">
+      <a href="#comprar">Comprar</a>
+      <a href="#alugar">Alugar</a>
+      <a href="#bairros">Bairros</a>
+      <a href="#sobre">Sobre</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <a href="#chat" class="btn-pill btn-amber">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+      Falar com a IA
+    </a>
+  </div>
+</header>
+
+<!-- ================== 2. HERO ================== -->
+<section class="hero">
+  <div class="hero-grid">
+    <div class="pr-8 lg:pr-16">
+      <span class="eyebrow fade-up">Imobiliária local · Arapongas-PR</span>
+      <h1 class="font-display font-extrabold h-display-xl mt-8 fade-up">
+        Encontre seu<br />novo lar com calma.
+      </h1>
+      <p class="section-sub fade-up" style="margin: 28px 0 0; max-width: 540px;">
+        Atendimento humano, IA 24/7 e curadoria pra quem quer comprar ou alugar em Arapongas sem stress.
+      </p>
+
+      <!-- Search card -->
+      <div class="search-card mt-10 fade-up">
+        <div class="flex gap-2 mb-5">
+          <button class="chip active">Comprar</button>
+          <button class="chip">Alugar</button>
+          <button class="chip">Comercial</button>
+        </div>
+        <div class="relative">
+          <span class="search-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+          </span>
+          <input class="search-input" type="text" placeholder="Bairro, tipo, característica..." />
+        </div>
+        <div class="grid grid-cols-2 gap-3 mt-3">
+          <select class="select-mini">
+            <option>Quartos</option>
+            <option>1+</option><option>2+</option><option>3+</option><option>4+</option>
+          </select>
+          <select class="select-mini">
+            <option>Faixa de preço</option>
+            <option>Até R$ 300 mil</option>
+            <option>R$ 300 – 600 mil</option>
+            <option>R$ 600 mil – 1 mi</option>
+            <option>Acima R$ 1 mi</option>
+          </select>
+        </div>
+        <button class="btn-pill btn-indigo w-full justify-center mt-4" style="padding: 16px;">Buscar imóveis</button>
+        <p class="text-center text-sm mt-3 font-body" style="color: var(--c-text-mute);">
+          ou <a href="#chat" style="color: var(--c-indigo); font-weight: 500;">converse com nossa IA →</a>
+        </p>
+      </div>
+
+      <!-- Stats -->
+      <div class="grid grid-cols-3 gap-8 mt-12 fade-up">
+        <div>
+          <div class="stat-num">628</div>
+          <div class="stat-lbl">imóveis ativos</div>
+        </div>
+        <div>
+          <div class="stat-num">12</div>
+          <div class="stat-lbl">anos atendendo</div>
+        </div>
+        <div>
+          <div class="stat-num">97<span style="font-size: 22px;">%</span></div>
+          <div class="stat-lbl">NPS clientes</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="hero-photo-wrap fade-up">
+      <img class="hero-photo" src="./assets/frente-imob.webp" alt="Fachada Dinamic" />
+      <div class="hero-photo-badge font-body">
+        <span class="pulse-dot"></span>
+        <span><strong style="font-weight: 500;">Atendimento agora</strong> · online</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== 3. COMO FUNCIONA ================== -->
+<section class="pad">
+  <div class="max-w-[1300px] mx-auto">
+    <div class="text-center">
+      <span class="eyebrow fade-up">Como atendemos</span>
+      <h2 class="section-title h-display-lg mt-6 fade-up">Três formas de te atender</h2>
+      <p class="section-sub fade-up">
+        Você escolhe o ritmo. Da conversa rápida com a IA à visita guiada com nosso corretor.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-7 mt-20">
+      <div class="paper-card fade-up">
+        <div class="icon-box icon-amber">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>
+        </div>
+        <h3 class="font-display font-extrabold text-2xl tracking-tighter mb-3">Converse com a IA</h3>
+        <p class="font-body" style="color: var(--c-text-mute); font-size: 16px; line-height: 1.65;">Em 30 segundos descobrimos seus critérios e enviamos as melhores opções, com fotos, mapa e visita pré-agendada.</p>
+      </div>
+
+      <div class="paper-card fade-up">
+        <div class="icon-box icon-indigo">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0 1 22 16.92z"/></svg>
+        </div>
+        <h3 class="font-display font-extrabold text-2xl tracking-tighter mb-3">Fale com um humano</h3>
+        <p class="font-body" style="color: var(--c-text-mute); font-size: 16px; line-height: 1.65;">Corretor especialista do bairro retorna em até 2 horas, de dia ou de noite, fim de semana incluso.</p>
+      </div>
+
+      <div class="paper-card fade-up">
+        <div class="icon-box icon-gold">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        </div>
+        <h3 class="font-display font-extrabold text-2xl tracking-tighter mb-3">Agende uma visita</h3>
+        <p class="font-body" style="color: var(--c-text-mute); font-size: 16px; line-height: 1.65;">Visita presencial ou tour online mesmo no fim de semana. Você define o horário, a gente confirma na hora.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== 4. CARD STACK ================== -->
+<section class="stack-section" style="padding: 0 0 12vw;">
+  <div class="text-center" style="padding: 8vw 8vw 6vw;">
+    <span class="eyebrow fade-up">Seleção da casa</span>
+    <h2 class="section-title h-display-lg mt-6 fade-up">Imóveis que valem o silêncio</h2>
+    <p class="section-sub fade-up">Curadoria com olhar editorial — fotografia, acabamento e localização.</p>
+  </div>
+
+  <!-- Card 01 -->
+  <div class="stack-card">
+    <div class="card-inner">
+      <div class="card-img" style="background-image: url('./assets/imovel-1.webp');"></div>
+      <div class="card-text">
+        <div class="number">Property 01 · Centro</div>
+        <h3 class="font-display font-extrabold h-card-title">Casa moderna<br />Rua Brasil</h3>
+        <p class="italic-edit" style="font-size: 22px; color: var(--c-text); line-height: 1.4;">Acabamento mármore travertino, piscina aquecida e jardim de buganvílias.</p>
+        <hr class="divider-gold" />
+        <div class="specs-grid">
+          <div class="spec"><strong>3</strong>Dormitórios</div>
+          <div class="spec"><strong>180m²</strong>Área útil</div>
+          <div class="spec"><strong>4</strong>Vagas</div>
+          <div class="spec"><strong>1</strong>Piscina</div>
+        </div>
+        <p class="font-body" style="font-size: 16px; line-height: 1.7; color: var(--c-text-mute); margin-top: 8px;">
+          Casa térrea recém-reformada em rua arborizada do Centro. Sala integrada com pé-direito duplo, cozinha gourmet e suíte master com closet.
+        </p>
+        <div class="price-big">R$ 1.280.000</div>
+        <div class="flex gap-3 flex-wrap mt-2">
+          <a class="btn-pill btn-indigo">Ver detalhes</a>
+          <a class="btn-pill btn-outline-indigo">Agendar visita</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 02 -->
+  <div class="stack-card">
+    <div class="card-inner">
+      <div class="card-img" style="background-image: url('./assets/imovel-2.webp');"></div>
+      <div class="card-text">
+        <div class="number">Property 02 · Jardim Tropical</div>
+        <h3 class="font-display font-extrabold h-card-title">Apartamento<br />Jardim Tropical</h3>
+        <p class="italic-edit" style="font-size: 22px; color: var(--c-text); line-height: 1.4;">Vista verde do parque, varanda gourmet e portaria 24h.</p>
+        <hr class="divider-gold" />
+        <div class="specs-grid">
+          <div class="spec"><strong>3</strong>Dormitórios</div>
+          <div class="spec"><strong>112m²</strong>Área útil</div>
+          <div class="spec"><strong>2</strong>Vagas</div>
+          <div class="spec"><strong>1</strong>Suíte</div>
+        </div>
+        <p class="font-body" style="font-size: 16px; line-height: 1.7; color: var(--c-text-mute); margin-top: 8px;">
+          Andar alto com vista pro Parque Linear. Edifício recente, áreas comuns completas e localização premiada do bairro.
+        </p>
+        <div class="price-big">R$ 620.000</div>
+        <div class="flex gap-3 flex-wrap mt-2">
+          <a class="btn-pill btn-indigo">Ver detalhes</a>
+          <a class="btn-pill btn-outline-indigo">Agendar visita</a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card 03 -->
+  <div class="stack-card">
+    <div class="card-inner">
+      <div class="card-img" style="background-image: url('./assets/imovel-3.webp');"></div>
+      <div class="card-text">
+        <div class="number">Property 03 · Industrial</div>
+        <h3 class="font-display font-extrabold h-card-title">Sala Comercial<br />Distrito Industrial</h3>
+        <p class="italic-edit" style="font-size: 22px; color: var(--c-text); line-height: 1.4;">Fachada de vidro, pé-direito 4m e vaga rotativa para clientes.</p>
+        <hr class="divider-gold" />
+        <div class="specs-grid">
+          <div class="spec"><strong>2</strong>Salas</div>
+          <div class="spec"><strong>95m²</strong>Privativos</div>
+          <div class="spec"><strong>3</strong>Vagas</div>
+          <div class="spec"><strong>24h</strong>Segurança</div>
+        </div>
+        <p class="font-body" style="font-size: 16px; line-height: 1.7; color: var(--c-text-mute); margin-top: 8px;">
+          Ponto estratégico próximo à PR-218, ideal para escritório, clínica ou showroom. Recepção, copa e dois banheiros sociais.
+        </p>
+        <div class="price-big">R$ 450.000</div>
+        <div class="flex gap-3 flex-wrap mt-2">
+          <a class="btn-pill btn-indigo">Ver detalhes</a>
+          <a class="btn-pill btn-outline-indigo">Agendar visita</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================== 5. BAIRROS ================== -->
+<section class="pad" id="bairros">
+  <div class="max-w-[1400px] mx-auto">
+    <div class="text-center">
+      <span class="eyebrow fade-up">Onde atuamos</span>
+      <h2 class="section-title h-display-lg mt-6 fade-up">Conhecemos cada esquina</h2>
+      <p class="section-sub fade-up">4 bairros · 628 imóveis · atendimento local</p>
+    </div>
+
+    <div class="bairros-grid fade-up">
+      <a href="#" class="bairro-card">
+        <img src="./assets/imovel-4.webp" alt="Centro" />
+        <div class="overlay"></div>
+        <div class="label">
+          <h3 class="h-bairro">Centro</h3>
+          <div class="meta">142 imóveis · ticket R$ 320 mil</div>
+        </div>
+      </a>
+      <a href="#" class="bairro-card">
+        <img src="./assets/imovel-2.webp" alt="Jardim Tropical" />
+        <div class="overlay"></div>
+        <div class="label">
+          <h3 class="h-bairro">Jardim Tropical</h3>
+          <div class="meta">98 imóveis · ticket R$ 480 mil</div>
+        </div>
+      </a>
+      <a href="#" class="bairro-card">
+        <img src="./assets/imovel-3.webp" alt="Industrial" />
+        <div class="overlay"></div>
+        <div class="label">
+          <h3 class="h-bairro">Industrial</h3>
+          <div class="meta">76 imóveis · ticket R$ 280 mil</div>
+        </div>
+      </a>
+      <a href="#" class="bairro-card">
+        <img src="./assets/imovel-5.webp" alt="Aeroporto" />
+        <div class="overlay"></div>
+        <div class="label">
+          <h3 class="h-bairro">Aeroporto</h3>
+          <div class="meta">54 imóveis · ticket R$ 650 mil</div>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================== 6. DEPOIMENTO ================== -->
+<section class="quote-section">
+  <div class="max-w-4xl mx-auto">
+    <div class="quote-marks h-quote-mark fade-up">"</div>
+    <p class="italic-edit h-quote fade-up" style="margin-top: -40px;">
+      A IA da Dinamic entendeu o que eu queria melhor que muito corretor que conversei antes. Em uma tarde fechei a visita do apartamento que comprei.
+    </p>
+    <p class="fade-up mt-10" style="font-family: 'Inter', sans-serif; font-weight: 500; font-size: 13px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--c-gold);">
+      — Marcos Andrade · Comprou apto Jd Tropical · 2025
+    </p>
+  </div>
+</section>
+
+<!-- ================== 7. CTA FINAL ================== -->
+<section class="cta-final-section" id="contato">
+  <div class="max-w-5xl mx-auto">
+    <h2 class="font-display font-extrabold h-cta-final fade-up">Vamos conversar?</h2>
+    <p class="section-sub fade-up" style="font-size: 24px; max-width: 720px;">
+      Atendemos por WhatsApp, chat IA ou pessoalmente, na Av. Arapongas, 1248 — Centro.
+    </p>
+    <div class="flex flex-wrap items-center justify-center gap-4 mt-14 fade-up">
+      <a href="#" class="btn-cta-big solid">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0 0 20.464 3.488"/></svg>
+        (43) 98847-8713 · Vendas
+      </a>
+      <a href="#" class="btn-cta-big ghost">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893A11.821 11.821 0 0 0 20.464 3.488"/></svg>
+        (43) 98847-8670 · Locações
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ================== FOOTER ================== -->
+<footer class="foot">
+  <div class="max-w-[1400px] mx-auto">
+    <div class="grid md:grid-cols-4 gap-12">
+      <div class="footer-col">
+        <div class="logo-big mb-6"><img src="./assets/logo-d.png" alt="Dinamic" /></div>
+        <p class="font-display font-extrabold text-2xl tracking-tighter mb-3" style="color: var(--c-text);">Dinamic</p>
+        <p style="color: var(--c-text-mute); line-height: 1.6;">Imobiliária local de Arapongas-PR. 12 anos atendendo com cuidado, IA e olhar editorial.</p>
+      </div>
+      <div class="footer-col">
+        <h5>Navegação</h5>
+        <a href="#">Comprar imóvel</a>
+        <a href="#">Alugar imóvel</a>
+        <a href="#">Imóveis comerciais</a>
+        <a href="#">Bairros</a>
+        <a href="#">Sobre a Dinamic</a>
+      </div>
+      <div class="footer-col">
+        <h5>Atendimento</h5>
+        <a href="#">(43) 98847-8713 · Vendas</a>
+        <a href="#">(43) 98847-8670 · Locações</a>
+        <a href="#">contato@dinamicimob.com.br</a>
+        <a href="#">Av. Arapongas, 1248 · Centro</a>
+        <p>Seg–Sex 8h–19h · Sáb 9h–13h</p>
+      </div>
+      <div class="footer-col">
+        <h5>Redes</h5>
+        <a href="#">Instagram</a>
+        <a href="#">Facebook</a>
+        <a href="#">YouTube</a>
+        <a href="#">WhatsApp</a>
+      </div>
+    </div>
+
+    <div class="mt-16 pt-8 border-t" style="border-color: var(--c-border);">
+      <div class="flex flex-wrap items-center justify-between gap-4 text-xs" style="color: var(--c-text-mute); font-family: 'Inter', sans-serif;">
+        <p>© 2026 Dinamic Imobiliária · CRECI 8472-F · Todos os direitos reservados.</p>
+        <div class="flex gap-6">
+          <a href="#" style="color: var(--c-text-mute);">Política de privacidade</a>
+          <a href="#" style="color: var(--c-text-mute);">LGPD</a>
+          <a href="#" style="color: var(--c-text-mute);">Termos de uso</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// ---------- LENIS smooth scroll ----------
+const lenis = new Lenis({
+  duration: 1.2,
+  easing: t => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
+  smoothWheel: true
+});
+function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+requestAnimationFrame(raf);
+
+// ---------- GSAP ----------
+gsap.registerPlugin(ScrollTrigger);
+lenis.on('scroll', ScrollTrigger.update);
+gsap.ticker.add(time => lenis.raf(time * 1000));
+gsap.ticker.lagSmoothing(0);
+
+// Parallax leve hero photo
+gsap.to('.hero-photo', {
+  yPercent: 15,
+  ease: 'none',
+  scrollTrigger: { trigger: '.hero', start: 'top top', end: 'bottom top', scrub: true }
+});
+
+// Fade-up elegante
+gsap.utils.toArray('.fade-up').forEach(el => {
+  gsap.fromTo(el,
+    { opacity: 0, y: 40 },
+    {
+      opacity: 1, y: 0,
+      duration: 1,
+      ease: 'power2.out',
+      scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' }
+    }
+  );
+});
+
+// Card stack: scale 0.95 opacity 0.5 nos cards anteriores
+const stackCards = document.querySelectorAll('.stack-card');
+stackCards.forEach((card, i) => {
+  if (i === stackCards.length - 1) return;
+  gsap.to(card.querySelector('.card-inner'), {
+    scale: 0.95,
+    opacity: 0.5,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: stackCards[i + 1],
+      start: 'top bottom',
+      end: 'top 10vh',
+      scrub: true
+    }
+  });
+});
+
+// Topbar scrolled state
+const header = document.querySelector('header.topbar');
+const updateTopbar = () => header.classList.toggle('scrolled', window.scrollY > 50);
+window.addEventListener('scroll', updateTopbar);
+updateTopbar();
+
+// Chip toggle
+document.querySelectorAll('.chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    chip.parentElement.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
+    chip.classList.add('active');
+  });
+});
+</script>
+</body>
+</html>

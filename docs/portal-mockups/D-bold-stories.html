@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Dinamic Imobiliária — Bold Stories</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700;800;900&family=Inter:wght@400;500;700&display=swap" rel="stylesheet" />
+<script src="https://cdn.tailwindcss.com"></script>
+<style>
+  :root {
+    --c-dark: #0B0B14;
+    --c-cream: #FAF7F2;
+    --c-indigo: #4F46E5;
+    --c-indigo-deep: #3730A3;
+    --c-amber: #F59E0B;
+    --c-amber-deep: #B45309;
+    --c-text-light: #F5F2EB;
+    --c-text-dark: #0B0B14;
+  }
+
+  * { -webkit-font-smoothing: antialiased; }
+
+  html, body {
+    font-family: 'Inter', system-ui, -apple-system, sans-serif;
+    background: var(--c-dark);
+    color: var(--c-text-light);
+    scroll-behavior: smooth;
+  }
+
+  .font-display { font-family: 'Inter Tight', 'Inter', sans-serif; font-weight: 800; letter-spacing: -0.05em; line-height: 0.95; }
+  .font-display-tight { font-family: 'Inter Tight', 'Inter', sans-serif; font-weight: 700; letter-spacing: -0.03em; }
+  .tabular { font-variant-numeric: tabular-nums; font-weight: 700; }
+
+  /* Headings responsive sizes */
+  .h-hero { font-size: clamp(64px, 9vw, 160px); }
+  .h-section { font-size: clamp(56px, 7vw, 96px); }
+  .h-mid { font-size: clamp(48px, 6vw, 80px); }
+  .h-quote { font-size: clamp(32px, 5vw, 72px); }
+  .quote-mark { font-size: clamp(200px, 28vw, 400px); line-height: 0.4; }
+  .stat-num { font-size: clamp(120px, 18vw, 280px); line-height: 0.85; }
+  .h-cta { font-size: clamp(64px, 9vw, 128px); }
+  .h-neighborhood { font-size: clamp(32px, 4.5vw, 56px); }
+  .subhead { font-size: clamp(18px, 1.8vw, 28px); }
+
+  /* Pills */
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 8px 18px; border-radius: 999px;
+    font-size: 13px; font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.08em;
+  }
+  .pill-amber { background: var(--c-amber); color: var(--c-text-dark); }
+  .pill-dark { background: var(--c-text-dark); color: var(--c-text-light); }
+  .pill-dot::before {
+    content: ''; width: 8px; height: 8px; background: currentColor;
+    border-radius: 999px; display: inline-block;
+  }
+
+  /* CTAs */
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    padding: 16px 32px; border-radius: 999px; font-weight: 700;
+    font-size: 16px; transition: transform .25s ease, background .25s ease, color .25s ease, box-shadow .25s ease;
+    cursor: pointer; white-space: nowrap;
+  }
+  .btn:hover { transform: translateY(-2px); }
+  .btn-indigo { background: var(--c-indigo); color: #fff; box-shadow: 0 10px 30px -10px rgba(79,70,229,.6); }
+  .btn-indigo:hover { background: var(--c-indigo-deep); }
+  .btn-amber-outline { border: 2px solid var(--c-amber); color: var(--c-amber); }
+  .btn-amber-outline:hover { background: rgba(245,158,11,.1); }
+  .btn-amber { background: var(--c-amber); color: var(--c-text-dark); }
+  .btn-amber:hover { background: var(--c-amber-deep); color: #fff; }
+  .btn-amber-outline-big { border: 2px solid var(--c-amber); color: var(--c-amber); padding: 22px 44px; font-size: 18px; }
+  .btn-amber-outline-big:hover { background: rgba(245,158,11,.1); }
+  .btn-amber-big { background: var(--c-amber); color: var(--c-text-dark); padding: 22px 44px; font-size: 18px; }
+  .btn-amber-big:hover { background: var(--c-amber-deep); color: #fff; }
+
+  /* Topbar */
+  header.topbar {
+    position: absolute; top: 0; left: 0; right: 0; z-index: 50;
+    padding: 28px 5vw;
+    display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; gap: 24px;
+    transition: color .4s ease;
+  }
+  header.topbar[data-theme="dark"]   { color: var(--c-text-light); }
+  header.topbar[data-theme="cream"]  { color: var(--c-text-dark); }
+  header.topbar[data-theme="indigo"] { color: var(--c-text-light); }
+  header.topbar[data-theme="amber"]  { color: var(--c-text-dark); }
+
+  .logo-dot {
+    width: 36px; height: 36px; border-radius: 10px;
+    background: var(--c-amber); display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Inter Tight', sans-serif; font-weight: 800; color: #0B0B14;
+    overflow: hidden; position: relative;
+  }
+  .logo-dot img { width: 290%; height: 290%; object-fit: cover; object-position: 32% 50%; position: absolute; left: -32%; top: -50%; }
+
+  .nav-link { font-size: 14px; font-weight: 500; opacity: .85; transition: opacity .2s; }
+  .nav-link:hover { opacity: 1; }
+
+  /* Reveal animation */
+  .reveal { opacity: 0; transform: translateY(40px); transition: opacity .8s ease, transform .8s ease; }
+  .reveal.in-view { opacity: 1; transform: translateY(0); }
+  .reveal.delay-1 { transition-delay: .1s; }
+  .reveal.delay-2 { transition-delay: .2s; }
+  .reveal.delay-3 { transition-delay: .3s; }
+  .reveal.delay-4 { transition-delay: .4s; }
+  .reveal.delay-5 { transition-delay: .5s; }
+
+  /* Hero */
+  .hero-bg {
+    position: absolute; inset: 0; z-index: 0;
+    background-image: url('./assets/frente-imob.webp');
+    background-size: cover; background-position: center;
+    filter: brightness(0.35) blur(2px); opacity: 0.6;
+  }
+  .hero-overlay {
+    position: absolute; inset: 0; z-index: 1;
+    background: radial-gradient(ellipse at 70% 30%, rgba(79,70,229,.18), transparent 60%),
+                linear-gradient(180deg, rgba(11,11,20,.4) 0%, rgba(11,11,20,.85) 100%);
+  }
+
+  /* Chat card */
+  .chat-card {
+    background: #13131F;
+    border: 1px solid rgba(79,70,229,.45);
+    border-radius: 24px;
+    padding: 24px;
+    box-shadow: 0 30px 80px -20px rgba(0,0,0,.7), 0 0 0 1px rgba(255,255,255,.04) inset;
+    backdrop-filter: blur(8px);
+  }
+  .chat-bubble { padding: 12px 16px; border-radius: 16px; font-size: 14px; line-height: 1.5; max-width: 90%; }
+  .chat-bubble-ai   { background: rgba(255,255,255,.06); color: var(--c-text-light); border-top-left-radius: 4px; }
+  .chat-bubble-user { background: var(--c-indigo); color: #fff; align-self: flex-end; margin-left: auto; border-top-right-radius: 4px; }
+  .chat-avatar {
+    width: 40px; height: 40px; border-radius: 999px; background: var(--c-amber);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-family: 'Inter Tight', sans-serif; font-weight: 800; color: #0B0B14;
+    overflow: hidden; position: relative; flex-shrink: 0;
+  }
+  .chat-avatar img { width: 290%; height: 290%; object-fit: cover; position: absolute; left: -32%; top: -50%; }
+  .dot-online {
+    width: 10px; height: 10px; background: #22C55E; border-radius: 999px; box-shadow: 0 0 0 3px #13131F;
+  }
+  .chat-input {
+    background: rgba(255,255,255,.05); border: 1px solid rgba(255,255,255,.08);
+    border-radius: 999px; padding: 12px 16px; flex: 1; color: var(--c-text-light); font-size: 14px;
+  }
+  .chat-input::placeholder { color: rgba(245,242,235,.45); }
+
+  /* Cards Section 2 */
+  .feature-card {
+    background: #fff; border-radius: 24px; padding: 36px; box-shadow: 0 20px 50px -20px rgba(11,11,20,.15);
+    transition: transform .35s ease, box-shadow .35s ease; border-top: 3px solid transparent;
+    height: 100%;
+  }
+  .feature-card:hover { transform: scale(1.02) translateY(-4px); box-shadow: 0 30px 70px -20px rgba(11,11,20,.25); }
+  .feature-card.border-indigo { border-top-color: var(--c-indigo); }
+  .feature-card.border-amber  { border-top-color: var(--c-amber); }
+  .feature-card.border-dark   { border-top-color: var(--c-text-dark); }
+
+  .icon-wrap { width: 64px; height: 64px; border-radius: 18px; display: inline-flex; align-items: center; justify-content: center; }
+  .icon-wrap.bg-indigo-soft { background: rgba(79,70,229,.12); color: var(--c-indigo); }
+  .icon-wrap.bg-amber-soft  { background: rgba(245,158,11,.15); color: var(--c-amber-deep); }
+  .icon-wrap.bg-dark-soft   { background: rgba(11,11,20,.08); color: var(--c-text-dark); }
+
+  /* Featured property card */
+  .prop-card {
+    background: #13131F; border-radius: 24px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,.08);
+    transition: transform .35s ease, border-color .35s ease;
+  }
+  .prop-card:hover { transform: translateY(-6px); border-color: rgba(245,158,11,.5); }
+  .prop-img-wrap { position: relative; overflow: hidden; height: 320px; }
+  .prop-img-wrap img { width: 100%; height: 100%; object-fit: cover; transition: transform 1s ease; }
+  .prop-card:hover .prop-img-wrap img { transform: scale(1.08); }
+  .price-underline { border-bottom: 2px solid var(--c-amber); padding-bottom: 4px; }
+
+  /* Stats amber section */
+  .stat-block { position: relative; }
+  .stat-block::after {
+    content: ''; display: block; height: 4px; background: var(--c-text-dark);
+    width: 60%; margin: 16px auto 0;
+  }
+
+  /* Neighborhood */
+  .hood {
+    position: relative; aspect-ratio: 4/3; overflow: hidden;
+    border-radius: 24px; cursor: pointer;
+  }
+  .hood img {
+    width: 100%; height: 100%; object-fit: cover;
+    filter: brightness(0.5); transition: filter .5s ease, transform .8s ease;
+  }
+  .hood:hover img { filter: brightness(0.8); transform: scale(1.05); }
+  .hood-content {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    color: #fff; text-align: center; padding: 24px;
+  }
+  .hood-name {
+    font-family: 'Inter Tight', sans-serif; font-weight: 800; letter-spacing: -0.04em;
+    transition: transform .4s ease;
+  }
+  .hood-meta {
+    margin-top: 12px; opacity: 0; transform: translateY(10px);
+    transition: opacity .4s ease, transform .4s ease;
+    font-size: 14px; font-weight: 500; letter-spacing: 0.02em;
+  }
+  .hood:hover .hood-name { transform: translateY(-10px); }
+  .hood:hover .hood-meta { opacity: 1; transform: translateY(0); }
+
+  /* Stars */
+  .stars { display: inline-flex; gap: 4px; color: var(--c-amber); font-size: 22px; }
+
+  /* Footer cols */
+  .footer-col h4 { font-family: 'Inter Tight', sans-serif; font-weight: 800; font-size: 14px;
+    text-transform: uppercase; letter-spacing: 0.12em; color: var(--c-amber); margin-bottom: 16px; }
+  .footer-col li { padding: 5px 0; opacity: .8; font-size: 14px; }
+  .footer-col a:hover { color: var(--c-amber); opacity: 1; }
+
+  /* Section padding helper */
+  .sec-pad { padding: 14vh 5vw; }
+  @media (min-width: 768px) { .sec-pad { padding: 18vh 8vw; } }
+
+  /* Background sections */
+  section[data-bg="dark"]   { background: var(--c-dark);   color: var(--c-text-light); }
+  section[data-bg="cream"]  { background: var(--c-cream);  color: var(--c-text-dark); }
+  section[data-bg="indigo"] { background: var(--c-indigo); color: #fff; }
+  section[data-bg="amber"]  { background: var(--c-amber);  color: var(--c-text-dark); }
+
+  .text-mute-light { color: rgba(245,242,235,.65); }
+  .text-mute-dark  { color: rgba(11,11,20,.65); }
+
+  /* Hide scrollbar style */
+  body::-webkit-scrollbar { width: 10px; }
+  body::-webkit-scrollbar-track { background: var(--c-dark); }
+  body::-webkit-scrollbar-thumb { background: var(--c-indigo-deep); border-radius: 8px; }
+</style>
+</head>
+<body>
+
+<!-- ============================================== -->
+<!-- 1. HERO DARK + CHAT INLINE                     -->
+<!-- ============================================== -->
+<section data-bg="dark" class="relative min-h-screen overflow-hidden flex items-center" style="padding-top: 8rem;">
+  <div class="hero-bg"></div>
+  <div class="hero-overlay"></div>
+
+  <!-- Topbar -->
+  <header class="topbar" data-theme="dark">
+    <div class="flex items-center gap-3">
+      <span class="logo-dot"><img src="./assets/logo-d.png" alt="D" onerror="this.style.display='none';this.parentNode.textContent='D'"/></span>
+      <span class="font-display text-xl tracking-tight">DINAMIC</span>
+    </div>
+    <nav class="hidden md:flex items-center gap-8 justify-self-center">
+      <a href="#" class="nav-link">Comprar</a>
+      <a href="#" class="nav-link">Alugar</a>
+      <a href="#bairros" class="nav-link">Bairros</a>
+      <a href="#" class="nav-link">Sobre</a>
+    </nav>
+    <div class="flex justify-end">
+      <a href="#" class="btn btn-amber" style="padding: 10px 22px; font-size: 14px;">Falar com a IA</a>
+    </div>
+  </header>
+
+  <div class="relative z-10 w-full max-w-[1400px] mx-auto px-[5vw] grid lg:grid-cols-5 gap-12 items-center">
+    <!-- Left 60% -->
+    <div class="lg:col-span-3 space-y-8">
+      <div class="reveal">
+        <span class="pill pill-amber">Arapongas-PR · CRECI 8472-F</span>
+      </div>
+      <h1 class="font-display h-hero reveal delay-1">
+        Imóveis com IA<br/>em <span style="color: var(--c-amber);">Arapongas</span>.
+      </h1>
+      <p class="subhead text-mute-light max-w-2xl reveal delay-2" style="line-height: 1.4;">
+        628 imóveis ativos. Atendimento humano em 2h + chat IA 24/7.<br class="hidden md:block"/>
+        A imobiliária local que entende o que você precisa.
+      </p>
+      <div class="flex flex-wrap gap-4 pt-4 reveal delay-3">
+        <a href="#" class="btn btn-indigo" style="padding: 18px 36px; font-size: 17px;">Conversar com a IA →</a>
+        <a href="#" class="btn btn-amber-outline" style="padding: 18px 36px; font-size: 17px;">Ver imóveis</a>
+      </div>
+      <div class="flex items-center gap-6 pt-6 reveal delay-4 text-mute-light text-sm">
+        <div class="flex items-center gap-2"><span class="dot-online"></span> Online agora</div>
+        <div>·</div>
+        <div>Resposta em ~30s</div>
+      </div>
+    </div>
+
+    <!-- Right 40% - Chat card -->
+    <div class="lg:col-span-2 reveal delay-2">
+      <div class="chat-card">
+        <div class="flex items-center gap-3 pb-4 border-b border-white/10">
+          <div class="relative">
+            <span class="chat-avatar"><img src="./assets/logo-d.png" alt="D" onerror="this.style.display='none';this.parentNode.textContent='D'"/></span>
+            <span class="dot-online absolute -bottom-0.5 -right-0.5"></span>
+          </div>
+          <div class="flex-1">
+            <div class="font-display-tight text-base text-white">Assistente Dinamic</div>
+            <div class="text-xs text-mute-light">Online · Responde em segundos</div>
+          </div>
+          <span class="text-xs text-mute-light">IA</span>
+        </div>
+
+        <div class="flex flex-col gap-3 py-5 min-h-[280px]">
+          <div class="chat-bubble chat-bubble-ai">Olá! Posso te ajudar a encontrar um imóvel. Aluguel ou compra?</div>
+          <div class="chat-bubble chat-bubble-user">Aluguel apto 2 dorms, perto do centro, até R$ 2.000</div>
+          <div class="chat-bubble chat-bubble-ai">Achei 8 opções pra você. A mais procurada é um apto reformado na Rua das Acácias, 130m², R$ 1.890.</div>
+          <div class="chat-bubble chat-bubble-ai">Quer agendar visita ou ver mais opções?</div>
+        </div>
+
+        <div class="flex items-center gap-2 pt-3 border-t border-white/10">
+          <input class="chat-input" placeholder="Digite sua mensagem..." />
+          <button class="w-11 h-11 rounded-full flex items-center justify-center" style="background: var(--c-indigo);">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================== -->
+<!-- 2. CREAM - COMO A IA ATENDE                    -->
+<!-- ============================================== -->
+<section data-bg="cream" class="sec-pad">
+  <div class="max-w-7xl mx-auto text-center">
+    <div class="reveal flex justify-center"><span class="pill pill-amber">Atendimento contínuo</span></div>
+    <h2 class="font-display h-section mt-6 reveal delay-1">Três jeitos de te atender.<br/>Sempre.</h2>
+    <p class="subhead max-w-2xl mx-auto mt-6 text-mute-dark reveal delay-2" style="line-height: 1.5;">
+      Você escolhe como falar com a Dinamic. Chat IA, WhatsApp ou visita presencial — sem fila, sem espera, sem script.
+    </p>
+
+    <div class="grid md:grid-cols-3 gap-8 mt-16 text-left">
+      <div class="feature-card border-indigo reveal delay-1">
+        <div class="icon-wrap bg-indigo-soft mb-6">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="10" rx="2"/><circle cx="12" cy="5" r="2"/><path d="M12 7v4"/><line x1="8" y1="16" x2="8" y2="16"/><line x1="16" y1="16" x2="16" y2="16"/></svg>
+        </div>
+        <h3 class="font-display-tight text-2xl mb-3">Chat IA</h3>
+        <p class="text-mute-dark text-base leading-relaxed">Atende em 30s, dia ou noite. Aprende seus critérios — e quanto mais conversa, mais certeira.</p>
+      </div>
+
+      <div class="feature-card border-amber reveal delay-2">
+        <div class="icon-wrap bg-amber-soft mb-6">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+        </div>
+        <h3 class="font-display-tight text-2xl mb-3">WhatsApp</h3>
+        <p class="text-mute-dark text-base leading-relaxed">Corretor especialista responde em até 2h. Setor vendas e setor locação, separados.</p>
+      </div>
+
+      <div class="feature-card border-dark reveal delay-3">
+        <div class="icon-wrap bg-dark-soft mb-6">
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+        </div>
+        <h3 class="font-display-tight text-2xl mb-3">Visita</h3>
+        <p class="text-mute-dark text-base leading-relaxed">Presencial ou online, fins de semana inclusive. Agenda no chat e o corretor confirma.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================== -->
+<!-- 3. INDIGO FULL - DEPOIMENTO                    -->
+<!-- ============================================== -->
+<section data-bg="indigo" class="sec-pad flex items-center justify-center min-h-screen">
+  <div class="max-w-5xl mx-auto text-center">
+    <div class="quote-mark font-display reveal" style="color: var(--c-amber); margin-bottom: -40px;">"</div>
+    <blockquote class="font-display-tight h-quote reveal delay-1" style="line-height: 1.2;">
+      A IA da Dinamic entendeu o que eu queria melhor que muito corretor que falei. Fechei a compra do apartamento em <span style="color: var(--c-amber);">uma semana</span>.
+    </blockquote>
+
+    <div class="flex flex-col items-center gap-3 mt-12 reveal delay-2">
+      <div class="w-20 h-20 rounded-full bg-white/15 border-2 border-white/30 flex items-center justify-center font-display text-2xl">MA</div>
+      <div class="font-display-tight text-xl">Marcos Andrade</div>
+      <div class="text-sm opacity-80">Comprou apto Jd Tropical · 2025</div>
+      <div class="stars mt-3">★ ★ ★ ★ ★</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================== -->
+<!-- 4. DARK - FEATURED PROPERTIES                  -->
+<!-- ============================================== -->
+<section data-bg="dark" class="sec-pad">
+  <div class="max-w-7xl mx-auto">
+    <div class="flex flex-wrap items-end justify-between gap-6 mb-12 reveal">
+      <div>
+        <span class="pill pill-amber">Esta semana</span>
+        <h2 class="font-display h-mid mt-4">Em destaque agora</h2>
+        <p class="subhead text-mute-light mt-4 max-w-xl" style="line-height: 1.4;">
+          Os 3 imóveis mais procurados em Arapongas-PR esta semana
+        </p>
+      </div>
+      <a href="#" class="btn btn-amber-outline">Ver todos os 628 →</a>
+    </div>
+
+    <div class="grid md:grid-cols-3 gap-6">
+      <!-- Card 1 -->
+      <article class="prop-card reveal delay-1">
+        <div class="prop-img-wrap">
+          <img src="./assets/imovel-1.webp" alt="Casa Centro" />
+        </div>
+        <div class="p-6">
+          <div class="text-xs tracking-widest font-bold mb-2" style="color: var(--c-amber);">CASA RESIDENCIAL</div>
+          <h3 class="font-display-tight text-2xl mb-2">Casa alto padrão · Centro</h3>
+          <div class="text-sm text-mute-light mb-4">3 dorms · 180m² · 4 vagas</div>
+          <div class="font-display text-3xl tabular text-white inline-block price-underline mb-5">R$ 1.280.000</div>
+          <div class="flex items-center justify-between pt-4 border-t border-white/10">
+            <span class="text-sm text-mute-light">Centro</span>
+            <a href="#" class="text-sm font-bold" style="color: var(--c-amber);">Detalhes →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 2 -->
+      <article class="prop-card reveal delay-2">
+        <div class="prop-img-wrap">
+          <img src="./assets/imovel-2.webp" alt="Apto Jd Tropical" />
+        </div>
+        <div class="p-6">
+          <div class="text-xs tracking-widest font-bold mb-2" style="color: var(--c-amber);">APARTAMENTO</div>
+          <h3 class="font-display-tight text-2xl mb-2">Apto reformado · Jd Tropical</h3>
+          <div class="text-sm text-mute-light mb-4">2 dorms · 92m² · 2 vagas</div>
+          <div class="font-display text-3xl tabular text-white inline-block price-underline mb-5">R$ 620.000</div>
+          <div class="flex items-center justify-between pt-4 border-t border-white/10">
+            <span class="text-sm text-mute-light">Jardim Tropical</span>
+            <a href="#" class="text-sm font-bold" style="color: var(--c-amber);">Detalhes →</a>
+          </div>
+        </div>
+      </article>
+
+      <!-- Card 3 -->
+      <article class="prop-card reveal delay-3">
+        <div class="prop-img-wrap">
+          <img src="./assets/imovel-3.webp" alt="Sala Industrial" />
+        </div>
+        <div class="p-6">
+          <div class="text-xs tracking-widest font-bold mb-2" style="color: var(--c-amber);">SALA COMERCIAL</div>
+          <h3 class="font-display-tight text-2xl mb-2">Sala comercial · Industrial</h3>
+          <div class="text-sm text-mute-light mb-4">120m² · 3 vagas · ar central</div>
+          <div class="font-display text-3xl tabular text-white inline-block price-underline mb-5">R$ 450.000</div>
+          <div class="flex items-center justify-between pt-4 border-t border-white/10">
+            <span class="text-sm text-mute-light">Industrial</span>
+            <a href="#" class="text-sm font-bold" style="color: var(--c-amber);">Detalhes →</a>
+          </div>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================== -->
+<!-- 5. AMBER FULL - STATS                          -->
+<!-- ============================================== -->
+<section data-bg="amber" class="sec-pad min-h-screen flex items-center justify-center">
+  <div class="max-w-6xl mx-auto text-center">
+    <div class="reveal flex justify-center"><span class="pill pill-dark">12 anos · CRECI 8472-F</span></div>
+    <h2 class="font-display h-section mt-8 mb-16 reveal delay-1">A Dinamic em<br/>números reais.</h2>
+
+    <div class="grid md:grid-cols-3 gap-12">
+      <div class="stat-block reveal delay-1">
+        <div class="stat-num font-display tabular">628</div>
+        <div class="text-sm md:text-base uppercase tracking-widest font-bold mt-2">Imóveis ativos</div>
+      </div>
+      <div class="stat-block reveal delay-2">
+        <div class="stat-num font-display tabular">12</div>
+        <div class="text-sm md:text-base uppercase tracking-widest font-bold mt-2">Anos no mercado</div>
+      </div>
+      <div class="stat-block reveal delay-3">
+        <div class="stat-num font-display tabular">97%</div>
+        <div class="text-sm md:text-base uppercase tracking-widest font-bold mt-2">Satisfação clientes</div>
+      </div>
+    </div>
+
+    <p class="subhead max-w-2xl mx-auto mt-16 reveal delay-4" style="color: rgba(11,11,20,.75); line-height: 1.4;">
+      Mais de uma década atendendo Arapongas e região. Cada número é um cliente que confiou na gente.
+    </p>
+  </div>
+</section>
+
+<!-- ============================================== -->
+<!-- 6. DARK - BAIRROS                              -->
+<!-- ============================================== -->
+<section data-bg="dark" class="sec-pad" id="bairros">
+  <div class="max-w-7xl mx-auto">
+    <div class="text-center mb-16 reveal">
+      <span class="pill pill-amber">Onde a Dinamic atua</span>
+      <h2 class="font-display h-section mt-6">4 bairros.<br/>628 imóveis.</h2>
+      <p class="subhead text-mute-light max-w-2xl mx-auto mt-6" style="line-height: 1.4;">
+        Conhecemos cada rua de Arapongas. Escolhe o bairro, a gente mostra o que tem.
+      </p>
+    </div>
+
+    <div class="grid md:grid-cols-2 gap-4">
+      <div class="hood reveal delay-1">
+        <img src="./assets/imovel-1.webp" alt="Centro" />
+        <div class="hood-content">
+          <div class="hood-name h-neighborhood">Centro</div>
+          <div class="hood-meta">214 imóveis · a partir de R$ 380.000</div>
+        </div>
+      </div>
+      <div class="hood reveal delay-2">
+        <img src="./assets/imovel-2.webp" alt="Jardim Tropical" />
+        <div class="hood-content">
+          <div class="hood-name h-neighborhood">Jardim Tropical</div>
+          <div class="hood-meta">186 imóveis · a partir de R$ 290.000</div>
+        </div>
+      </div>
+      <div class="hood reveal delay-3">
+        <img src="./assets/imovel-4.webp" alt="Industrial" />
+        <div class="hood-content">
+          <div class="hood-name h-neighborhood">Industrial</div>
+          <div class="hood-meta">142 imóveis · a partir de R$ 220.000</div>
+        </div>
+      </div>
+      <div class="hood reveal delay-4">
+        <img src="./assets/imovel-5.webp" alt="Aeroporto" />
+        <div class="hood-content">
+          <div class="hood-name h-neighborhood">Aeroporto</div>
+          <div class="hood-meta">86 imóveis · a partir de R$ 420.000</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============================================== -->
+<!-- 7. FOOTER DARK - CTA + REDES                   -->
+<!-- ============================================== -->
+<section data-bg="dark" class="sec-pad" style="padding-bottom: 8vh;">
+  <div class="max-w-6xl mx-auto text-center">
+    <div class="reveal flex justify-center"><span class="pill pill-amber pill-dot">Atendemos agora</span></div>
+    <h2 class="font-display h-cta mt-6 reveal delay-1">Vamos<br/>conversar?</h2>
+    <p class="subhead text-mute-light max-w-2xl mx-auto mt-6 reveal delay-2" style="line-height: 1.4;">
+      Atendemos por WhatsApp, chat IA ou pessoalmente. Local de Arapongas.<br/>
+      Sem robô que não resolve, sem fila — atendimento humano de verdade.
+    </p>
+    <div class="flex flex-wrap items-center justify-center gap-4 mt-12 reveal delay-3">
+      <a href="https://wa.me/5543988478713" class="btn btn-amber-big">(43) 98847-8713 · Vendas</a>
+      <a href="https://wa.me/5543988478670" class="btn btn-amber-outline-big">(43) 98847-8670 · Locações</a>
+    </div>
+  </div>
+
+  <!-- Footer cols -->
+  <footer class="max-w-7xl mx-auto mt-24 pt-12 border-t border-white/10">
+    <div class="grid md:grid-cols-4 gap-12">
+      <div class="footer-col">
+        <div class="flex items-center gap-3 mb-4">
+          <span class="logo-dot" style="width: 48px; height: 48px;"><img src="./assets/logo-d.png" alt="D" onerror="this.style.display='none';this.parentNode.textContent='D'"/></span>
+          <span class="font-display text-xl">DINAMIC</span>
+        </div>
+        <p class="text-sm text-mute-light leading-relaxed">
+          Imobiliária local de Arapongas-PR. Tecnologia + atendimento humano desde 2013.
+        </p>
+      </div>
+
+      <div class="footer-col">
+        <h4>Navegação</h4>
+        <ul>
+          <li><a href="#">Comprar imóvel</a></li>
+          <li><a href="#">Alugar imóvel</a></li>
+          <li><a href="#bairros">Bairros</a></li>
+          <li><a href="#">Sobre nós</a></li>
+          <li><a href="#">Blog</a></li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Atendimento</h4>
+        <ul>
+          <li>R. Sergipe, 1234 · Centro</li>
+          <li>Arapongas-PR · 86701-000</li>
+          <li>(43) 98847-8713 · Vendas</li>
+          <li>(43) 98847-8670 · Locações</li>
+          <li>Seg–Sex 8h–18h · Sáb 9h–13h</li>
+        </ul>
+      </div>
+
+      <div class="footer-col">
+        <h4>Redes sociais</h4>
+        <ul>
+          <li><a href="#">Instagram @dinamicimob</a></li>
+          <li><a href="#">Facebook</a></li>
+          <li><a href="#">YouTube</a></li>
+          <li><a href="#">LinkedIn</a></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="mt-12 pt-6 border-t border-white/10 flex flex-wrap items-center justify-between gap-4 text-xs text-mute-light">
+      <div>© 2026 Dinamic Imobiliária · CRECI 8472-F · CNPJ 12.345.678/0001-90</div>
+      <div class="flex gap-6">
+        <a href="#" class="hover:text-white">Política de Privacidade</a>
+        <a href="#" class="hover:text-white">LGPD</a>
+        <a href="#" class="hover:text-white">Termos de uso</a>
+      </div>
+    </div>
+  </footer>
+</section>
+
+<script>
+  // Reveal on scroll
+  const revealObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('in-view');
+        revealObserver.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.15, rootMargin: '0px 0px -50px 0px' });
+
+  document.querySelectorAll('.reveal').forEach(el => revealObserver.observe(el));
+
+  // Topbar theme switcher per section
+  const topbar = document.querySelector('header.topbar');
+  const sections = document.querySelectorAll('section[data-bg]');
+  const tbObserver = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.intersectionRatio > 0.5) {
+        const bg = entry.target.dataset.bg;
+        topbar.dataset.theme = bg;
+      }
+    });
+  }, { threshold: [0.5] });
+  sections.forEach(s => tbObserver.observe(s));
+
+  // Smooth scroll for anchor links
+  document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', e => {
+      const id = anchor.getAttribute('href');
+      if (id.length > 1) {
+        const target = document.querySelector(id);
+        if (target) {
+          e.preventDefault();
+          target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }
+    });
+  });
+</script>
+
+</body>
+</html>
