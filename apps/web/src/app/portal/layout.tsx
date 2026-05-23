@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Montserrat } from "next/font/google";
 import { ChatWidget } from "@/components/chat-widget";
+import { LenisProvider } from "@/components/portal/lenis-provider";
+import { NoiseOverlay } from "@/components/portal/noise-overlay";
+import "@/styles/portal-day-night.css";
 
 const fontPortalDisplay = Montserrat({
   subsets: ["latin"],
@@ -45,13 +48,16 @@ export default function PortalLayout({
   children: React.ReactNode;
 }) {
   return (
-    <main
-      data-portal
-      suppressHydrationWarning
-      className={`${fontPortalDisplay.variable} min-h-screen overflow-x-hidden bg-portal-bg text-portal-text`}
-    >
-      {children}
-      <ChatWidget hideButton />
-    </main>
+    <LenisProvider>
+      <main
+        data-portal
+        suppressHydrationWarning
+        className={`${fontPortalDisplay.variable} min-h-screen overflow-x-hidden bg-portal-bg text-portal-text`}
+      >
+        {children}
+        <ChatWidget hideButton />
+        <NoiseOverlay />
+      </main>
+    </LenisProvider>
   );
 }

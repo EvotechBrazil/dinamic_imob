@@ -103,6 +103,19 @@ const config: Config = {
           warning: "#EA580C",
           danger: "#DC2626",
         },
+        // Editorial Noir (dark theme) — paleta cinematic
+        noir: {
+          bg: "var(--noir-bg)",
+          surface: "var(--noir-surface)",
+          text: "var(--noir-text)",
+          "text-mute": "var(--noir-text-mute)",
+          "text-subtle": "var(--noir-text-subtle)",
+          indigo: "var(--noir-indigo)",
+          "indigo-glow": "var(--noir-indigo-glow)",
+          amber: "var(--noir-amber)",
+          "amber-soft": "var(--noir-amber-soft)",
+          border: "var(--noir-border)",
+        },
         // Tremor (light)
         tremor: {
           brand: {
@@ -161,6 +174,8 @@ const config: Config = {
           "ui-sans-serif",
           "system-ui",
         ],
+        "display-noir": ["var(--font-syncopate)", "sans-serif"],
+        "body-noir": ["var(--font-manrope)", "sans-serif"],
       },
       keyframes: {
         "accordion-down": {

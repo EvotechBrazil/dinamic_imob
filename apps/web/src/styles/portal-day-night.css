@@ -1,0 +1,68 @@
+/* Ciclo dia -> noite no hero (40s loop) */
+@keyframes portal-day-night {
+  0%   { filter: brightness(0.45) saturate(1.5) hue-rotate(-12deg) sepia(0.25) contrast(1.05); }
+  25%  { filter: brightness(0.75) saturate(1.05) hue-rotate(0deg)   sepia(0)    contrast(1); }
+  50%  { filter: brightness(0.55) saturate(1.55) hue-rotate(18deg)  sepia(0.35) contrast(1.08); }
+  75%  { filter: brightness(0.22) saturate(0.7)  hue-rotate(-35deg) sepia(0)    contrast(0.95); }
+  100% { filter: brightness(0.45) saturate(1.5)  hue-rotate(-12deg) sepia(0.25) contrast(1.05); }
+}
+@keyframes portal-sky-color {
+  0%   { background: linear-gradient(180deg, rgba(245,158,11,0.45) 0%, rgba(251,113,133,0.32) 28%, transparent 58%); }
+  25%  { background: linear-gradient(180deg, rgba(147,197,253,0.22) 0%, rgba(219,234,254,0.12) 30%, transparent 60%); }
+  50%  { background: linear-gradient(180deg, rgba(245,158,11,0.5)  0%, rgba(220,38,38,0.4)   30%, transparent 65%); }
+  75%  { background: linear-gradient(180deg, rgba(30,27,75,0.75)   0%, rgba(79,70,229,0.4)   35%, transparent 75%); }
+  100% { background: linear-gradient(180deg, rgba(245,158,11,0.45) 0%, rgba(251,113,133,0.32) 28%, transparent 58%); }
+}
+@keyframes portal-stars-fade {
+  0%, 30% { opacity: 0; }
+  60%, 90% { opacity: 0.9; }
+  100% { opacity: 0; }
+}
+@keyframes portal-twinkle {
+  0%, 100% { opacity: 0.3; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.3); }
+}
+
+.portal-hero-img-cycle { animation: portal-day-night 40s ease-in-out infinite; }
+.portal-hero-sky {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  mix-blend-mode: overlay;
+  animation: portal-sky-color 40s ease-in-out infinite;
+}
+.portal-stars {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  opacity: 0;
+  animation: portal-stars-fade 40s ease-in-out infinite;
+}
+.portal-stars .portal-star {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: #F5F2EB;
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(245,242,235,0.9);
+  animation: portal-twinkle 3s ease-in-out infinite;
+}
+
+/* CSS vars do tema Editorial Noir (dark) */
+:root {
+  --noir-bg: #0B0B14;
+  --noir-surface: #13131F;
+  --noir-text: #F5F2EB;
+  --noir-text-mute: rgba(245, 242, 235, 0.6);
+  --noir-text-subtle: rgba(245, 242, 235, 0.35);
+  --noir-indigo: #4F46E5;
+  --noir-indigo-glow: #818CF8;
+  --noir-amber: #F59E0B;
+  --noir-amber-soft: #FCD34D;
+  --noir-border: rgba(255, 255, 255, 0.08);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portal-hero-img-cycle,
+  .portal-hero-sky,
+  .portal-stars,
+  .portal-stars .portal-star { animation: none !important; }
+  .portal-hero-img-cycle { filter: brightness(0.55) saturate(1.1); }
+}

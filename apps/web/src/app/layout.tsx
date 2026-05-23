@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans, Inter, JetBrains_Mono } from "next/font/google";
+import { Plus_Jakarta_Sans, Inter, JetBrains_Mono, Syncopate, Manrope } from "next/font/google";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
@@ -24,6 +24,20 @@ const fontMono = JetBrains_Mono({
   display: "swap",
 });
 
+const fontSyncopate = Syncopate({
+  subsets: ["latin"],
+  weight: ["400", "700"],
+  variable: "--font-syncopate",
+  display: "swap",
+});
+
+const fontManrope = Manrope({
+  subsets: ["latin"],
+  weight: ["300", "400", "700"],
+  variable: "--font-manrope",
+  display: "swap",
+});
+
 export const metadata: Metadata = {
   title: "Dinamic Imobiliária — Plataforma Integrada",
   description:
@@ -39,7 +53,7 @@ export default function RootLayout({
   return (
     <html
       lang="pt-BR"
-      className={`${fontDisplay.variable} ${fontSans.variable} ${fontMono.variable}`}
+      className={`${fontDisplay.variable} ${fontSans.variable} ${fontMono.variable} ${fontSyncopate.variable} ${fontManrope.variable}`}
     >
       <body className="min-h-screen bg-app text-ink antialiased">
         <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
