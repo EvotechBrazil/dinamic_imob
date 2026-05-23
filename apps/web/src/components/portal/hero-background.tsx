@@ -1,88 +1,92 @@
 "use client";
 
-import { motion } from "framer-motion";
+import Image from "next/image";
 
 /**
- * HeroBackground — camada decorativa atrás do <HeroChat />.
+ * HeroBackground — Editorial Noir dark cinematic.
  *
- * 3 blobs dourados em blur-3xl que se movem MUITO devagar (28-36s loop)
- * sobre um gradient mesh estático suave. Tudo aria-hidden + pointer-events-none
- * pra não atrapalhar leitor de tela nem cliques.
+ * 4 camadas empilhadas:
+ *  1. Foto da imobiliária com filter animation `portal-hero-img-cycle` (40s
+ *     loop dia→entardecer→noite).
+ *  2. Overlay céu (`portal-hero-sky`) sincronizado com o ciclo.
+ *  3. Vinheta radial + gradient vertical pra escurecer bordas e legibilizar
+ *     o painel central.
+ *  4. 25 estrelas (`portal-stars` / `portal-star`) visíveis só no trecho
+ *     "noite" do keyframe (CSS controla opacity).
  *
- * Squad A · Agent 6 · uau item F.
+ * Tudo aria-hidden + pointer-events-none. CSS-only animations vivem em
+ * `apps/web/src/styles/portal-day-night.css` (Agent 1).
+ *
+ * Squad Editorial Noir · Agent 2.
  */
 export function HeroBackground() {
+  const stars = [
+    { top: "8%", left: "12%", delay: "0s" },
+    { top: "15%", left: "88%", delay: "0.5s" },
+    { top: "22%", left: "25%", delay: "1.2s" },
+    { top: "18%", left: "67%", delay: "0.8s" },
+    { top: "32%", left: "42%", delay: "2s" },
+    { top: "9%", left: "55%", delay: "1.5s" },
+    { top: "28%", left: "8%", delay: "0.3s" },
+    { top: "35%", left: "78%", delay: "2.5s" },
+    { top: "12%", left: "38%", delay: "1.8s" },
+    { top: "25%", left: "92%", delay: "0.6s" },
+    { top: "40%", left: "15%", delay: "1.1s" },
+    { top: "7%", left: "72%", delay: "2.2s" },
+    { top: "19%", left: "48%", delay: "0.4s" },
+    { top: "30%", left: "60%", delay: "1.7s" },
+    { top: "14%", left: "5%", delay: "2.4s" },
+    { top: "38%", left: "35%", delay: "0.9s" },
+    { top: "21%", left: "82%", delay: "1.4s" },
+    { top: "6%", left: "28%", delay: "0.7s" },
+    { top: "33%", left: "95%", delay: "2.6s" },
+    { top: "16%", left: "18%", delay: "1.9s" },
+    { top: "27%", left: "50%", delay: "1s" },
+    { top: "11%", left: "62%", delay: "0.2s" },
+    { top: "36%", left: "24%", delay: "2.3s" },
+    { top: "23%", left: "70%", delay: "1.6s" },
+    { top: "5%", left: "45%", delay: "2.1s" },
+  ];
+
   return (
     <div
-      className="absolute inset-0 overflow-hidden pointer-events-none"
       aria-hidden="true"
+      className="absolute inset-0 z-0 overflow-hidden pointer-events-none"
     >
-      {/* Camada base — gradient mesh estático, premium leve */}
-      <div className="absolute inset-0 bg-gradient-to-br from-portal-gold-soft/20 via-transparent to-portal-bg/40" />
+      {/* Camada 1 — foto da imobiliária com ciclo dia→noite */}
+      <div className="absolute -inset-[10%] portal-hero-img-cycle">
+        <Image
+          src="/portal/frente-imob.webp"
+          alt=""
+          fill
+          priority
+          sizes="100vw"
+          className="object-cover"
+        />
+      </div>
 
-      {/* Blob 1 — canto superior esquerdo, gold principal */}
-      <motion.div
-        className="absolute -top-32 -left-32 h-[480px] w-[480px] rounded-full bg-portal-gold/20 blur-3xl"
-        animate={{
-          x: [0, 60, -20, 0],
-          y: [0, -40, 30, 0],
-          scale: [1, 1.08, 0.95, 1],
-        }}
-        transition={{
-          duration: 32,
-          repeat: Infinity,
-          ease: "easeInOut",
+      {/* Camada 2 — overlay céu animado */}
+      <div className="portal-hero-sky absolute inset-0" />
+
+      {/* Camada 3 — vinheta dark sobre tudo */}
+      <div
+        className="absolute inset-0"
+        style={{
+          background:
+            "radial-gradient(ellipse at center, transparent 0%, rgba(11, 11, 20, 0.5) 60%, rgba(11, 11, 20, 0.95) 100%), linear-gradient(180deg, rgba(11,11,20,0.4) 0%, transparent 30%, transparent 70%, rgba(11,11,20,0.9) 100%)",
         }}
       />
 
-      {/* Blob 2 — centro-direita, amber mais quente */}
-      <motion.div
-        className="absolute top-1/3 -right-24 h-[420px] w-[420px] rounded-full bg-amber-300/25 blur-3xl"
-        animate={{
-          x: [0, -50, 30, 0],
-          y: [0, 50, -20, 0],
-          scale: [1, 0.92, 1.06, 1],
-        }}
-        transition={{
-          duration: 28,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 4,
-        }}
-      />
-
-      {/* Blob 3 — canto inferior central, gold-dark mais sutil */}
-      <motion.div
-        className="absolute -bottom-40 left-1/3 h-[380px] w-[380px] rounded-full bg-portal-gold-dark/15 blur-3xl"
-        animate={{
-          x: [0, 40, -60, 0],
-          y: [0, -30, 20, 0],
-          scale: [1, 1.04, 0.98, 1],
-        }}
-        transition={{
-          duration: 36,
-          repeat: Infinity,
-          ease: "easeInOut",
-          delay: 8,
-        }}
-      />
-
-      {/* Grain noise sutil — SVG pattern de pontos pra dar textura premium */}
-      <svg
-        className="absolute inset-0 h-full w-full opacity-[0.04] mix-blend-overlay"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <filter id="hero-noise">
-          <feTurbulence
-            type="fractalNoise"
-            baseFrequency="0.85"
-            numOctaves="2"
-            stitchTiles="stitch"
+      {/* Camada 4 — estrelas (só visíveis à noite via keyframe sync) */}
+      <div className="portal-stars absolute inset-0">
+        {stars.map((s, i) => (
+          <span
+            key={i}
+            className="portal-star"
+            style={{ top: s.top, left: s.left, animationDelay: s.delay }}
           />
-          <feColorMatrix type="saturate" values="0" />
-        </filter>
-        <rect width="100%" height="100%" filter="url(#hero-noise)" />
-      </svg>
+        ))}
+      </div>
     </div>
   );
 }

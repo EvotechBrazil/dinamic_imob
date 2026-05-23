@@ -40,6 +40,22 @@ const PROOF_POINTS: readonly string[] = [
   "Resposta em segundos",
 ];
 
+// Editorial Noir tokens (CSS vars vivem em portal-day-night.css).
+// Usar arbitrary values garante que funciona mesmo sem registro no
+// tailwind.config (que o Agent 1 ainda pode estar finalizando).
+const NOIR = {
+  bg: "var(--noir-bg)",
+  surface: "var(--noir-surface)",
+  text: "var(--noir-text)",
+  textMute: "var(--noir-text-mute)",
+  textSubtle: "var(--noir-text-subtle)",
+  indigo: "var(--noir-indigo)",
+  indigoGlow: "var(--noir-indigo-glow)",
+  amber: "var(--noir-amber)",
+  amberSoft: "var(--noir-amber-soft)",
+  border: "var(--noir-border)",
+} as const;
+
 interface DemoOverlayState {
   active: boolean;
   userMessage: string | null;
@@ -147,9 +163,10 @@ export function HeroChat() {
     [handleSend],
   );
 
-  // Demo auto-play wiring (uau item A).
+  // Demo auto-play wiring (uau item A) — desativado a pedido do cliente:
+  // painel fica exposto sem instrução automática toda vez que abre.
   useDemoAutoplay({
-    enabled: isIdle && input.length === 0,
+    enabled: false,
     idleDelayMs: 6000,
     onStart: () => {
       setDemoOverlay({ active: true, userMessage: null, aiMessage: null });
@@ -169,7 +186,7 @@ export function HeroChat() {
     <section
       className={cn(
         "relative min-h-[calc(100vh-80px)] flex items-center justify-center px-4 py-16 lg:py-24 overflow-hidden",
-        "bg-gradient-to-b from-white via-portal-gold-soft/30 to-portal-bg",
+        "text-[var(--noir-text)]",
       )}
     >
       <HeroBackground />
@@ -215,21 +232,11 @@ export function HeroChat() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.5 }}
-                className="font-portal-display text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight leading-tight text-portal-text mt-8 text-center"
+                className="font-[var(--font-syncopate)] text-3xl sm:text-4xl lg:text-5xl font-bold tracking-tight leading-tight text-[var(--noir-text)] mt-8 text-center"
+                style={{ fontFamily: "var(--font-syncopate), Manrope, ui-sans-serif, system-ui" }}
               >
                 {greeting}
               </motion.h1>
-
-              {/* Subtítulo */}
-              <motion.p
-                initial={{ opacity: 0, y: 12 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.3, duration: 0.5 }}
-                className="text-lg lg:text-xl text-portal-text-muted max-w-2xl mx-auto mt-4 leading-relaxed text-center"
-              >
-                Sou a IA da Dinamic — me conta o que você procura que eu mostro
-                as melhores opções de Arapongas.
-              </motion.p>
 
               {/* Input grande */}
               <motion.div
@@ -238,7 +245,7 @@ export function HeroChat() {
                 transition={{ delay: 0.4, duration: 0.5 }}
                 className="max-w-3xl mx-auto mt-10 relative"
               >
-                <div className="bg-white border border-portal-border rounded-2xl shadow-portal-card focus-within:ring-2 focus-within:ring-portal-gold focus-within:border-portal-gold transition p-5 pr-16">
+                <div className="bg-[color:color-mix(in_oklab,var(--noir-surface)_70%,transparent)] border border-[var(--noir-border)] rounded-2xl backdrop-blur-xl shadow-2xl focus-within:ring-2 focus-within:ring-[var(--noir-amber)] focus-within:border-[var(--noir-amber)] transition p-5 pr-16">
                   <textarea
                     ref={textareaRef}
                     rows={1}
@@ -247,7 +254,8 @@ export function HeroChat() {
                     onKeyDown={handleKeyDown}
                     placeholder={PLACEHOLDERS[placeholderIndex]}
                     aria-label="Conte pra IA o que você procura"
-                    className="min-h-[112px] max-h-[260px] resize-none w-full outline-none text-base lg:text-lg placeholder:text-portal-text-subtle font-medium bg-transparent leading-relaxed"
+                    className="min-h-[112px] max-h-[260px] resize-none w-full outline-none text-base lg:text-lg placeholder:text-[var(--noir-text-subtle)] text-[var(--noir-text)] bg-transparent leading-relaxed"
+                    style={{ fontFamily: "var(--font-manrope), ui-sans-serif, system-ui" }}
                   />
                   <button
                     type="button"
@@ -255,12 +263,15 @@ export function HeroChat() {
                     disabled={!input.trim() || isStreaming}
                     aria-disabled={!input.trim() || isStreaming}
                     aria-label="Enviar mensagem"
-                    className="absolute bottom-3 right-3 h-11 w-11 rounded-xl bg-portal-gold text-white shadow-portal-cta hover:shadow-lg disabled:bg-portal-text-subtle disabled:shadow-none disabled:cursor-not-allowed transition flex items-center justify-center"
+                    className="absolute bottom-3 right-3 h-11 w-11 rounded-xl bg-[var(--noir-amber)] text-[var(--noir-bg)] shadow-[0_8px_24px_rgba(245,158,11,0.35)] hover:shadow-[0_12px_32px_rgba(245,158,11,0.5)] hover:bg-[var(--noir-amber-soft)] disabled:bg-[var(--noir-text-subtle)] disabled:shadow-none disabled:cursor-not-allowed transition flex items-center justify-center"
                   >
                     <ArrowUp className="h-5 w-5" />
                   </button>
                 </div>
-                <p className="text-xs text-portal-text-subtle text-center mt-2">
+                <p
+                  className="text-xs text-[var(--noir-text-subtle)] text-center mt-2"
+                  style={{ fontFamily: "var(--font-manrope), ui-sans-serif, system-ui" }}
+                >
                   Enter pra enviar · Shift+Enter pra quebrar linha
                 </p>
 
@@ -275,9 +286,12 @@ export function HeroChat() {
                         transition={{ duration: 0.25 }}
                         className="absolute -bottom-4 left-0 right-0 translate-y-full pt-6 pointer-events-none"
                       >
-                        <div className="bg-white/95 backdrop-blur border border-portal-border rounded-2xl shadow-portal-card p-4 max-w-xl mx-auto flex flex-col gap-3">
-                          <div className="flex items-center gap-2 text-xs uppercase tracking-wide text-portal-text-subtle">
-                            <span className="inline-block h-1.5 w-1.5 rounded-full bg-portal-gold animate-pulse" />
+                        <div className="bg-[color:color-mix(in_oklab,var(--noir-surface)_90%,transparent)] backdrop-blur-xl border border-[var(--noir-border)] rounded-2xl shadow-2xl p-4 max-w-xl mx-auto flex flex-col gap-3">
+                          <div
+                            className="flex items-center gap-2 text-xs uppercase tracking-wide text-[var(--noir-text-mute)]"
+                            style={{ fontFamily: "var(--font-manrope), ui-sans-serif, system-ui" }}
+                          >
+                            <span className="inline-block h-1.5 w-1.5 rounded-full bg-[var(--noir-amber)] animate-pulse" />
                             Veja como a IA atende
                           </div>
                           {demoOverlay.userMessage && (
@@ -312,7 +326,8 @@ export function HeroChat() {
                     type="button"
                     onClick={() => void handleSuggestion(s)}
                     disabled={isStreaming}
-                    className="rounded-full bg-white border border-portal-border px-4 py-2.5 text-sm font-medium text-portal-text hover:border-portal-gold hover:bg-portal-gold-soft transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="rounded-full bg-[color:color-mix(in_oklab,var(--noir-bg)_50%,transparent)] border border-[var(--noir-border)] px-4 py-2.5 text-sm font-medium text-[var(--noir-text)] hover:border-[var(--noir-amber)] hover:bg-[color:color-mix(in_oklab,var(--noir-amber)_10%,transparent)] hover:text-[var(--noir-amber-soft)] transition cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                    style={{ fontFamily: "var(--font-manrope), ui-sans-serif, system-ui" }}
                   >
                     {s}
                   </button>
@@ -329,9 +344,10 @@ export function HeroChat() {
                 {PROOF_POINTS.map((p) => (
                   <span
                     key={p}
-                    className="flex items-center gap-2 text-sm text-portal-text-muted"
+                    className="flex items-center gap-2 text-xs text-[var(--noir-text-mute)] uppercase tracking-wider"
+                    style={{ fontFamily: "var(--font-manrope), ui-sans-serif, system-ui" }}
                   >
-                    <Check className="h-3.5 w-3.5 text-portal-success" />
+                    <Check className="h-3.5 w-3.5 text-emerald-400" />
                     {p}
                   </span>
                 ))}
@@ -345,15 +361,18 @@ export function HeroChat() {
               transition={{ duration: 0.35 }}
               className="w-full"
             >
-              <div className="max-w-3xl mx-auto bg-white border border-portal-border rounded-2xl shadow-portal-card mt-8">
-                <div className="p-4 border-b border-portal-border flex items-center justify-between">
-                  <h2 className="font-semibold text-portal-text">
+              <div className="max-w-3xl mx-auto bg-[color:color-mix(in_oklab,var(--noir-surface)_70%,transparent)] border border-[var(--noir-border)] rounded-2xl backdrop-blur-xl shadow-2xl mt-8">
+                <div className="p-4 border-b border-[var(--noir-border)] flex items-center justify-between">
+                  <h2
+                    className="font-bold text-[var(--noir-text)] tracking-wide"
+                    style={{ fontFamily: "var(--font-syncopate), Manrope, ui-sans-serif, system-ui" }}
+                  >
                     Conversa com a IA Dinamic
                   </h2>
                   <button
                     type="button"
                     onClick={reset}
-                    className="text-sm text-portal-text-muted hover:text-portal-gold-dark transition"
+                    className="text-sm text-[var(--noir-text-mute)] hover:text-[var(--noir-amber)] transition"
                   >
                     Nova conversa
                   </button>
@@ -377,7 +396,10 @@ export function HeroChat() {
                   ))}
 
                   {isStreaming && (
-                    <div className="flex items-center gap-1.5 text-xs text-portal-text-subtle pl-2 pt-1">
+                    <div
+                      className="flex items-center gap-1.5 text-xs text-[var(--noir-text-subtle)] pl-2 pt-1"
+                      style={{ fontFamily: "var(--font-manrope), ui-sans-serif, system-ui" }}
+                    >
                       <span>IA está digitando</span>
                       <motion.span
                         className="inline-flex gap-0.5"
@@ -386,7 +408,7 @@ export function HeroChat() {
                         {[0, 1, 2].map((d) => (
                           <motion.span
                             key={d}
-                            className="inline-block h-1 w-1 rounded-full bg-portal-gold"
+                            className="inline-block h-1 w-1 rounded-full bg-[var(--noir-amber)]"
                             animate={{ opacity: [0.2, 1, 0.2] }}
                             transition={{
                               duration: 1.1,
@@ -403,7 +425,7 @@ export function HeroChat() {
 
               {/* Input continua visível abaixo do card */}
               <div className="max-w-3xl mx-auto mt-6 relative">
-                <div className="bg-white border border-portal-border rounded-2xl shadow-portal-card focus-within:ring-2 focus-within:ring-portal-gold focus-within:border-portal-gold transition p-5 pr-16">
+                <div className="bg-[color:color-mix(in_oklab,var(--noir-surface)_70%,transparent)] border border-[var(--noir-border)] rounded-2xl backdrop-blur-xl shadow-2xl focus-within:ring-2 focus-within:ring-[var(--noir-amber)] focus-within:border-[var(--noir-amber)] transition p-5 pr-16">
                   <textarea
                     ref={textareaRef}
                     rows={1}
@@ -412,19 +434,23 @@ export function HeroChat() {
                     onKeyDown={handleKeyDown}
                     placeholder={PLACEHOLDERS[placeholderIndex]}
                     aria-label="Continue a conversa"
-                    className="min-h-[112px] max-h-[260px] resize-none w-full outline-none text-base lg:text-lg placeholder:text-portal-text-subtle font-medium bg-transparent leading-relaxed"
+                    className="min-h-[112px] max-h-[260px] resize-none w-full outline-none text-base lg:text-lg placeholder:text-[var(--noir-text-subtle)] text-[var(--noir-text)] bg-transparent leading-relaxed"
+                    style={{ fontFamily: "var(--font-manrope), ui-sans-serif, system-ui" }}
                   />
                   <button
                     type="button"
                     onClick={() => void handleSend()}
                     disabled={!input.trim() || isStreaming}
                     aria-label="Enviar mensagem"
-                    className="absolute bottom-3 right-3 h-11 w-11 rounded-xl bg-portal-gold text-white shadow-portal-cta hover:shadow-lg disabled:bg-portal-text-subtle disabled:shadow-none disabled:cursor-not-allowed transition flex items-center justify-center"
+                    className="absolute bottom-3 right-3 h-11 w-11 rounded-xl bg-[var(--noir-amber)] text-[var(--noir-bg)] shadow-[0_8px_24px_rgba(245,158,11,0.35)] hover:shadow-[0_12px_32px_rgba(245,158,11,0.5)] hover:bg-[var(--noir-amber-soft)] disabled:bg-[var(--noir-text-subtle)] disabled:shadow-none disabled:cursor-not-allowed transition flex items-center justify-center"
                   >
                     <ArrowUp className="h-5 w-5" />
                   </button>
                 </div>
-                <p className="text-xs text-portal-text-subtle text-center mt-2">
+                <p
+                  className="text-xs text-[var(--noir-text-subtle)] text-center mt-2"
+                  style={{ fontFamily: "var(--font-manrope), ui-sans-serif, system-ui" }}
+                >
                   Enter pra enviar · Shift+Enter pra quebrar linha
                 </p>
               </div>
@@ -435,3 +461,6 @@ export function HeroChat() {
     </section>
   );
 }
+// Silencia o linter no NOIR map (mantido como referência inline; valores
+// usados via arbitrary CSS values em todo o componente).
+void NOIR;
