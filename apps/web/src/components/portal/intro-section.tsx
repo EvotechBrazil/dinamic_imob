@@ -15,7 +15,7 @@ interface Stat {
 }
 
 const STATS: ReadonlyArray<Stat> = [
-  { num: "628", label: "Imóveis ativos" },
+  { num: "12", label: "Imóveis ativos" },
   { num: "12", label: "Anos no mercado" },
   { num: "8472-F", label: "CRECI" },
 ];

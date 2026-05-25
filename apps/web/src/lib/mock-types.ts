@@ -10,7 +10,7 @@
 // ============================================================
 // Omnichannel
 // ============================================================
-export type ChannelType = "whatsapp" | "instagram" | "facebook";
+export type ChannelType = "whatsapp" | "instagram" | "facebook" | "web";
 
 export type Setor =
   | "vendas"
@@ -139,6 +139,11 @@ export interface Lead {
   ultimaInteracao: string;
   telefone?: string;
   origemCanal?: ChannelType;
+  /**
+   * ID da conversa omnichannel que originou esse lead (se houver).
+   * Permite ir do card no Kanban → thread completa no inbox.
+   */
+  conversationId?: string;
 }
 
 export type TipoImovel = "apartamento" | "casa" | "terreno" | "comercial";
@@ -231,6 +236,7 @@ export const CHANNEL_LABELS: Record<ChannelType, string> = {
   whatsapp: "WhatsApp",
   instagram: "Instagram",
   facebook: "Facebook",
+  web: "Chat Web",
 };
 
 export const SETOR_LABELS: Record<Setor, string> = {

@@ -25,6 +25,13 @@ import {
 import { sendAgendamentoEmail } from "@/lib/email-resend";
 import { addLead } from "@/lib/lead-store";
 import { PROPERTIES } from "@/components/sections/crm/mock";
+import {
+  createConversation,
+  appendMessage,
+  bindLeadToConversation,
+  markConversationHasBooking,
+  getConversation,
+} from "@/lib/conversation-store";
 
 export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
@@ -60,6 +67,8 @@ function alreadyDispatched(m: AgendamentoMarker): boolean {
 interface Body {
   messages?: Array<{ role: "user" | "assistant"; content: string }>;
   context?: string;
+  conversationId?: string;
+  sessionId?: string;
 }
 
 function fmtBRL(n: number) {
@@ -70,7 +79,7 @@ function fmtBRL(n: number) {
   });
 }
 
-async function dispatchAgendamento(marker: AgendamentoMarker) {
+async function dispatchAgendamento(marker: AgendamentoMarker, convId: string) {
   const imovel = PROPERTIES.find((p) => p.id === marker.imovelId);
   const setor: "vendas" | "locacao" =
     imovel?.finalidade === "aluguel" ? "locacao" : "vendas";
@@ -84,8 +93,11 @@ async function dispatchAgendamento(marker: AgendamentoMarker) {
       bairro: imovel.bairro,
       preco: imovel.preco,
       finalidade: imovel.finalidade,
+      conversationId: convId,
     });
     console.log("[lead-store] lead criado:", lead.id, lead.nome, "→ visita");
+    bindLeadToConversation(convId, lead.id);
+    markConversationHasBooking(convId);
   }
 
   try {
@@ -133,6 +145,29 @@ export async function POST(req: NextRequest) {
     return new Response(JSON.stringify({ error: "messages requerido" }), {
       status: 400,
       headers: { "content-type": "application/json" },
+    });
+  }
+
+  // Resolve conversa: usa convId existente se válido, senão cria uma nova.
+  let convId = body.conversationId;
+  if (!convId || !getConversation(convId)) {
+    const newConv = createConversation({
+      channel: "web",
+      sessionId: body.sessionId,
+    });
+    convId = newConv.id;
+  }
+  // Captura imutável pro closure do stream.
+  const finalConvId: string = convId;
+
+  // Persiste a última mensagem do usuário antes do stream.
+  const lastUserMsg = body.messages.filter((m) => m.role === "user").at(-1);
+  if (lastUserMsg) {
+    appendMessage(finalConvId, {
+      direction: "inbound",
+      sender: "lead",
+      content: String(lastUserMsg.content ?? ""),
+      nome: "Visitante",
     });
   }
 
@@ -223,7 +258,7 @@ export async function POST(req: NextRequest) {
           } else {
             console.log("[agendamento] disparando email:", marker);
             // Fire-and-forget: não bloqueia o fechamento do stream.
-            void dispatchAgendamento(marker);
+            void dispatchAgendamento(marker, finalConvId);
           }
         } else if (
           fullText.toLowerCase().includes("vou encaminhar") ||
@@ -233,6 +268,19 @@ export async function POST(req: NextRequest) {
             "[agendamento] IA disse que ia encaminhar mas NÃO emitiu o marker [[AGENDAMENTO]]. Texto completo abaixo (revisar prompt):"
           );
           console.warn(fullText);
+        }
+
+        // Persiste a resposta da IA na conversa (sem o marker, que o user nunca vê).
+        const cleanReply = fullText
+          .replace(/\[\[AGENDAMENTO\]\][\s\S]*?\[\[\/AGENDAMENTO\]\]/g, "")
+          .trim();
+        if (cleanReply) {
+          appendMessage(finalConvId, {
+            direction: "outbound",
+            sender: "ai",
+            content: cleanReply,
+            nome: "IA Dinamic",
+          });
         }
 
         controller.close();
@@ -250,6 +298,8 @@ export async function POST(req: NextRequest) {
       "content-type": "text/plain; charset=utf-8",
       "cache-control": "no-cache, no-transform",
       "x-content-type-options": "nosniff",
+      "x-conversation-id": finalConvId,
+      "access-control-expose-headers": "x-conversation-id",
     },
   });
 }

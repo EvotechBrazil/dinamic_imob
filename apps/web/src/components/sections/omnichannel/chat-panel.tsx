@@ -21,6 +21,7 @@ const channelDot: Record<Conversation["canal"], string> = {
   whatsapp: "bg-emerald-500",
   instagram: "bg-pink-500",
   facebook: "bg-blue-600",
+  web: "bg-amber-500",
 };
 
 interface ChatPanelProps {

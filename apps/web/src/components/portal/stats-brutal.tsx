@@ -10,7 +10,7 @@ if (typeof window !== "undefined") {
 
 const STATS = [
   { num: "12", suffix: "", label: "Anos no mercado", amber: false },
-  { num: "628", suffix: "", label: "Imóveis ativos", amber: true },
+  { num: "12", suffix: "", label: "Imóveis ativos", amber: true },
   { num: "97", suffix: "%", label: "Satisfação clientes", amber: false },
 ];
 

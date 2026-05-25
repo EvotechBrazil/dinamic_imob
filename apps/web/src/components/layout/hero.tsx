@@ -3,7 +3,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 
 const MINI_KPIS = [
-  { label: "Imóveis ativos", value: "628" },
+  { label: "Imóveis ativos", value: "12" },
   { label: "Conversas/dia", value: "142" },
   { label: "Contratos", value: "187" },
   { label: "Custo IA/conversa", value: "R$ 0,02" },

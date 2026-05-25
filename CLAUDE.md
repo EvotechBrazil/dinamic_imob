@@ -4,11 +4,12 @@
 
 Plataforma própria custom para a **Dinamic Imobiliária** (Arapongas-PR) — substitui o site atual da Flex49/Code49 e adiciona sistema de gestão completo: Portal público + Agente IA (chat + WhatsApp) + CRM + Financeiro de locação. Cliente atual: ~628 imóveis ativos, 2 números WhatsApp ((43) 98847-8713 vendas / (43) 98847-8670 locações).
 
-**Status atual:** Fase 3 do portal concluída e em produção. Próximo passo: voltar ao plano original (Sprint 1 backend modules) ou iterar visual conforme feedback do cliente.
+**Status atual:** Fase 4 (Dinamic Channel — inbox omnichannel real) concluída e em produção. Próximo passo: voltar ao plano original (Sprint 1 backend NestJS + migração in-memory→Prisma) ou iterar mais features no admin.
 
 ## Em produção
 
-- **Portal público:** https://dinamic-imob-web.vercel.app/portal — redesign Editorial Noir cinematic, chat IA OpenRouter funcionando, agendamento de visita por email Resend
+- **Portal público:** https://dinamic-imob-web.vercel.app/portal — redesign Editorial Noir cinematic, chat IA OpenRouter (Haiku 4.5) funcionando, agendamento de visita por email Resend
+- **Inbox Dinamic Channel:** https://dinamic-imob-web.vercel.app/admin/inbox — 3 colunas, polling 3s, multi-canal (WhatsApp/IG/FB/Web), conversa do chat IA cai aqui, lead vinculado ao Kanban
 - **Repositório:** https://github.com/EvotechBrazil/dinamic_imob — branch `main` sincronizada
 - **Hosting:** Vercel (apps/web). Apps/api e apps/worker ainda local-only.
 
@@ -109,7 +110,8 @@ Demo autoplay (uau item) está **desativado** a pedido do cliente — painel fic
 - ~~Sprint 0~~ ✅ — fundação (monorepo, docker-compose, .env, OpenRouter ativa) + landing demo entregue (rota `/`)
 - ~~Polimento da landing demo executiva~~ ✅ — 2026-05-22
 - ~~**Fase 3** — Redesign Editorial Noir do `/portal`~~ ✅ — 2026-05-23, em produção Vercel
-- **Próximo:** decidir entre (a) iterar visual conforme feedback do cliente ou (b) voltar Sprint 1 backend (NestJS modules + Prisma + BullMQ workers)
+- ~~**Fase 4** — Dinamic Channel inbox (`/admin/inbox` + persistência chat IA + bridge Kanban) ~~ ✅ — 2026-05-25, em produção Vercel. In-memory store com interface drop-in pra Prisma no Sprint 1
+- **Próximo:** decidir entre (a) iterar features no admin (Kanban no /admin, dashboards, tasks) ou (b) Sprint 1 backend (NestJS + Prisma migration do conversation-store)
 
 ## Como retomar este projeto
 

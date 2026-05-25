@@ -54,6 +54,7 @@ export interface AddLeadInput {
   bairro: string;
   preco: number;
   finalidade: "aluguel" | "venda";
+  conversationId?: string;
 }
 
 function avatarFor(nome: string): string {
@@ -81,6 +82,7 @@ export function addLead(input: AddLeadInput): StoredLead {
     setor,
     ultimaInteracao: "agora",
     addedAt: Date.now(),
+    conversationId: input.conversationId,
   };
 
   store.set(id, lead);

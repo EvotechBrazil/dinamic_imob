@@ -52,8 +52,8 @@ export function PortalFooter() {
             Disponíveis agora
           </div>
           <h2
-            className="m-0 font-display-noir font-bold leading-[0.88] tracking-[-0.03em] text-noir-text"
-            style={{ fontSize: "clamp(80px, 14vw, 160px)" }}
+            className="m-0 break-words font-display-noir font-bold leading-[0.88] tracking-[-0.03em] text-noir-text"
+            style={{ fontSize: "clamp(44px, 13vw, 160px)" }}
           >
             VAMOS CONVERSAR
           </h2>

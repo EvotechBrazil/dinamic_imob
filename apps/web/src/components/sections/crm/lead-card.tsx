@@ -1,6 +1,7 @@
 "use client";
 
-import { MapPin, GripVertical, MessageCircle, Instagram, Facebook, Clock } from "lucide-react";
+import Link from "next/link";
+import { MapPin, GripVertical, MessageCircle, Instagram, Facebook, Globe, Clock } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 import type { ChannelType, Lead } from "@/lib/mock-types";
@@ -10,12 +11,14 @@ const CHANNEL_ICONS: Record<ChannelType, React.ComponentType<{ className?: strin
   whatsapp: MessageCircle,
   instagram: Instagram,
   facebook: Facebook,
+  web: Globe,
 };
 
 const CHANNEL_OVERLAY_STYLE: Record<ChannelType, string> = {
   whatsapp: "text-emerald-600",
   instagram: "text-pink-600",
   facebook: "text-sky-600",
+  web: "text-amber-600",
 };
 
 const formatBRL = (value: number) =>
@@ -120,6 +123,16 @@ export function LeadCard({ lead }: LeadCardProps) {
         <Clock className="h-3 w-3 shrink-0" aria-hidden />
         <span className="truncate">{lead.ultimaInteracao}</span>
       </div>
+
+      {lead.conversationId && (
+        <Link
+          href={`/admin/inbox?c=${lead.conversationId}`}
+          onClick={(e) => e.stopPropagation()}
+          className="mt-2 inline-flex items-center gap-1 text-[10px] font-medium text-primary hover:underline"
+        >
+          Ver conversa →
+        </Link>
+      )}
     </div>
   );
 }

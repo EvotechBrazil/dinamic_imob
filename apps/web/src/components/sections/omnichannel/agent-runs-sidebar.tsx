@@ -1,7 +1,10 @@
+import Link from "next/link";
 import {
   ArrowRightLeft,
+  ArrowUpRight,
   CalendarClock,
   Database,
+  Inbox,
   Sparkles,
   Tag,
 } from "lucide-react";
@@ -75,10 +78,20 @@ export function AgentRunsSidebar({ runs }: AgentRunsSidebarProps) {
         <p className="mt-1.5 text-[11px] leading-relaxed text-muted">
           Cada passo da IA nessa conversa — totalmente auditável.
         </p>
+        <Link
+          href="/admin/inbox"
+          className="group mt-2.5 flex items-center justify-between gap-2 rounded-lg bg-primary px-3 py-2 text-[12px] font-semibold text-primary-foreground shadow-sm transition hover:bg-primary/90"
+        >
+          <span className="flex items-center gap-1.5">
+            <Inbox className="h-3.5 w-3.5" />
+            Abrir Dinamic Channel
+          </span>
+          <ArrowUpRight className="h-3.5 w-3.5 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+        </Link>
       </div>
 
       {/* Lista */}
-      <ScrollArea className="flex-1">
+      <ScrollArea className="min-h-0 flex-1">
         <ol className="relative px-4 py-4">
           {/* Linha vertical do timeline */}
           <span
@@ -120,6 +133,7 @@ export function AgentRunsSidebar({ runs }: AgentRunsSidebarProps) {
           </div>
         </div>
       </div>
+
     </div>
   );
 }
