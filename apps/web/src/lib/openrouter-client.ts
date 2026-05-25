@@ -167,8 +167,8 @@ function getApiKey(): string {
 
 function getModel(premium = false): string {
   return premium
-    ? process.env.OPENROUTER_PREMIUM_MODEL ?? "qwen/qwen3.7-max"
-    : process.env.OPENROUTER_DEFAULT_MODEL ?? "qwen/qwen3.7-max";
+    ? process.env.OPENROUTER_PREMIUM_MODEL ?? "anthropic/claude-sonnet-4.5"
+    : process.env.OPENROUTER_DEFAULT_MODEL ?? "anthropic/claude-haiku-4.5";
 }
 
 export function getOpenRouterClient() {
