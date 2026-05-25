@@ -107,7 +107,6 @@ vendor/
 .playwright-mcp/
 
 # ----- Screenshots de dev/debug na raiz -----
-/dinamic-landing-full.png
 /*-screenshot.png
 
 # ----- Misc -----

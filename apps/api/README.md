@@ -11,4 +11,4 @@ NestJS modular monolith com 14 bounded contexts: `auth`, `tenants`, `properties`
 - OpenAPI 3.1 (auto-gerado)
 - Adapters: OpenRouter (ativo), Asaas, Evolution, D4Sign, Mapbox, R2 (adiados)
 
-Ver detalhes em `docs/squads/02-backend.md`.
+Ver detalhes em `docs/workflow/squads/02-backend.md`.

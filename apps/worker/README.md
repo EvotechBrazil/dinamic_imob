@@ -10,4 +10,4 @@ Workers BullMQ para jobs assíncronos:
 
 **Status:** placeholder. Implementação na **task #11** do backlog.
 
-Ver detalhes em `docs/squads/02-backend.md`.
+Ver detalhes em `docs/workflow/squads/02-backend.md`.

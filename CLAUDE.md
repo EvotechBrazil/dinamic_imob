@@ -17,9 +17,10 @@ Plataforma própria custom para a **Dinamic Imobiliária** (Arapongas-PR) — su
 ## Documentos de referência
 
 - **Plano aprovado (fonte da verdade):** `C:\Users\Tiago\.claude\plans\vamos-iniciar-um-novo-virtual-lobster.md`
-- **Proposta estratégica original (27 seções, 20 módulos IA):** `docs/dinamic_web.md`
+- **Proposta estratégica original (27 seções, 20 módulos IA):** `docs/strategy/proposta-original.md`
 - **Plano Fase 3 (redesign portal):** `C:\Users\Tiago\.claude\plans\nossa-pagina-portal-de-mighty-flurry.md`
-- **Specs técnicas Fase 3:** `docs/portal-mockups/spec-dia-noite.md`, `docs/portal-mockups/spec-lovable-panel.md`, `docs/portal-mockups/mobile-audit.md`
+- **Specs técnicas Fase 3:** `docs/design/portal-mockups/spec-dia-noite.md`, `docs/design/portal-mockups/spec-lovable-panel.md`, `docs/design/portal-mockups/mobile-audit.md`
+- **Índice geral de docs:** `docs/README.md`
 
 ## Decisões já fechadas (não revisitar sem conversar)
 

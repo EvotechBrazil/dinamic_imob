@@ -13,4 +13,4 @@ Next.js 14 App Router — landing pública híbrida + admin Tremor + PWA mobile-
 - Mapbox GL JS
 - next-pwa
 
-Ver detalhes em `docs/squads/03-frontend.md`.
+Ver detalhes em `docs/workflow/squads/03-frontend.md`.
