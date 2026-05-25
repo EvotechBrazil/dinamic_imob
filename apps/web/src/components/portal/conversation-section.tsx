@@ -88,6 +88,31 @@ export function ConversationSection() {
     setGreeting(getGreeting());
   }, []);
 
+  // Listener pro evento de seed externo (ex: popup de pin no mapa de bairros
+  // dispara "dinamic:portal-conversation-seed" e a gente pré-preenche o textarea).
+  React.useEffect(() => {
+    function handleSeed(e: Event) {
+      const detail = (e as CustomEvent<{ prompt?: string }>).detail;
+      if (!detail?.prompt) return;
+      setInput(detail.prompt);
+      // foca após o paint pra garantir que o textarea esteja visível.
+      window.requestAnimationFrame(() => {
+        textareaRef.current?.focus();
+        // posiciona caret no fim
+        const len = detail.prompt!.length;
+        try {
+          textareaRef.current?.setSelectionRange(len, len);
+        } catch {
+          // setSelectionRange pode dar throw em alguns tipos de input — ignora silenciosamente.
+        }
+      });
+    }
+    window.addEventListener("dinamic:portal-conversation-seed", handleSeed as EventListener);
+    return () => {
+      window.removeEventListener("dinamic:portal-conversation-seed", handleSeed as EventListener);
+    };
+  }, []);
+
   // Rotative placeholder — pausa quando user está digitando.
   React.useEffect(() => {
     if (input.length > 0) return;

@@ -49,8 +49,8 @@ export function StatsBrutal() {
   }, []);
 
   return (
-    <section ref={ref} className="bg-noir-bg px-6 md:px-[6vw] py-[30vh] text-center">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-[4vw] items-end">
+    <section ref={ref} className="bg-noir-bg px-6 md:px-[6vw] py-[18vh] md:py-[30vh] text-center">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-y-16 md:gap-[4vw] items-end">
         {STATS.map((s) => (
           <div key={s.label} className="text-center">
             <div
@@ -58,12 +58,12 @@ export function StatsBrutal() {
               className={`font-display-noir font-bold leading-[0.85] tracking-[-0.05em] ${
                 s.amber ? "text-noir-amber" : "text-noir-text"
               }`}
-              style={{ fontSize: "clamp(120px, 18vw, 240px)" }}
+              style={{ fontSize: "clamp(72px, 16vw, 200px)" }}
             >
               {s.num}
               {s.suffix}
             </div>
-            <div className="font-body-noir text-xs uppercase tracking-[0.35em] text-noir-text-mute mt-6">
+            <div className="font-body-noir text-[10px] md:text-xs uppercase tracking-[0.25em] md:tracking-[0.35em] text-noir-text-mute mt-4 md:mt-6">
               {s.label}
             </div>
           </div>

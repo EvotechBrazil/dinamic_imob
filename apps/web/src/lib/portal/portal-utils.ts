@@ -106,6 +106,17 @@ export interface OpenChatWidgetDetail {
 }
 
 /**
+ * Payload pro evento "preencher o textarea da ConversationSection com um prompt".
+ * Usado quando o user clica em "Agendar visita" no popup de um pin no mapa do portal —
+ * a ConversationSection (que vive no #conversa-ia dentro do PortalFooterCTA)
+ * escuta esse evento, faz setInput(prompt) e foca o textarea, deixando o user
+ * revisar antes de enviar.
+ */
+export interface PortalConversationSeedDetail {
+  prompt: string;
+}
+
+/**
  * Dispatcher pro evento global de shortcut (Squad A → Squad B listener).
  */
 export function dispatchPortalShortcut(type: PortalShortcutType): void {
@@ -124,6 +135,23 @@ export function dispatchOpenChatWidget(prompt: string): void {
   if (typeof window === "undefined") return;
   const ev = new CustomEvent<OpenChatWidgetDetail>(
     "dinamic:open-chat-widget",
+    {
+      detail: { prompt },
+    },
+  );
+  window.dispatchEvent(ev);
+}
+
+/**
+ * Dispara o evento que faz a ConversationSection pré-preencher o textarea com `prompt`
+ * e focar nele. Combine com `scrollToId("conversa-ia")` se quiser scroll também
+ * (faça o scroll ANTES de dispatchar — assim o user vê a seção e depois o input
+ * aparece preenchido).
+ */
+export function dispatchPortalConversationSeed(prompt: string): void {
+  if (typeof window === "undefined") return;
+  const ev = new CustomEvent<PortalConversationSeedDetail>(
+    "dinamic:portal-conversation-seed",
     {
       detail: { prompt },
     },

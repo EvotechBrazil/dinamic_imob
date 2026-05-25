@@ -81,3 +81,139 @@
     min-height: auto !important;
   }
 }
+
+/* ArapongasMap — pulse dots e labels com leader-line amber */
+@keyframes portal-map-pulse {
+  0%   { transform: scale(1);   opacity: 0.8; }
+  100% { transform: scale(3.5); opacity: 0;   }
+}
+.portal-map-pulse {
+  animation: portal-map-pulse 2s ease-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+.portal-map-pulse-strong {
+  animation: portal-map-pulse 3.2s ease-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.portal-map-label {
+  position: absolute;
+  font-family: var(--font-syncopate), sans-serif;
+  font-weight: 700;
+  font-size: 12px;
+  letter-spacing: 0.28em;
+  color: var(--noir-text);
+  text-transform: uppercase;
+  background: transparent;
+  border: 0;
+  padding: 6px 10px;
+  cursor: pointer;
+  white-space: nowrap;
+  z-index: 4;
+  transition: color 0.3s ease, transform 0.3s ease;
+}
+.portal-map-label::before {
+  content: "";
+  position: absolute;
+  width: 48px;
+  height: 1px;
+  background: var(--noir-amber);
+  top: 50%;
+  left: -56px;
+}
+.portal-map-label.is-right::before {
+  left: auto;
+  right: -56px;
+}
+.portal-map-label:hover {
+  color: var(--noir-amber);
+}
+.portal-map-label:focus-visible {
+  outline: 1px solid var(--noir-amber);
+  outline-offset: 4px;
+  border-radius: 2px;
+}
+
+/* Portal map pins — clickable buttons absolutely positioned over the SVG map.
+   Reusa o keyframe portal-map-pulse (scale 1->3.5 opacity 0.8->0) já definido acima. */
+.portal-pin {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+.portal-pin-dot {
+  width: 100%;
+  height: 100%;
+  background: var(--noir-amber);
+  border: 2px solid rgba(255, 255, 255, 0.9);
+  border-radius: 50%;
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.6);
+}
+.portal-pin-halo {
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  background: rgba(245, 158, 11, 0.35);
+  pointer-events: none;
+  animation: portal-map-pulse 2.2s ease-out infinite;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+.portal-pin:hover:not(.is-active) {
+  transform: scale(1.25);
+}
+.portal-pin.is-active {
+  transform: scale(1.4);
+}
+.portal-pin.is-active .portal-pin-dot {
+  background: var(--noir-indigo);
+  box-shadow: 0 0 18px rgba(79, 70, 229, 0.8);
+  border-color: rgba(255, 255, 255, 1);
+}
+.portal-pin.is-active .portal-pin-halo {
+  display: none;
+}
+.portal-pin:focus-visible {
+  outline: 2px solid var(--noir-amber);
+  outline-offset: 6px;
+  border-radius: 50%;
+}
+
+/* Popups ancorados acima/abaixo do pin (translate -50% pra centralizar X). */
+@keyframes portal-popup-in {
+  0%   { opacity: 0; transform: translate(-50%, calc(-100% - 16px)) scale(0.92); }
+  100% { opacity: 1; transform: translate(-50%, calc(-100% - 24px)) scale(1); }
+}
+.portal-popup-anchor-above {
+  animation: portal-popup-in 200ms ease-out forwards;
+}
+@keyframes portal-popup-in-below {
+  0%   { opacity: 0; transform: translate(-50%, 16px) scale(0.92); }
+  100% { opacity: 1; transform: translate(-50%, 24px) scale(1); }
+}
+.portal-popup-anchor-below {
+  animation: portal-popup-in-below 200ms ease-out forwards;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .portal-map-pulse,
+  .portal-map-pulse-strong {
+    animation: none !important;
+    opacity: 0.35 !important;
+  }
+  .portal-pin-halo {
+    animation: none !important;
+    opacity: 0.35 !important;
+  }
+  .portal-popup-anchor-above,
+  .portal-popup-anchor-below {
+    animation: none !important;
+  }
+}
