@@ -60,6 +60,7 @@ export function HeroBackground() {
           alt=""
           fill
           priority
+          quality={95}
           sizes="100vw"
           className="object-cover"
         />

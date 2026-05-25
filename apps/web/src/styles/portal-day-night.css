@@ -1,10 +1,13 @@
-/* Ciclo dia -> noite no hero (40s loop) */
+/* Ciclo dia -> noite no hero (40s loop)
+   Exposicao calibrada: brightness subido em todas as fases pra preservar
+   detalhes da fachada mesmo no auge da noite. Contrast/saturate boostados
+   pra texturas (placa, fachada, janelas) saltarem na composicao escura. */
 @keyframes portal-day-night {
-  0%   { filter: brightness(0.45) saturate(1.5) hue-rotate(-12deg) sepia(0.25) contrast(1.05); }
-  25%  { filter: brightness(0.75) saturate(1.05) hue-rotate(0deg)   sepia(0)    contrast(1); }
-  50%  { filter: brightness(0.55) saturate(1.55) hue-rotate(18deg)  sepia(0.35) contrast(1.08); }
-  75%  { filter: brightness(0.22) saturate(0.7)  hue-rotate(-35deg) sepia(0)    contrast(0.95); }
-  100% { filter: brightness(0.45) saturate(1.5)  hue-rotate(-12deg) sepia(0.25) contrast(1.05); }
+  0%   { filter: brightness(0.62) saturate(1.35) hue-rotate(-10deg) sepia(0.15) contrast(1.12); }
+  25%  { filter: brightness(0.92) saturate(1.15) hue-rotate(0deg)   sepia(0)    contrast(1.08); }
+  50%  { filter: brightness(0.7)  saturate(1.4)  hue-rotate(15deg)  sepia(0.2)  contrast(1.15); }
+  75%  { filter: brightness(0.4)  saturate(0.85) hue-rotate(-28deg) sepia(0)    contrast(1.18); }
+  100% { filter: brightness(0.62) saturate(1.35) hue-rotate(-10deg) sepia(0.15) contrast(1.12); }
 }
 @keyframes portal-sky-color {
   0%   { background: linear-gradient(180deg, rgba(245,158,11,0.45) 0%, rgba(251,113,133,0.32) 28%, transparent 58%); }
@@ -64,7 +67,7 @@
   .portal-hero-sky,
   .portal-stars,
   .portal-stars .portal-star { animation: none !important; }
-  .portal-hero-img-cycle { filter: brightness(0.55) saturate(1.1); }
+  .portal-hero-img-cycle { filter: brightness(0.75) saturate(1.2) contrast(1.1); }
 }
 
 /* Mobile: desliga sticky/altura fixa do card stack pra cards flow em coluna.

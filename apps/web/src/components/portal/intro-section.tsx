@@ -4,6 +4,7 @@ import * as React from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextReveal } from "./text-reveal";
+import { cn } from "@/lib/utils";
 
 if (typeof window !== "undefined") {
   gsap.registerPlugin(ScrollTrigger);
@@ -67,22 +68,30 @@ export function IntroSection() {
           um corretor especialista quando você quer agendar visita.
         </p>
         <div ref={statsRef} className="mt-20 grid grid-cols-2 sm:grid-cols-3 gap-6 pt-8 border-t border-noir-amber">
-          {STATS.map((s, i) => (
-            <div
-              key={s.label}
-              className={i === STATS.length - 1 ? "col-span-2 sm:col-span-1" : undefined}
-            >
+          {STATS.map((s, i) => {
+            const isCreci = s.label === "CRECI";
+            return (
               <div
-                data-stat-num
-                className="font-display-noir font-bold text-[28px] sm:text-4xl md:text-5xl lg:text-6xl text-noir-text leading-none mb-3"
+                key={s.label}
+                className={i === STATS.length - 1 ? "col-span-2 sm:col-span-1" : undefined}
               >
-                {s.num}
+                <div
+                  data-stat-num
+                  className={cn(
+                    "font-display-noir font-bold text-noir-text leading-none mb-3 whitespace-nowrap",
+                    isCreci
+                      ? "text-xl sm:text-3xl md:text-4xl lg:text-5xl"
+                      : "text-[28px] sm:text-4xl md:text-5xl lg:text-6xl"
+                  )}
+                >
+                  {s.num}
+                </div>
+                <div className="font-body-noir text-[11px] uppercase tracking-[0.25em] text-noir-text-mute">
+                  {s.label}
+                </div>
               </div>
-              <div className="font-body-noir text-[11px] uppercase tracking-[0.25em] text-noir-text-mute">
-                {s.label}
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
     </section>

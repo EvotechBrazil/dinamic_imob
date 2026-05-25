@@ -4,7 +4,8 @@ import { IntroSection } from "@/components/portal/intro-section";
 import { StickyCardStack } from "@/components/portal/sticky-card-stack";
 import { Neighborhoods } from "@/components/portal/neighborhoods";
 import { StatsBrutal } from "@/components/portal/stats-brutal";
-import { PortalFooter } from "@/components/portal/portal-footer";
+import { PortalFooterCTA } from "@/components/portal/portal-footer-cta";
+import { PortalFooterSitemap } from "@/components/portal/portal-footer-sitemap";
 import { FloatingActions } from "@/components/portal/floating-actions";
 
 export default function PortalPage() {
@@ -18,7 +19,8 @@ export default function PortalPage() {
         <Neighborhoods />
         <StatsBrutal />
       </main>
-      <PortalFooter />
+      <PortalFooterCTA />
+      <PortalFooterSitemap />
       <FloatingActions />
     </>
   );
