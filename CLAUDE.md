@@ -67,22 +67,25 @@ Plataforma própria custom para a **Dinamic Imobiliária** (Arapongas-PR) — su
 - `apps/web`, `apps/api`, `apps/worker`
 - `packages/db`, `packages/shared`, `packages/contracts`, `packages/ui`, `packages/ai-prompts`
 
-## Estrutura do /portal (Editorial Noir)
+## Estrutura do /portal (Editorial Noir — pós-refator 2026-05-25)
 
 Rota: `/portal` em `apps/web/src/app/portal/page.tsx`.
 
 Componentes ativos (em ordem renderizada):
 
 1. **`PortalHeader`** — mix-blend-difference + nav uppercase + CTA "Falar com a IA" pill amber + mobile drawer
-2. **`HeroChat`** + **`HeroBackground`** — foto fachada (`/portal/frente-imob.webp`) animando dia→noite (40s) + 25 estrelas + painel lovable dark central (logo D + greeting dinâmico + input grande + 4 chips + 3 proofs com check verde)
-3. **`IntroSection`** — 2-col text reveal "IMOBILIÁRIA LOCAL, IA 24/7" + 3 stats animados (628 / 12 / 8472-F)
+2. **`HeroChat` (minimalista)** + **`HeroBackground`** — foto fachada (`/portal/frente-imob.webp`) animando dia→noite (40s) + 25 estrelas + eyebrow + headline gigante "ENCONTRE O IMÓVEL CERTO" (Syncopate clamp 40-120px word-by-word) + subtítulo + CTA pill amber "Falar com a IA" que linka `#conversa-ia` + scroll cue. **Painel lovable NÃO vive mais no hero** — migrou pro CTA.
+3. **`IntroSection`** — 2-col text reveal "IMOBILIÁRIA LOCAL, IA 24/7" + 3 stats animados (12 / 12 / 8472-F com `whitespace-nowrap` + font menor no CRECI)
 4. **`StickyCardStack`** — 3 imóveis featured com sticky + scrub scale/opacity em GSAP
 5. **`Neighborhoods`** — 4 bairros com hover expand (Centro · Jd Tropical · Industrial · Aeroporto)
 6. **`StatsBrutal`** — "12 / 628 / 97%" Syncopate gigante + counter animado
-7. **`PortalFooter`** — "VAMOS CONVERSAR" clamp 80-160px + 2 CTAs WhatsApp + logo D fantasma
-8. **`FloatingActions`** — botão flutuante WhatsApp + chat dispatcher
+7. **`PortalFooterCTA`** — section "VAMOS CONVERSAR" (clamp 36-96px) + subtítulo + **`ConversationSection` integrado** (logo D + greeting + input grande + 4 chips + 3 proofs + estado conversation com chat) + 2 CTAs WhatsApp + redes sociais + CRECI
+8. **`PortalFooterSitemap`** — faixa Marca/Institucional/Imóveis/Contato (`bg-noir-bg` direto — não usar `/X` opacity modifier, ver memory `feedback-tailwind-opacity-modifier-v34`)
+9. **`FloatingActions`** — botão flutuante WhatsApp + chat dispatcher
 
-CSS vars do tema em `apps/web/src/styles/portal-day-night.css`. Smooth scroll via `lenis-provider.tsx`. Noise overlay SVG via `noise-overlay.tsx`.
+`PortalFooter` original mantido como wrapper `@deprecated` retrocompat.
+
+CSS vars do tema em `apps/web/src/styles/portal-day-night.css` (exposição recalibrada: brightness/contrast subidos em todas as fases). Smooth scroll via `lenis-provider.tsx`. Noise overlay SVG via `noise-overlay.tsx`.
 
 Demo autoplay (uau item) está **desativado** a pedido do cliente — painel fica exposto sem instrução automática.
 
@@ -111,6 +114,7 @@ Demo autoplay (uau item) está **desativado** a pedido do cliente — painel fic
 - ~~Polimento da landing demo executiva~~ ✅ — 2026-05-22
 - ~~**Fase 3** — Redesign Editorial Noir do `/portal`~~ ✅ — 2026-05-23, em produção Vercel
 - ~~**Fase 4** — Dinamic Channel inbox (`/admin/inbox` + persistência chat IA + bridge Kanban) ~~ ✅ — 2026-05-25, em produção Vercel. In-memory store com interface drop-in pra Prisma no Sprint 1
+- ~~**Iteração UX 2026-05-25 noite**~~ ✅ — refator: painel IA migrou do hero pra dentro da section "VAMOS CONVERSAR" (CTA do footer). Hero virou minimalista editorial. Footer splittado em CTA+Sitemap. Fix CRECI quebra + exposição fachada recalibrada + bug Tailwind opacity. Commit `4f2529b` em produção.
 - **Próximo:** decidir entre (a) iterar features no admin (Kanban no /admin, dashboards, tasks) ou (b) Sprint 1 backend (NestJS + Prisma migration do conversation-store)
 
 ## Como retomar este projeto
