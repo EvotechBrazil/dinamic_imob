@@ -4,11 +4,12 @@
 
 Plataforma própria custom para a **Dinamic Imobiliária** (Arapongas-PR) — substitui o site atual da Flex49/Code49 e adiciona sistema de gestão completo: Portal público + Agente IA (chat + WhatsApp) + CRM + Financeiro de locação. Cliente atual: ~628 imóveis ativos, 2 números WhatsApp ((43) 98847-8713 vendas / (43) 98847-8670 locações).
 
-**Status atual:** Fase 4 (Dinamic Channel — inbox omnichannel real) concluída e em produção. Próximo passo: voltar ao plano original (Sprint 1 backend NestJS + migração in-memory→Prisma) ou iterar mais features no admin.
+**Status atual:** Fase 4 (Dinamic Channel inbox) + iteração 4.5 (Mapa interativo no `/portal/bairros` com 12 pins clicáveis e popup IA Airbnb-style) concluídas e em produção. Próximo passo: voltar ao plano original (Sprint 1 backend NestJS + migração in-memory→Prisma) ou iterar mais features no admin.
 
 ## Em produção
 
 - **Portal público:** https://dinamic-imob-web.vercel.app/portal — redesign Editorial Noir cinematic, chat IA OpenRouter (Haiku 4.5) funcionando, agendamento de visita por email Resend
+- **Mapa interativo `#bairros`:** mesma URL, scroll até a section — SVG dark estilizado de Arapongas com 12 pins clicáveis (um por imóvel cadastrado). Click no pin → popup Airbnb-style → CTAs "Agendar visita" / "Ver detalhes" dão scroll smooth pro `#conversa-ia` e seedam o textarea com prompt contextual via evento `dinamic:portal-conversation-seed`
 - **Inbox Dinamic Channel:** https://dinamic-imob-web.vercel.app/admin/inbox — 3 colunas, polling 3s, multi-canal (WhatsApp/IG/FB/Web), conversa do chat IA cai aqui, lead vinculado ao Kanban
 - **Repositório:** https://github.com/EvotechBrazil/dinamic_imob — branch `main` sincronizada
 - **Hosting:** Vercel (apps/web). Apps/api e apps/worker ainda local-only.
@@ -115,6 +116,7 @@ Demo autoplay (uau item) está **desativado** a pedido do cliente — painel fic
 - ~~**Fase 3** — Redesign Editorial Noir do `/portal`~~ ✅ — 2026-05-23, em produção Vercel
 - ~~**Fase 4** — Dinamic Channel inbox (`/admin/inbox` + persistência chat IA + bridge Kanban) ~~ ✅ — 2026-05-25, em produção Vercel. In-memory store com interface drop-in pra Prisma no Sprint 1
 - ~~**Iteração UX 2026-05-25 noite**~~ ✅ — refator: painel IA migrou do hero pra dentro da section "VAMOS CONVERSAR" (CTA do footer). Hero virou minimalista editorial. Footer splittado em CTA+Sitemap. Fix CRECI quebra + exposição fachada recalibrada + bug Tailwind opacity. Commit `4f2529b` em produção.
+- ~~**Iteração 4.5 — Mapa interativo (2026-05-25 madrugada)**~~ ✅ — refator da section `#bairros`: removida grid de 4 botões + paragrafo intro, substituída por SVG estilizado dark (grid+anel+lagos+vignette) + 12 pins amber pulsantes (um por imóvel de `PROPERTIES` em `crm/mock.ts`). Click no pin → popup Airbnb-style com foto+specs+CTAs. "Agendar visita" dá smooth scroll pra `#conversa-ia` e seeda o textarea via novo evento `dinamic:portal-conversation-seed`. Anchoring do popup por quadrante + clip layer separado pra não cortar. StatsBrutal reduzido pra mobile. Commit `5873356` em produção.
 - **Próximo:** decidir entre (a) iterar features no admin (Kanban no /admin, dashboards, tasks) ou (b) Sprint 1 backend (NestJS + Prisma migration do conversation-store)
 
 ## Como retomar este projeto
