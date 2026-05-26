@@ -202,6 +202,14 @@ export function ArapongasMap() {
                 onMouseLeave={scheduleClose}
                 onFocus={() => openPin(property.id)}
                 onBlur={scheduleClose}
+                // Touch: abre IMEDIATAMENTE no pointerdown (sem esperar o ciclo
+                // touchend→click, que cancela se o dedo move 1px). Mouse passa
+                // pelo onMouseEnter normal.
+                onPointerDown={(e) => {
+                  if (e.pointerType === "touch") {
+                    openPin(property.id);
+                  }
+                }}
                 ariaLabel={ariaLabel}
               />
             </div>
