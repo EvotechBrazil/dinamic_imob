@@ -113,16 +113,42 @@ export function ConversationSection() {
     };
   }, []);
 
-  // Rotative placeholder — pausa quando user está digitando.
+  // Placeholder atual sendo "digitado" char-by-char (efeito typewriter).
+  const [typedPlaceholder, setTypedPlaceholder] = React.useState("");
+
+  // Typewriter: digita o placeholder atual char-by-char (~30ms/char),
+  // depois pausa pra leitura, depois avança pro próximo. Pausa total
+  // quando o user começa a digitar.
   React.useEffect(() => {
-    if (input.length > 0) return;
-    const id = window.setInterval(() => {
-      setPlaceholderIndex((i) => (i + 1) % PLACEHOLDERS.length);
-    }, 4000);
-    return () => {
-      window.clearInterval(id);
+    if (input.length > 0) {
+      setTypedPlaceholder("");
+      return;
+    }
+    const target = PLACEHOLDERS[placeholderIndex];
+    setTypedPlaceholder("");
+    let i = 0;
+    let typingTimer: number | null = null;
+    let rotateTimer: number | null = null;
+
+    const typeNext = () => {
+      if (i >= target.length) {
+        // Terminou de digitar — aguarda leitura, depois rotaciona.
+        rotateTimer = window.setTimeout(() => {
+          setPlaceholderIndex((p) => (p + 1) % PLACEHOLDERS.length);
+        }, 1800);
+        return;
+      }
+      i += 1;
+      setTypedPlaceholder(target.slice(0, i));
+      typingTimer = window.setTimeout(typeNext, 32);
     };
-  }, [input.length]);
+    typingTimer = window.setTimeout(typeNext, 250);
+
+    return () => {
+      if (typingTimer !== null) window.clearTimeout(typingTimer);
+      if (rotateTimer !== null) window.clearTimeout(rotateTimer);
+    };
+  }, [placeholderIndex, input.length]);
 
   // Auto-resize textarea conforme conteúdo.
   React.useEffect(() => {
@@ -262,16 +288,25 @@ export function ConversationSection() {
                 transition={{ delay: 0.4, duration: 0.5 }}
                 className="max-w-3xl mx-auto mt-6 sm:mt-10 relative"
               >
-                <div className="bg-[color:color-mix(in_oklab,var(--noir-surface)_70%,transparent)] border border-[var(--noir-border)] rounded-2xl backdrop-blur-xl shadow-2xl focus-within:ring-2 focus-within:ring-[var(--noir-amber)] focus-within:border-[var(--noir-amber)] transition p-4 pr-14 sm:p-5 sm:pr-16">
+                <div className="relative bg-[color:color-mix(in_oklab,var(--noir-surface)_70%,transparent)] border border-[var(--noir-border)] rounded-2xl backdrop-blur-xl shadow-2xl focus-within:ring-2 focus-within:ring-[var(--noir-amber)] focus-within:border-[var(--noir-amber)] transition p-4 pr-14 sm:p-5 sm:pr-16">
+                  {input.length === 0 && (
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute inset-0 p-4 pr-14 sm:p-5 sm:pr-16 text-base lg:text-lg leading-relaxed text-[var(--noir-text-subtle)]"
+                      style={{ fontFamily: "var(--font-manrope), ui-sans-serif, system-ui" }}
+                    >
+                      {typedPlaceholder}
+                      <span className="inline-block w-[2px] h-[1.1em] bg-[var(--noir-amber)] align-text-bottom animate-pulse ml-[2px] translate-y-[2px]" />
+                    </div>
+                  )}
                   <textarea
                     ref={textareaRef}
                     rows={1}
                     value={input}
                     onChange={(e) => setInput(e.target.value)}
                     onKeyDown={handleKeyDown}
-                    placeholder={PLACEHOLDERS[placeholderIndex]}
                     aria-label="Conte pra IA o que você procura"
-                    className="min-h-[80px] sm:min-h-[112px] max-h-[260px] resize-none w-full outline-none text-base lg:text-lg placeholder:text-[var(--noir-text-subtle)] text-[var(--noir-text)] bg-transparent leading-relaxed"
+                    className="relative min-h-[80px] sm:min-h-[112px] max-h-[260px] resize-none w-full outline-none text-base lg:text-lg text-[var(--noir-text)] bg-transparent leading-relaxed"
                     style={{ fontFamily: "var(--font-manrope), ui-sans-serif, system-ui" }}
                   />
                   <button
