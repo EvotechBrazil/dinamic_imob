@@ -135,14 +135,14 @@ export function ConversationSection() {
         // Terminou de digitar — aguarda leitura, depois rotaciona.
         rotateTimer = window.setTimeout(() => {
           setPlaceholderIndex((p) => (p + 1) % PLACEHOLDERS.length);
-        }, 1800);
+        }, 2800);
         return;
       }
       i += 1;
       setTypedPlaceholder(target.slice(0, i));
-      typingTimer = window.setTimeout(typeNext, 32);
+      typingTimer = window.setTimeout(typeNext, 65);
     };
-    typingTimer = window.setTimeout(typeNext, 250);
+    typingTimer = window.setTimeout(typeNext, 350);
 
     return () => {
       if (typingTimer !== null) window.clearTimeout(typingTimer);
