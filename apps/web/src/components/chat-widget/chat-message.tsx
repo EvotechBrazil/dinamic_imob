@@ -199,10 +199,12 @@ function useTypewriter(target: string, role: "user" | "assistant"): {
         return;
       }
       const backlog = t.length - d.length;
-      const advance = Math.max(1, Math.ceil(backlog / 40));
+      // Taxa: ~33 chars/s sustentado em backlog pequeno, cap em ~270 chars/s
+      // em respostas longas pra não ficar lento demais
+      const advance = Math.max(1, Math.min(8, Math.ceil(backlog / 130)));
       const next = t.slice(0, Math.min(d.length + advance, t.length));
       setDisplayed(next);
-      timer = window.setTimeout(tick, 24);
+      timer = window.setTimeout(tick, 30);
     };
 
     if (displayedRef.current.length < target.length) {
