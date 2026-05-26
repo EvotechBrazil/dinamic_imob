@@ -50,9 +50,10 @@ export function ImovelPin({
       aria-pressed={isActive}
       className={[
         "group absolute z-10 cursor-pointer touch-manipulation",
-        // Tamanho visual menor; hit area expandida via pseudo-elemento
-        "h-[16px] w-[16px] md:h-[14px] md:w-[14px] rounded-full",
-        "before:content-[''] before:absolute before:-inset-3 md:before:-inset-2",
+        // Tamanho visual 14px em todos os devices; hit area generosa via
+        // pseudo-elemento garante tap fácil no mobile.
+        "h-[14px] w-[14px] rounded-full",
+        "before:content-[''] before:absolute before:-inset-3.5 md:before:-inset-2",
         "bg-noir-amber border-2 border-white",
         "shadow-[0_2px_8px_rgba(0,0,0,0.45)]",
         "transition-transform duration-150 ease-out",
