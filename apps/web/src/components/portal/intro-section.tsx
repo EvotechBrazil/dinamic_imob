@@ -64,44 +64,45 @@ export function IntroSection() {
   }, []);
 
   return (
-    <section className="bg-noir-bg text-noir-text px-6 md:px-[8vw] py-[8vh] md:py-[12vh] grid md:grid-cols-2 gap-8 md:gap-[6vw] items-start">
+    <section className="bg-noir-bg text-noir-text px-6 md:px-[8vw] py-[8vh] md:py-[12vh] flex flex-col items-center text-center gap-8 md:gap-12">
       <TextReveal
         text="ENCONTRE O IMÓVEL CERTO"
         as="h1"
-        className="font-display-noir font-bold text-5xl md:text-6xl lg:text-7xl leading-[0.95] tracking-tight m-0"
+        className="font-display-noir font-bold text-5xl md:text-6xl lg:text-7xl leading-[0.95] tracking-tight m-0 max-w-4xl"
       />
-      <div>
-        <p className="font-body-noir font-light text-lg md:text-xl leading-relaxed text-noir-text-mute">
-          Há 12 anos servindo Arapongas com olho técnico e atendimento humano.
-          Nossa IA atende em 30 segundos, dia ou noite, e passa o bastão pra
-          um corretor especialista quando você quer agendar visita.
-        </p>
-        <div ref={statsRef} className="mt-10 md:mt-14 grid grid-cols-2 sm:grid-cols-3 gap-6 pt-8 border-t border-noir-amber">
-          {STATS.map((s, i) => {
-            const isCreci = s.label === "CRECI";
-            return (
+      <p className="font-body-noir font-light text-lg md:text-xl leading-relaxed text-noir-text-mute max-w-2xl">
+        Há 12 anos servindo Arapongas com olho técnico e atendimento humano.
+        Nossa IA atende em 30 segundos, dia ou noite, e passa o bastão pra
+        um corretor especialista quando você quer agendar visita.
+      </p>
+      <div
+        ref={statsRef}
+        className="grid grid-cols-2 sm:grid-cols-3 gap-x-10 sm:gap-x-16 gap-y-8 pt-8 border-t border-noir-amber max-w-3xl w-full justify-items-center"
+      >
+        {STATS.map((s, i) => {
+          const isCreci = s.label === "CRECI";
+          return (
+            <div
+              key={s.label}
+              className={i === STATS.length - 1 ? "col-span-2 sm:col-span-1" : undefined}
+            >
               <div
-                key={s.label}
-                className={i === STATS.length - 1 ? "col-span-2 sm:col-span-1" : undefined}
+                data-stat-num
+                className={cn(
+                  "font-display-noir font-bold text-noir-text leading-none mb-3 whitespace-nowrap",
+                  isCreci
+                    ? "text-xl sm:text-3xl md:text-4xl lg:text-5xl"
+                    : "text-[28px] sm:text-4xl md:text-5xl lg:text-6xl"
+                )}
               >
-                <div
-                  data-stat-num
-                  className={cn(
-                    "font-display-noir font-bold text-noir-text leading-none mb-3 whitespace-nowrap",
-                    isCreci
-                      ? "text-xl sm:text-3xl md:text-4xl lg:text-5xl"
-                      : "text-[28px] sm:text-4xl md:text-5xl lg:text-6xl"
-                  )}
-                >
-                  {s.num}
-                </div>
-                <div className="font-body-noir text-[11px] uppercase tracking-[0.25em] text-noir-text-mute">
-                  {s.label}
-                </div>
+                {s.num}
               </div>
-            );
-          })}
-        </div>
+              <div className="font-body-noir text-[11px] uppercase tracking-[0.25em] text-noir-text-mute">
+                {s.label}
+              </div>
+            </div>
+          );
+        })}
       </div>
     </section>
   );

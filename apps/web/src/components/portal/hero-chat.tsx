@@ -2,7 +2,6 @@
 
 import * as React from "react";
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ChevronDown } from "lucide-react";
 import { HeroBackground } from "@/components/portal/hero-background";
 import { cn } from "@/lib/utils";
 
@@ -70,27 +69,6 @@ export function HeroChat() {
         >
           Atendimento humano + IA 24/7. Em segundos.
         </motion.p>
-
-        {/* CTA pill âmbar */}
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.9, duration: 0.6, ease: [0.22, 1, 0.36, 1] }}
-          className="mt-2 sm:mt-4"
-        >
-          <a
-            href="#conversa-ia"
-            aria-label="Falar com a IA da Dinamic — rolar até a seção de conversa"
-            className="group inline-flex items-center gap-3 rounded-full bg-[var(--noir-amber)] px-7 py-4 text-sm sm:text-base font-bold uppercase tracking-[0.18em] text-[var(--noir-bg)] shadow-[0_12px_32px_rgba(245,158,11,0.35)] hover:shadow-[0_18px_42px_rgba(245,158,11,0.55)] hover:bg-[var(--noir-amber-soft)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--noir-bg)] focus-visible:ring-[var(--noir-amber)] transition-all duration-300"
-            style={{ fontFamily: "var(--font-manrope), ui-sans-serif, system-ui" }}
-          >
-            <span>Falar com a IA</span>
-            <ChevronDown
-              className="h-4 w-4 sm:h-5 sm:w-5 transition-transform duration-300 group-hover:translate-y-0.5"
-              aria-hidden="true"
-            />
-          </a>
-        </motion.div>
       </motion.div>
     </section>
   );
