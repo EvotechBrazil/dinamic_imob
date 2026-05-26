@@ -10,6 +10,10 @@ interface ImovelPinProps {
   /** se este pin está com popup aberto */
   isActive?: boolean;
   onClick: () => void;
+  onMouseEnter?: () => void;
+  onMouseLeave?: () => void;
+  onFocus?: () => void;
+  onBlur?: () => void;
   ariaLabel: string;
 }
 
@@ -25,12 +29,20 @@ export function ImovelPin({
   cyPercent,
   isActive = false,
   onClick,
+  onMouseEnter,
+  onMouseLeave,
+  onFocus,
+  onBlur,
   ariaLabel,
 }: ImovelPinProps): JSX.Element {
   return (
     <button
       type="button"
       onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+      onFocus={onFocus}
+      onBlur={onBlur}
       aria-label={ariaLabel}
       aria-pressed={isActive}
       className={[

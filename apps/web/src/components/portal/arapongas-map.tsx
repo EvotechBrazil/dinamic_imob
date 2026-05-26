@@ -58,6 +58,32 @@ function buildSeedPrompt(
 
 export function ArapongasMap() {
   const [activeId, setActiveId] = React.useState<string | null>(null);
+  const closeTimerRef = React.useRef<number | null>(null);
+
+  const cancelClose = React.useCallback(() => {
+    if (closeTimerRef.current !== null) {
+      window.clearTimeout(closeTimerRef.current);
+      closeTimerRef.current = null;
+    }
+  }, []);
+
+  const openPin = React.useCallback(
+    (id: string) => {
+      cancelClose();
+      setActiveId(id);
+    },
+    [cancelClose],
+  );
+
+  const scheduleClose = React.useCallback(() => {
+    cancelClose();
+    closeTimerRef.current = window.setTimeout(() => {
+      setActiveId(null);
+      closeTimerRef.current = null;
+    }, 180);
+  }, [cancelClose]);
+
+  React.useEffect(() => () => cancelClose(), [cancelClose]);
 
   React.useEffect(() => {
     if (!activeId) return;
@@ -84,6 +110,7 @@ export function ArapongasMap() {
     : null;
 
   const fireSeed = (property: Property, intent: "agendar" | "ver_detalhes") => {
+    cancelClose();
     setActiveId(null);
     scrollToId("conversa-ia");
     window.setTimeout(() => {
@@ -202,6 +229,10 @@ export function ArapongasMap() {
                 onClick={() =>
                   setActiveId((curr) => (curr === property.id ? null : property.id))
                 }
+                onMouseEnter={() => openPin(property.id)}
+                onMouseLeave={scheduleClose}
+                onFocus={() => openPin(property.id)}
+                onBlur={scheduleClose}
                 ariaLabel={ariaLabel}
               />
             </div>
@@ -211,7 +242,11 @@ export function ArapongasMap() {
 
       {activePin && (
         <div data-portal-popup className="absolute inset-0 z-20 pointer-events-none">
-          <div className="pointer-events-auto">
+          <div
+            className="pointer-events-auto"
+            onMouseEnter={cancelClose}
+            onMouseLeave={scheduleClose}
+          >
             <ImovelPopup
               property={activePin.property}
               cxPercent={(activePin.cx / 1920) * 100}
