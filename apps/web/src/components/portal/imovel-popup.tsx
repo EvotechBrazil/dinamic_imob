@@ -40,26 +40,14 @@ export function ImovelPopup({
   onAgendar,
   onVerDetalhes,
 }: ImovelPopupProps): JSX.Element {
-  // Anchor inteligente por quadrante pra evitar overflow do container do mapa.
-  // Horizontal: pin nos 25% esquerdos -> popup cresce pra direita (anchor left);
-  //             pin nos 25% direitos  -> popup cresce pra esquerda (anchor right);
-  //             centro -> popup centrado.
-  // Vertical:   pin na metade de cima -> popup abre ABAIXO;
-  //             pin na metade de baixo -> popup abre ACIMA.
+  // Desktop: anchor inteligente por quadrante.
   const translateX =
-    cxPercent < 25
-      ? "8px"
-      : cxPercent > 75
-        ? "calc(-100% - 8px)"
-        : "-50%";
-  const translateY =
-    cyPercent < 50 ? "24px" : "calc(-100% - 24px)";
+    cxPercent < 25 ? "8px" : cxPercent > 75 ? "calc(-100% - 8px)" : "-50%";
+  const translateY = cyPercent < 50 ? "24px" : "calc(-100% - 24px)";
 
   const foto = property.fotos?.[0];
-  const finalidadeLabel =
-    property.finalidade === "venda" ? "VENDA" : "ALUGUEL";
+  const finalidadeLabel = property.finalidade === "venda" ? "VENDA" : "ALUGUEL";
 
-  // Specs em linha — pula campos zero (terreno por ex).
   const specs: { icon: React.ReactNode; label: string }[] = [];
   if (property.dormitorios > 0) {
     specs.push({
@@ -80,60 +68,39 @@ export function ImovelPopup({
     });
   }
 
-  return (
-    <div
-      className="absolute z-30"
-      style={{
-        left: `${cxPercent}%`,
-        top: `${cyPercent}%`,
-        transform: `translate(${translateX}, ${translateY})`,
-      }}
-    >
-    <motion.div
-      role="dialog"
-      aria-label={`Detalhes do imóvel ${property.titulo}`}
-      initial={{ opacity: 0, scale: 0.9 }}
-      animate={{ opacity: 1, scale: 1 }}
-      transition={{ duration: 0.18, ease: "easeOut" }}
-      className="w-[280px] sm:w-[320px] rounded-2xl bg-noir-surface border border-noir-border shadow-2xl overflow-hidden"
-    >
-      {/* Botão close */}
+  const cardBody = (
+    <>
       <button
         type="button"
         onClick={onClose}
         aria-label="Fechar"
-        className="absolute top-2 right-2 z-10 grid place-items-center h-7 w-7 rounded-full bg-black/60 backdrop-blur-sm text-white hover:bg-black/80 transition-colors"
+        className="absolute top-2 right-2 z-10 grid place-items-center h-8 w-8 md:h-7 md:w-7 rounded-full bg-black/60 backdrop-blur-sm text-white hover:bg-black/80 transition-colors"
       >
         <X className="h-4 w-4" strokeWidth={2} aria-hidden />
       </button>
 
-      {/* Foto + badges */}
       <div className="relative aspect-[16/10] w-full bg-black/40">
         {foto ? (
           <Image
             src={foto}
             alt={property.titulo}
             fill
-            sizes="320px"
+            sizes="(min-width: 768px) 320px, 100vw"
             unoptimized
             className="object-cover"
           />
         ) : null}
 
-        {/* Badge tipo top-left */}
         <span className="absolute top-2 left-2 inline-flex items-center rounded-full bg-noir-amber text-noir-bg font-bold px-2 py-0.5 text-[10px] uppercase tracking-wider">
           {TIPO_LABEL[property.tipo]}
         </span>
 
-        {/* Badge finalidade top-right (deslocado p/ não colidir com close) */}
         <span className="absolute top-2 right-11 inline-flex items-center rounded-full bg-noir-indigo text-white font-bold px-2 py-0.5 text-[10px] uppercase tracking-wider">
           {finalidadeLabel}
         </span>
       </div>
 
-      {/* Conteúdo */}
       <div className="p-4">
-        {/* Preço */}
         <div className="font-display-noir text-2xl font-bold text-noir-text leading-tight">
           {brl.format(property.preco)}
           {property.finalidade === "aluguel" ? (
@@ -143,13 +110,11 @@ export function ImovelPopup({
           ) : null}
         </div>
 
-        {/* Bairro · Endereço */}
         <p className="mt-1 font-body-noir text-[12px] text-noir-text-mute truncate">
           {property.bairro}
           {property.endereco ? ` · ${property.endereco}` : ""}
         </p>
 
-        {/* Specs */}
         {specs.length > 0 ? (
           <div className="mt-3 flex items-center gap-3 font-body-noir text-[12px] text-noir-text-mute">
             {specs.map((s, i) => (
@@ -161,25 +126,75 @@ export function ImovelPopup({
           </div>
         ) : null}
 
-        {/* CTAs */}
         <div className="mt-4 flex items-center gap-2">
           <button
             type="button"
             onClick={onVerDetalhes}
-            className="flex-1 rounded-full border border-noir-border text-noir-text hover:bg-white/5 transition-colors font-display-noir text-[11px] uppercase tracking-[0.18em] font-bold py-2.5"
+            className="flex-1 rounded-full border border-noir-border text-noir-text hover:bg-white/5 transition-colors font-display-noir text-[11px] uppercase tracking-[0.18em] font-bold py-3 md:py-2.5"
           >
             Ver detalhes
           </button>
           <button
             type="button"
             onClick={onAgendar}
-            className="flex-1 rounded-full bg-noir-amber text-noir-bg hover:brightness-110 transition-[filter] font-display-noir text-[11px] uppercase tracking-[0.18em] font-bold py-2.5"
+            className="flex-1 rounded-full bg-noir-amber text-noir-bg hover:brightness-110 transition-[filter] font-display-noir text-[11px] uppercase tracking-[0.18em] font-bold py-3 md:py-2.5"
           >
             Agendar visita
           </button>
         </div>
       </div>
-    </motion.div>
-    </div>
+    </>
+  );
+
+  return (
+    <>
+      {/* Desktop: popup ancorado no pin por quadrante */}
+      <motion.div
+        data-portal-popup
+        role="dialog"
+        aria-label={`Detalhes do imóvel ${property.titulo}`}
+        initial={{ opacity: 0, scale: 0.9 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 0.18, ease: "easeOut" }}
+        className="hidden md:block absolute z-30 w-[320px] rounded-2xl bg-noir-surface border border-noir-border shadow-2xl overflow-hidden"
+        style={{
+          left: `${cxPercent}%`,
+          top: `${cyPercent}%`,
+          transform: `translate(${translateX}, ${translateY})`,
+        }}
+      >
+        {cardBody}
+      </motion.div>
+
+      {/* Mobile: backdrop + bottom sheet */}
+      <div className="md:hidden">
+        <motion.button
+          type="button"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.2 }}
+          onClick={onClose}
+          aria-label="Fechar"
+          className="fixed inset-0 z-40 bg-black/65 backdrop-blur-sm cursor-default"
+        />
+        <motion.div
+          data-portal-popup
+          role="dialog"
+          aria-label={`Detalhes do imóvel ${property.titulo}`}
+          initial={{ y: "100%" }}
+          animate={{ y: 0 }}
+          transition={{ type: "spring", damping: 30, stiffness: 320 }}
+          className="fixed inset-x-0 bottom-0 z-50 rounded-t-2xl bg-noir-surface border-t border-noir-border shadow-2xl overflow-hidden max-h-[85vh] overflow-y-auto"
+        >
+          {/* Handle */}
+          <div className="pt-3 pb-1 flex justify-center" aria-hidden="true">
+            <span className="h-1 w-12 rounded-full bg-white/25" />
+          </div>
+          {cardBody}
+          {/* safe-area bottom */}
+          <div className="pb-[env(safe-area-inset-bottom)]" />
+        </motion.div>
+      </div>
+    </>
   );
 }

@@ -114,8 +114,8 @@ export function StickyCardStack() {
   }, []);
 
   return (
-    <section ref={sectionRef} className="relative bg-noir-bg pt-[10vh] pb-[10vh]">
-      <div className="text-center mb-[6vh] px-6">
+    <section ref={sectionRef} className="relative bg-noir-bg pt-[6vh] pb-[6vh]">
+      <div className="text-center mb-[4vh] px-6">
         <div className="font-body-noir font-bold text-[11px] uppercase tracking-[0.35em] text-noir-amber mb-3">
           Destaques da semana
         </div>
@@ -127,24 +127,36 @@ export function StickyCardStack() {
       </div>
 
       {FEATURED.map((p) => (
-        <div key={p.num} className="stack-card sticky top-[10vh] h-[80vh] px-6 md:px-[8vw]">
-          <div className="card-inner h-full w-full bg-noir-surface border border-white/10 grid md:grid-cols-[1fr_1.2fr] overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.7)] origin-top">
-            <div className="p-8 md:p-12 flex flex-col justify-between">
+        <div
+          key={p.num}
+          className="stack-card sticky top-[6vh] md:top-[10vh] h-[92vh] md:h-[80vh] px-4 md:px-[8vw]"
+        >
+          <div className="card-inner h-full w-full bg-noir-surface border border-white/10 grid grid-cols-1 grid-rows-[34vh_1fr] md:grid-rows-1 md:grid-cols-[1fr_1.2fr] overflow-hidden shadow-[0_25px_50px_-12px_rgba(0,0,0,0.7)] origin-top">
+            <div className="relative overflow-hidden order-1 md:order-2 row-start-1 md:row-auto md:col-start-2">
+              <Image
+                src={p.image}
+                alt={p.alt}
+                fill
+                sizes="(min-width: 768px) 55vw, 100vw"
+                className="object-cover transition-transform duration-[1500ms] ease-out hover:scale-[1.08]"
+              />
+            </div>
+            <div className="p-6 md:p-12 flex flex-col justify-between order-2 md:order-1 row-start-2 md:row-auto md:col-start-1 overflow-y-auto md:overflow-visible">
               <div>
-                <div className="font-display-noir font-bold text-7xl md:text-8xl text-noir-amber leading-none">
+                <div className="font-display-noir font-bold text-6xl md:text-8xl text-noir-amber leading-none">
                   {p.num}
                 </div>
-                <div className="font-body-noir font-bold text-[11px] uppercase tracking-[0.3em] text-noir-text-mute mt-6">
+                <div className="font-body-noir font-bold text-[11px] uppercase tracking-[0.3em] text-noir-text-mute mt-4 md:mt-6">
                   {p.type}
                 </div>
-                <h3 className="font-display-noir font-bold text-4xl md:text-5xl text-noir-text leading-tight mt-3 mb-2 tracking-tight">
+                <h3 className="font-display-noir font-bold text-3xl md:text-5xl text-noir-text leading-tight mt-2 md:mt-3 mb-2 tracking-tight">
                   {p.title}
                 </h3>
-                <div className="font-body-noir text-sm text-noir-text-mute tracking-wide">{p.location}</div>
-                <p className="font-body-noir font-light text-[15px] leading-relaxed text-noir-text-mute mt-6 max-w-[90%]">
+                <div className="font-body-noir text-xs md:text-sm text-noir-text-mute tracking-wide">{p.location}</div>
+                <p className="font-body-noir font-light text-[13px] md:text-[15px] leading-relaxed text-noir-text-mute mt-4 md:mt-6 max-w-[95%] md:max-w-[90%]">
                   {p.description}
                 </p>
-                <div className="grid grid-cols-4 gap-4 py-6 my-6 border-t border-b border-noir-border">
+                <div className="grid grid-cols-4 gap-3 md:gap-4 py-4 md:py-6 my-4 md:my-6 border-t border-b border-noir-border">
                   {p.specs.map((sp) => (
                     <div
                       key={sp.label}
@@ -157,23 +169,15 @@ export function StickyCardStack() {
                 </div>
               </div>
               <div>
-                <div className="font-display-noir font-bold text-5xl text-noir-text leading-none mt-6">{p.price}</div>
+                <div className="font-display-noir font-bold text-4xl md:text-5xl text-noir-text leading-none mt-4 md:mt-6">{p.price}</div>
                 <div className="h-[2px] w-3/5 bg-noir-amber mt-2" />
                 <a
                   href="#"
-                  className="inline-flex items-center gap-2 text-noir-amber font-body-noir font-bold text-sm uppercase tracking-[0.2em] border-b border-noir-amber pb-1 mt-6 transition-transform hover:translate-x-2"
+                  className="inline-flex items-center gap-2 text-noir-amber font-body-noir font-bold text-sm uppercase tracking-[0.2em] border-b border-noir-amber pb-1 mt-4 md:mt-6 transition-transform hover:translate-x-2"
                 >
                   Ver detalhes →
                 </a>
               </div>
-            </div>
-            <div className="relative overflow-hidden hidden md:block">
-              <Image
-                src={p.image}
-                alt={p.alt}
-                fill
-                className="object-cover transition-transform duration-[1500ms] ease-out hover:scale-[1.08]"
-              />
             </div>
           </div>
         </div>

@@ -6,8 +6,8 @@ import { ArapongasMap } from "./arapongas-map";
 
 export function Neighborhoods() {
   return (
-    <section id="bairros" className="bg-noir-bg px-6 md:px-[8vw] py-[18vh] md:py-[20vh]">
-      <div className="mb-[8vh] md:mb-[10vh]">
+    <section id="bairros" className="bg-noir-bg px-6 md:px-[8vw] py-[8vh] md:py-[12vh]">
+      <div className="mb-[5vh] md:mb-[6vh]">
         <TextReveal
           text="ARAPONGAS EM 4 BAIRROS"
           as="h2"

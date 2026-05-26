@@ -47,7 +47,7 @@ export function ImovelPin({
       aria-pressed={isActive}
       className={[
         "group absolute z-10 cursor-pointer",
-        "h-[14px] w-[14px] rounded-full",
+        "h-[22px] w-[22px] md:h-[14px] md:w-[14px] rounded-full",
         "bg-noir-amber border-2 border-white",
         "shadow-[0_2px_8px_rgba(0,0,0,0.45)]",
         "transition-all duration-200 ease-out",

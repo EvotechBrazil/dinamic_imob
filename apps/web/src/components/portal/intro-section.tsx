@@ -1,14 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { TextReveal } from "./text-reveal";
 import { cn } from "@/lib/utils";
-
-if (typeof window !== "undefined") {
-  gsap.registerPlugin(ScrollTrigger);
-}
 
 interface Stat {
   num: string;
@@ -27,38 +21,53 @@ export function IntroSection() {
   React.useEffect(() => {
     const el = statsRef.current;
     if (!el) return;
-    const nums = el.querySelectorAll<HTMLElement>("[data-stat-num]");
-    nums.forEach((node) => {
+    const nums = Array.from(
+      el.querySelectorAll<HTMLElement>("[data-stat-num]"),
+    );
+    const started = new WeakSet<HTMLElement>();
+
+    function runCountUp(node: HTMLElement) {
+      if (started.has(node)) return;
+      started.add(node);
       const finalText = node.textContent ?? "";
       const finalNum = parseInt(finalText.replace(/[^0-9]/g, ""), 10);
-      if (!Number.isFinite(finalNum) || finalNum > 99999) return;
-      ScrollTrigger.create({
-        trigger: node,
-        start: "top 80%",
-        once: true,
-        onEnter: () => {
-          const obj = { val: 0 };
-          gsap.to(obj, {
-            val: finalNum,
-            duration: 2,
-            ease: "power3.out",
-            onUpdate: () => {
-              node.textContent = Math.round(obj.val).toString();
-            },
-            onComplete: () => {
-              node.textContent = finalText;
-            },
-          });
-        },
-      });
-    });
+      if (!Number.isFinite(finalNum)) return;
+      const start = performance.now();
+      const duration = 2200;
+      function tick(now: number) {
+        const elapsed = now - start;
+        const progress = Math.min(elapsed / duration, 1);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        node.textContent = Math.round(finalNum * eased).toString();
+        if (progress < 1) {
+          requestAnimationFrame(tick);
+        } else {
+          node.textContent = finalText;
+        }
+      }
+      requestAnimationFrame(tick);
+    }
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const node = entry.target as HTMLElement;
+          observer.unobserve(node);
+          runCountUp(node);
+        });
+      },
+      { threshold: 0.35 },
+    );
+    nums.forEach((node) => observer.observe(node));
+    return () => observer.disconnect();
   }, []);
 
   return (
-    <section className="bg-noir-bg text-noir-text min-h-screen px-6 md:px-[8vw] py-[20vh] grid md:grid-cols-2 gap-12 md:gap-[8vw] items-start">
+    <section className="bg-noir-bg text-noir-text px-6 md:px-[8vw] py-[8vh] md:py-[12vh] grid md:grid-cols-2 gap-8 md:gap-[6vw] items-start">
       <TextReveal
-        text="IMOBILIÁRIA LOCAL, IA 24/7"
-        as="h2"
+        text="ENCONTRE O IMÓVEL CERTO"
+        as="h1"
         className="font-display-noir font-bold text-5xl md:text-6xl lg:text-7xl leading-[0.95] tracking-tight m-0"
       />
       <div>
@@ -67,7 +76,7 @@ export function IntroSection() {
           Nossa IA atende em 30 segundos, dia ou noite, e passa o bastão pra
           um corretor especialista quando você quer agendar visita.
         </p>
-        <div ref={statsRef} className="mt-20 grid grid-cols-2 sm:grid-cols-3 gap-6 pt-8 border-t border-noir-amber">
+        <div ref={statsRef} className="mt-10 md:mt-14 grid grid-cols-2 sm:grid-cols-3 gap-6 pt-8 border-t border-noir-amber">
           {STATS.map((s, i) => {
             const isCreci = s.label === "CRECI";
             return (

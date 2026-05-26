@@ -49,7 +49,7 @@ export function StatsBrutal() {
   }, []);
 
   return (
-    <section ref={ref} className="bg-noir-bg px-6 md:px-[6vw] py-[18vh] md:py-[30vh] text-center">
+    <section ref={ref} className="bg-noir-bg px-6 md:px-[6vw] py-[10vh] md:py-[16vh] text-center">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-y-16 md:gap-[4vw] items-end">
         {STATS.map((s) => (
           <div key={s.label} className="text-center">
