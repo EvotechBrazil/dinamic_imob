@@ -18,8 +18,6 @@ const NAV_LINKS: ReadonlyArray<NavLink> = [
   { label: "Contato", href: "#contato" },
 ];
 
-const WA_VENDAS = "https://wa.me/5543988478713";
-
 export function PortalHeader() {
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -134,9 +132,8 @@ export function PortalHeader() {
           {/* CTA + hamburger (direita) */}
           <div className="flex items-center justify-end gap-3">
             <a
-              href={WA_VENDAS}
-              target="_blank"
-              rel="noopener noreferrer"
+              href="#conversa-ia"
+              aria-label="Falar com a IA — rolar até a seção de conversa"
               className="hidden items-center gap-2 rounded-full bg-noir-amber px-3 py-2 font-body-noir text-[10px] font-bold uppercase tracking-[0.15em] text-noir-bg transition hover:scale-105 sm:inline-flex sm:px-5 sm:py-3 sm:text-xs sm:tracking-[0.2em]"
             >
               <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-noir-bg" />
@@ -230,9 +227,8 @@ export function PortalHeader() {
 
               <div className="border-t border-noir-border pt-6">
                 <a
-                  href={WA_VENDAS}
-                  target="_blank"
-                  rel="noopener noreferrer"
+                  href="#conversa-ia"
+                  aria-label="Falar com a IA — rolar até a seção de conversa"
                   onClick={closeMenu}
                   className="inline-flex items-center gap-2 rounded-full bg-noir-amber px-4 py-2.5 font-body-noir text-[11px] font-bold uppercase tracking-[0.18em] text-noir-bg transition hover:scale-105 sm:px-5 sm:py-3 sm:text-xs sm:tracking-[0.2em]"
                 >
