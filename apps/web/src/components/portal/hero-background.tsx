@@ -21,16 +21,24 @@ export function HeroBackground() {
       aria-hidden="true"
       className="absolute inset-0 z-0 overflow-hidden pointer-events-none"
     >
-      {/* Camada 1 — hiperlapse da fachada (ciclo dia→noite nativo) */}
+      {/* Camada 1 — hiperlapse da fachada (ciclo dia→noite nativo).
+          Sem poster: o vídeo é o LCP, então preload="auto" + fetchpriority
+          "high" pra baixar agressivo e iniciar playback o mais rápido
+          possível. Fundo noir-bg cobre o flash enquanto baixa. */}
+      <div
+        aria-hidden="true"
+        className="absolute inset-0 bg-noir-bg"
+      />
       <video
         className="absolute inset-0 h-full w-full object-cover"
         src="/portal/video_fachada.mp4"
-        poster="/portal/frente-imob.webp"
         autoPlay
         loop
         muted
         playsInline
         preload="auto"
+        // @ts-expect-error — fetchPriority é suportado mas TS DOM types ainda atrasados
+        fetchpriority="high"
       />
 
       {/* Camada 2 — vinheta dark sobre tudo */}

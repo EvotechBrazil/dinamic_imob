@@ -46,12 +46,15 @@ export function ImovelPin({
       aria-label={ariaLabel}
       aria-pressed={isActive}
       className={[
-        "group absolute z-10 cursor-pointer",
+        "group absolute z-10 cursor-pointer touch-manipulation",
         "h-[22px] w-[22px] md:h-[14px] md:w-[14px] rounded-full",
         "bg-noir-amber border-2 border-white",
         "shadow-[0_2px_8px_rgba(0,0,0,0.45)]",
         "transition-all duration-200 ease-out",
-        "hover:scale-110 hover:shadow-[0_0_18px_rgba(245,158,11,0.65)]",
+        // Hover só em desktop (pointer fine) — evita hover sticky no iOS
+        "md:hover:scale-110 md:hover:shadow-[0_0_18px_rgba(245,158,11,0.65)]",
+        // Active state (touch + click) dá feedback igual em qualquer device
+        "active:scale-125 active:shadow-[0_0_22px_rgba(245,158,11,0.7)]",
         "focus:outline-none focus-visible:ring-2 focus-visible:ring-noir-amber focus-visible:ring-offset-2 focus-visible:ring-offset-noir-bg",
         isActive
           ? "scale-125 ring-2 ring-noir-indigo ring-offset-2 ring-offset-noir-bg shadow-[0_0_22px_rgba(79,70,229,0.7)]"

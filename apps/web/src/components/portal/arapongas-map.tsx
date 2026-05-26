@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { ImovelPin } from "./imovel-pin";
 import { ImovelPopup } from "./imovel-popup";
 import { PORTAL_IMOVEIS_MAP } from "@/lib/portal/portal-imoveis-coords";
@@ -23,9 +24,6 @@ const BAIRRO_LABELS: ReadonlyArray<BairroLabel> = [
   { name: "Industrial", top: "68%", left: "65%", right: true },
   { name: "Aeroporto", top: "28%", left: "80%", right: true },
 ];
-
-const VERTICAL_LINES = Array.from({ length: 19 }, (_, i) => 80 + i * 100);
-const HORIZONTAL_LINES = Array.from({ length: 11 }, (_, i) => 80 + i * 100);
 
 const TIPO_LABEL: Record<Property["tipo"], string> = {
   apartamento: "Apartamento",
@@ -120,99 +118,70 @@ export function ArapongasMap() {
 
   return (
     <div className="relative w-full aspect-[16/10] md:aspect-[16/9]">
-      <div className="absolute inset-0 rounded-2xl overflow-hidden border border-noir-border bg-[#0F1729]">
-      <svg
-        viewBox="0 0 1920 1080"
-        preserveAspectRatio="xMidYMid slice"
-        xmlns="http://www.w3.org/2000/svg"
-        className="absolute inset-0 w-full h-full"
-        aria-hidden="true"
-      >
-        <defs>
-          <radialGradient id="portalMapHaze" cx="50%" cy="50%" r="60%">
-            <stop offset="0%" stopColor="#0F1729" stopOpacity="0" />
-            <stop offset="100%" stopColor="#0B0B14" stopOpacity="0.85" />
-          </radialGradient>
-          <linearGradient id="portalMapLake" x1="0" x2="1">
-            <stop offset="0" stopColor="#0F1729" />
-            <stop offset="1" stopColor="#1A2540" />
-          </linearGradient>
-        </defs>
+      <div className="absolute inset-0 rounded-2xl overflow-hidden border border-noir-border bg-[#0B0B14]">
+        {/* Mapa real de Arapongas — Google Maps em B&W via filter */}
+        <Image
+          src="/portal/mapa-arapongas.png"
+          alt="Mapa de Arapongas"
+          fill
+          priority
+          sizes="(min-width: 1024px) 80vw, 100vw"
+          className="object-cover select-none"
+          style={{
+            filter:
+              "grayscale(1) invert(1) brightness(0.88) contrast(1.12) hue-rotate(180deg)",
+          }}
+          draggable={false}
+        />
 
-        <rect width="1920" height="1080" fill="#0F1729" />
+        {/* Tint noir por cima da imagem pra integrar com tema */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 pointer-events-none mix-blend-multiply"
+          style={{ background: "rgba(15, 23, 41, 0.55)" }}
+        />
 
-        <path d="M120,160 L420,160 L460,300 L380,420 L160,440 L100,300 Z" fill="#111827" opacity="0.85" />
-        <path d="M620,580 L900,560 L960,720 L820,860 L600,840 L540,700 Z" fill="#111827" opacity="0.8" />
-        <path d="M1300,180 L1620,160 L1700,300 L1640,460 L1380,480 L1280,340 Z" fill="#111827" opacity="0.85" />
-        <path d="M1500,720 L1820,720 L1860,880 L1700,1000 L1480,980 L1420,860 Z" fill="#111827" opacity="0.8" />
-        <path d="M40,720 L300,700 L380,860 L260,1020 L60,1000 Z" fill="#111827" opacity="0.85" />
+        {/* Vinheta radial pra escurecer bordas */}
+        <div
+          aria-hidden="true"
+          className="absolute inset-0 pointer-events-none"
+          style={{
+            background:
+              "radial-gradient(ellipse at center, transparent 35%, rgba(11,11,20,0.75) 95%)",
+          }}
+        />
 
-        <ellipse cx="960" cy="440" rx="120" ry="60" fill="url(#portalMapLake)" opacity="0.9" />
-        <ellipse cx="380" cy="900" rx="80" ry="40" fill="url(#portalMapLake)" opacity="0.9" />
-
-        <g stroke="#1F2937" strokeWidth="1" fill="none">
-          {VERTICAL_LINES.map((x) => (
-            <line key={`v${x}`} x1={x} y1="0" x2={x} y2="1080" />
-          ))}
-          {HORIZONTAL_LINES.map((y) => (
-            <line key={`h${y}`} x1="0" y1={y} x2="1920" y2={y} />
-          ))}
-        </g>
-
-        <g stroke="#374151" strokeWidth="2" fill="none" opacity="0.7">
-          <line x1="0" y1="200" x2="1920" y2="900" />
-          <line x1="0" y1="800" x2="1920" y2="300" />
-          <line x1="960" y1="0" x2="960" y2="1080" strokeWidth="3" />
-          <line x1="0" y1="540" x2="1920" y2="540" strokeWidth="3" />
-        </g>
-
-        <circle cx="960" cy="540" r="380" fill="none" stroke="#2D3748" strokeWidth="2" strokeDasharray="6 6" opacity="0.6" />
-
-        <rect width="1920" height="1080" fill="url(#portalMapHaze)" />
-
-        <g transform="translate(960,540)">
-          <circle r="22" fill="none" stroke="#4F46E5" strokeWidth="2" strokeDasharray="3 3" />
-          <rect x="-10" y="-10" width="20" height="20" fill="#4F46E5" rx="3" />
-          <text
-            x="0"
-            y="4"
-            textAnchor="middle"
-            fontFamily="var(--font-syncopate), sans-serif"
-            fontWeight="700"
-            fontSize="12"
-            fill="#fff"
-          >
-            D
-          </text>
-        </g>
-      </svg>
-
-      <div
-        className="absolute inset-0 pointer-events-none"
-        style={{
-          background:
-            "radial-gradient(ellipse at center, transparent 30%, rgba(11,11,20,0.85) 90%)",
-        }}
-      />
-
-      <div className="hidden md:block">
-        {BAIRRO_LABELS.map((b) => (
-          <div
-            key={b.name}
-            className={`portal-map-label ${b.right ? "is-right" : ""}`}
-            style={{
-              top: b.top,
-              left: b.left,
-              transform: b.name === "Centro" ? "translate(-50%, 0)" : undefined,
-              cursor: "default",
-              pointerEvents: "none",
-            }}
-            aria-hidden
-          >
-            {b.name.toUpperCase()}
+        {/* Marker da sede Dinamic no centro */}
+        <div
+          aria-hidden="true"
+          className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 z-[5] pointer-events-none"
+        >
+          <div className="relative grid place-items-center h-11 w-11">
+            <div className="absolute inset-0 rounded-full border border-noir-indigo/70 border-dashed" />
+            <div className="grid place-items-center h-5 w-5 rounded-sm bg-noir-indigo text-white font-display-noir font-bold text-[11px] leading-none">
+              D
+            </div>
           </div>
-        ))}
-      </div>
+        </div>
+
+        <div className="hidden md:block">
+          {BAIRRO_LABELS.map((b) => (
+            <div
+              key={b.name}
+              className={`portal-map-label ${b.right ? "is-right" : ""}`}
+              style={{
+                top: b.top,
+                left: b.left,
+                transform: b.name === "Centro" ? "translate(-50%, 0)" : undefined,
+                cursor: "default",
+                pointerEvents: "none",
+              }}
+              aria-hidden
+            >
+              {b.name.toUpperCase()}
+            </div>
+          ))}
+        </div>
       </div>
 
       <div className="absolute inset-0 z-10">
