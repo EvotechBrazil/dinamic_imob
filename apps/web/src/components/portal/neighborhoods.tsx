@@ -9,7 +9,7 @@ export function Neighborhoods() {
     <section id="bairros" className="bg-noir-bg px-6 md:px-[8vw] py-[8vh] md:py-[12vh]">
       <div className="mb-[5vh] md:mb-[6vh]">
         <TextReveal
-          text="ARAPONGAS EM 4 BAIRROS"
+          text="Encontre seu imóvel por geolocalização"
           as="h2"
           className="font-display-noir font-bold text-5xl md:text-6xl lg:text-7xl leading-[0.95] tracking-tight m-0 text-noir-text"
         />
