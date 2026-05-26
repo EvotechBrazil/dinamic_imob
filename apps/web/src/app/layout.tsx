@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Plus_Jakarta_Sans, Inter, JetBrains_Mono, Syncopate, Manrope } from "next/font/google";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import "./globals.css";
 
@@ -57,6 +58,7 @@ export default function RootLayout({
     >
       <body className="min-h-screen bg-app text-ink antialiased">
         <TooltipProvider delayDuration={200}>{children}</TooltipProvider>
+        <SpeedInsights />
       </body>
     </html>
   );
