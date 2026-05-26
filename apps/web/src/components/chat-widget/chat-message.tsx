@@ -1,5 +1,6 @@
 import { User } from "lucide-react";
 import Image from "next/image";
+import * as React from "react";
 import type { ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
@@ -144,12 +145,90 @@ function renderAssistantContent(content: string): ReactNode[] {
   return nodes;
 }
 
+/**
+ * Typewriter adaptativo client-side. Desacopla o conteúdo total (que pode
+ * chegar em chunks grandes do OpenRouter ou mesmo de uma vez) do que está
+ * sendo exibido — revelando char-by-char com velocidade que acelera quando
+ * o backlog cresce. Resultado: streaming sempre tem cara de "máquina de
+ * escrever", mesmo quando o backend buferiza chunks gordos.
+ *
+ * Comportamento:
+ * - role="user": sem typewriter (texto da pessoa aparece imediato)
+ * - role="assistant": revela do tamanho atual até target.length, com
+ *   advance = max(1, ceil(backlog / 40)) chars por tick de 24ms
+ * - Reset quando target encolhe (nova conversa / reset)
+ */
+function useTypewriter(target: string, role: "user" | "assistant"): {
+  displayed: string;
+  isTyping: boolean;
+} {
+  const [displayed, setDisplayed] = React.useState(
+    role === "user" ? target : "",
+  );
+  const targetRef = React.useRef(target);
+  const displayedRef = React.useRef(displayed);
+
+  React.useEffect(() => {
+    displayedRef.current = displayed;
+  }, [displayed]);
+
+  React.useEffect(() => {
+    targetRef.current = target;
+  }, [target]);
+
+  React.useEffect(() => {
+    if (role === "user") {
+      setDisplayed(target);
+      return;
+    }
+    // Reset se a mensagem foi trocada por uma menor (nova conversa)
+    if (
+      displayedRef.current.length > target.length ||
+      !target.startsWith(displayedRef.current)
+    ) {
+      setDisplayed("");
+      displayedRef.current = "";
+    }
+
+    let timer: number | null = null;
+    const tick = () => {
+      const t = targetRef.current;
+      const d = displayedRef.current;
+      if (d.length >= t.length) {
+        timer = null;
+        return;
+      }
+      const backlog = t.length - d.length;
+      const advance = Math.max(1, Math.ceil(backlog / 40));
+      const next = t.slice(0, Math.min(d.length + advance, t.length));
+      setDisplayed(next);
+      timer = window.setTimeout(tick, 24);
+    };
+
+    if (displayedRef.current.length < target.length) {
+      tick();
+    }
+
+    return () => {
+      if (timer !== null) window.clearTimeout(timer);
+    };
+  }, [target, role]);
+
+  return {
+    displayed,
+    isTyping: role === "assistant" && displayed.length < target.length,
+  };
+}
+
 export function ChatMessageBubble({
   role,
   content,
   streaming,
 }: ChatMessageProps) {
   const isUser = role === "user";
+  const { displayed, isTyping } = useTypewriter(content, role);
+  const showCursor = !isUser && (Boolean(streaming) || isTyping);
+
   return (
     <div
       className={cn(
@@ -185,10 +264,10 @@ export function ChatMessageBubble({
           <>{content}</>
         ) : (
           <div className="flex flex-col">
-            {renderAssistantContent(content)}
+            {renderAssistantContent(displayed)}
           </div>
         )}
-        {streaming && (
+        {showCursor && (
           <span className="ml-0.5 inline-block h-3 w-1 animate-pulse bg-primary align-middle" />
         )}
       </div>
