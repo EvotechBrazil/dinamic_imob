@@ -120,28 +120,27 @@ export function ArapongasMap() {
     <div className="relative w-full aspect-[16/10] md:aspect-[16/9]">
       <div className="absolute inset-0 rounded-2xl overflow-hidden border border-noir-border bg-[#0B0B14]">
         {/* Mapa real de Arapongas — Google Maps em B&W via filter
-            (mais claro no mobile pra melhor legibilidade) */}
+            (calibrado pra legibilidade igual em mobile e desktop) */}
         <Image
           src="/portal/mapa-arapongas.png"
           alt="Mapa de Arapongas"
           fill
           priority
           sizes="(min-width: 1024px) 80vw, 100vw"
-          className="object-cover select-none [filter:grayscale(1)_invert(1)_brightness(1.05)_contrast(1)_hue-rotate(180deg)] md:[filter:grayscale(1)_invert(1)_brightness(0.88)_contrast(1.12)_hue-rotate(180deg)]"
+          className="object-cover select-none [filter:grayscale(1)_invert(1)_brightness(1.05)_contrast(1)_hue-rotate(180deg)]"
           draggable={false}
         />
 
-        {/* Tint noir por cima da imagem pra integrar com tema
-            (mais leve no mobile) */}
+        {/* Tint noir leve por cima da imagem pra integrar com tema */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 pointer-events-none mix-blend-multiply bg-[rgba(15,23,41,0.28)] md:bg-[rgba(15,23,41,0.55)]"
+          className="absolute inset-0 pointer-events-none mix-blend-multiply bg-[rgba(15,23,41,0.28)]"
         />
 
-        {/* Vinheta radial pra escurecer bordas (mais suave no mobile) */}
+        {/* Vinheta radial suave pra escurecer só as bordas */}
         <div
           aria-hidden="true"
-          className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_transparent_50%,_rgba(11,11,20,0.45)_95%)] md:bg-[radial-gradient(ellipse_at_center,_transparent_35%,_rgba(11,11,20,0.75)_95%)]"
+          className="absolute inset-0 pointer-events-none bg-[radial-gradient(ellipse_at_center,_transparent_50%,_rgba(11,11,20,0.45)_95%)]"
         />
 
         {/* Marker da sede Dinamic no centro */}
